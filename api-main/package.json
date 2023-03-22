@@ -1,0 +1,17 @@
+{
+  "name": "api-main",
+  "version": "1.0.0",
+  "description": "Ceci est l'api pour la gestion des données",
+  "main": "App.js",
+  "scripts": {
+    "start": "nodemon App.js"
+  },
+  "keywords": [],
+  "author": "zach & alex",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.2"
+  }
+}
