@@ -7,11 +7,10 @@
     "start": "nodemon App.js"
   },
   "keywords": [],
-  "author": "zach & alex",
+  "author": "zachjve",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "mongoose": "^7.0.2"
+    "express": "^4.18.2"
   }
 }
