@@ -1,53 +1,38 @@
-// Données utilisateurs
-const userSettings = {
-    rainThreshold: 20,
-    minimumSoilMoistureLevel: 40,
-    minimumHoursSinceLastWatering: 24,
-    wateringSchedule: {
-      startHour: 15,
-      stopHour: 20
+const isRainExpected = (rain, threshold) => {
+    return rain <= threshold;
     }
-};
-
-// Variables d'états
-let isWateringEnabled = false;
-let isRainExpected = false;
-let isSoilMoistureLevelValid = false;
-let isLastWateringTooRecent = false;
-let isWateringScheduleValid = false;
-
-const updateStateVariables = (userSettings) => {
-  
-  const currentHour = new Date().getHours();
-  
-  console.log('currentHour', currentHour);
-  console.log('startHour', userSettings.wateringSchedule.startHour);
-  console.log('stopHour', userSettings.wateringSchedule.stopHour);
-
-  if (userSettings.wateringSchedule.startHour <= userSettings.wateringSchedule.stopHour) {
-    // Cas où l'heure de début et l'heure de fin sont le même jour
-    if (currentHour >= userSettings.wateringSchedule.startHour && currentHour < userSettings.wateringSchedule.stopHour) {
-      isWateringScheduleValid = true;
-    } else {
-      isWateringScheduleValid = false;
+    
+    const isSoilMoistureLevelValid = (soilMoistureLevel, minSoilMoistureLevel) => {
+    return soilMoistureLevel <= minSoilMoistureLevel;
     }
-  } else {
-    // Cas où l'heure de début et l'heure de fin s'étendent sur deux jours différents
-    if (currentHour >= userSettings.wateringSchedule.startHour || currentHour < userSettings.wateringSchedule.stopHour) {
-      isWateringScheduleValid = true;
-    } else {
-      isWateringScheduleValid = false;
+    
+    const isLastWateringTooRecent = (lastWateringTimestamp, minHoursSinceLastWatering) => {
+    const hoursSinceLastWatering = (Date.now() - lastWateringTimestamp) / 1000 / 60 / 60;
+    return hoursSinceLastWatering >= minHoursSinceLastWatering;
     }
-  }
-
-  if (!isWateringScheduleValid) {
-    return "l'arrosage ne peut pas être activé car l'heure d'arrosage est invalide";
-  } else {
-    return "l'heure d'arrosage est valide";
-  }
-}
-
-module.exports = {  
-  updateStateVariables, 
-  userSettings 
-}
+    
+    const isWateringScheduleValid = (startHour, stopHour) => {
+    const currentHour = new Date().getHours();
+    return (startHour <= stopHour && currentHour >= startHour && currentHour < stopHour) ||
+           (startHour > stopHour && (currentHour >= startHour || currentHour < stopHour));
+    }
+    
+    const updateStateVariables = (userSettings, externData) => {
+    const isRainExpectedResult = isRainExpected(externData.weatherData.rain, userSettings.rainThreshold);
+    const isSoilMoistureLevelValidResult = isSoilMoistureLevelValid(externData.soilMoistureLevel, userSettings.minimumSoilMoistureLevel);
+    const isLastWateringTooRecentResult = isLastWateringTooRecent(externData.lastWateringTimestamp, userSettings.minimumHoursSinceLastWatering);
+    const isWateringScheduleValidResult = isWateringScheduleValid(userSettings.wateringSchedule.startHour, userSettings.wateringSchedule.stopHour);
+    
+    return isRainExpectedResult && isSoilMoistureLevelValidResult && !isLastWateringTooRecentResult && isWateringScheduleValidResult;
+    }
+    
+    const isWateringEnabled = updateStateVariables(userSettings, externData);
+    
+    console.log('Is watering enabled:', isWateringEnabled);
+    
+    module.exports = {
+      updateStateVariables,
+      isWateringEnabled,
+      userSettings,
+      externData
+    }
