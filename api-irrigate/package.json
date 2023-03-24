@@ -1,0 +1,17 @@
+{
+  "name": "api-irrigate",
+  "version": "1.0.0",
+  "description": "API qui servira à piloter le raspberry Pi (lire les valeurs des capteurs et commander les éléctrovalves dans le cadre du projet IoT Water Pilote)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "AxLDvL",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  }
+}
