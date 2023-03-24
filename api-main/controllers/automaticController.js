@@ -1,3 +1,7 @@
+const sensors = fetch('http://localhost:8090/sensors');
+
+console.log('sensors', sensors)
+
 const isRainExpected = (rain, threshold) => {
     return rain <= threshold;
     }
