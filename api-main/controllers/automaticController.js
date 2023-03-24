@@ -2,6 +2,7 @@ const sensors = fetch('http://localhost:8090/sensors');
 
 console.log('sensors', sensors)
 
+//si localisation,on récupère les prévisions météo
 const isRainExpected = (rain, threshold) => {
     return rain <= threshold;
     }
