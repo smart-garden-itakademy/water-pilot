@@ -1,3 +1,17 @@
+const getSencors = async () => {
+  const sensors = await fetch('http://localhost:8090/sensors').then(res => res.json());
+  console.log('sensors', sensors)
+}
+
+getSencors();
+
+const startIrrigation = async () => {
+  const start = await fetch('http://localhost:8090/startIrrigation', { method: 'POST'} ).then(res => res.json());
+  console.log(start)
+}
+
+startIrrigation();
+
 // TEST
 // Données utilisateurs
 const userSettings = {
