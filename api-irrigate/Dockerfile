@@ -1,6 +1,6 @@
 FROM node:16-alpine
-WORKDIR ./api-irrigate
+WORKDIR /api-irrigate
 COPY . .
 RUN npm install
-CMD ["npm start"]
-EXPOSE 3000
+CMD ["node", "index.js"]
+EXPOSE 8090
