@@ -4,8 +4,7 @@
   "description": "Ceci est l'api principale de WaterPilot",
   "main": "App.js",
   "scripts": {
-    "start": "nodemon App.js",
-    "test": "nodemon Test.js"
+    "start": "nodemon App.js"
   },
   "keywords": [],
   "author": "zachjve",
