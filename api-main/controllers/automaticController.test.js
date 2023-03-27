@@ -1,43 +1,93 @@
-const getSencors = async () => {
-  const sensors = await fetch('http://localhost:8090/sensors').then(res => res.json());
-  console.log('sensors', sensors)
-}
 
-getSencors();
+//-------------------------------------------------------
+// on vérifie qu'on a la localisation
 
-const startIrrigation = async () => {
-  const start = await fetch('http://localhost:8090/startIrrigation', { method: 'POST'} ).then(res => res.json());
-  console.log(start)
-}
 
-startIrrigation();
+//-------------------------------------------------------
+//On récupère les UsersSettings via BDD
 
 // TEST
 // Données utilisateurs
 const userSettings = {
-    rainThreshold: 80,
-    minimumSoilMoistureLevel: 50,
-    minimumHoursSinceLastWatering: 34,
-    wateringSchedule: {
-      startHour: 10,
-      stopHour: 20
+  rainThreshold: 80,
+  minimumSoilMoistureLevel: 50,
+  wateringSchedule: [
+    {
+      startHour: 6,
+      stopHour: 9,
+      days: [
+        1,2,3,4,5
+      ]
+    },
+    {
+      startHour: 15,
+      stopHour: 20,
+      days: [
+        1,2,3,4,5
+      ]
     }
+  ],
+  wateringDuration:60
 };
+//-------------------------------------------------------
+//on lance l'algo isWateringScheduleValid
+
+const isWateringScheduleValid = (startHour, stopHour) => {
+  const currentHour = new Date().getHours();
+  console.log(currentHour);
+  console.log(startHour);
+  console.log(stopHour);
+  return (startHour <= stopHour && currentHour >= startHour && currentHour < stopHour) ||
+      (startHour > stopHour && (currentHour >= startHour || currentHour < stopHour));
+}
+//console.log(isWateringScheduleValid(userSettings.wateringSchedule[0].startHour, userSettings.wateringSchedule[0].stopHour));
+
+for(let i=0; i < userSettings.wateringSchedule.length; i++){
+  console.log(isWateringScheduleValid(userSettings.wateringSchedule[i].startHour, userSettings.wateringSchedule[i].stopHour));
+
+}
+
+
+//-------------------------------------------------------
+//On récupère les données des capteurs
+const getSencors = async () => {
+  const sensors = await fetch('http://localhost:8090/sensors').then(res => res.json());
+  console.log('sensors', sensors)
+}
+getSencors();
 
 // TEST
 // Données du terrain
 const externData = {
-  weatherData: { rain: 30 }, 
+  weatherData: { rain: 30 },
   soilMoistureLevel: 42,
-  lastWateringTimestamp: Date.now() - 30 * 60 * 60 * 1000
 }
+
+
+//-------------------------------------------------------
+
+//On lance l'arrosage
+const startIrrigation = async () => {
+  const start = await fetch('http://localhost:8090/startIrrigation', { method: 'POST'} ).then(res => res.json());
+  console.log(start)
+}
+startIrrigation();
+
+//-------------------------------------------------------
+//On arrête l'arrosage
+
+
+
+
+//-------------------------------------------------------
+
 
 // Variables d'états
 let isWateringEnabled = false;
 let isRainExpected = false;
 let isSoilMoistureLevelValid = false;
 let isLastWateringTooRecent = false;
-let isWateringScheduleValid = false;
+//let isWateringScheduleValid = false;
 
 const updateStateRainExpected = () => {
   
@@ -114,7 +164,7 @@ const updateStateVariables = (userSettings, externData) => {
     console.log ("le dernier arrosage date l'arrosage est valide");
   }
 
-  const currentHour = new Date().getHours();
+/*  const currentHour = new Date().getHours();
 
   console.log('currentHour', currentHour);
   console.log('startHour', userSettings.wateringSchedule.startHour);
@@ -134,7 +184,7 @@ const updateStateVariables = (userSettings, externData) => {
     } else {
       isWateringScheduleValid = false;
     }
-  }
+  }*/
 
   // TEST
   if (!isWateringScheduleValid) {
