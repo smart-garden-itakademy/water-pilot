@@ -6,7 +6,7 @@ router.route('/sensors')
     .get((req,res) => {
         res.status(200).json({
             "pressure":100,
-            "temperature":5,
+            "temperature":25,
             "humidity":60,
             "soil_moisture":22
         });
