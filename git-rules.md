@@ -32,11 +32,13 @@ Pour verifier que vous êtes sur votre branch de fonctionnalitée :
 git branch
 ```  
 
-Pour faire en sorte que la branche contient tout les MAJ du fork main :
+Pour faire en sorte que la branche contienne toutes les MAJ du fork main :
 
 ```bash
 git merge main
 ```
+
+Everything is up to date. 
 
 ###### Commencer à travailler votre fonctionnalitée sur la branch.
 
@@ -48,19 +50,25 @@ Pour cela verifier le remote (l'endroit ou sera push le travail) :
 git remote -v
 ```  
 
-Pour changer le remote si nécéssaire (new URL c'est l'URL de votre fork, changer `zachjve` par votre `pseudo` github) :
+Pour changer le remote si nécéssaire (new URL c'est l'URL de votre fork, changer 'pseudo' par votre `pseudo` github) :
 
 ```bash
-git remote set-url origin https://github.com/zachjve/Smart-Garden-Repo.git
+git remote add origin https://github.com/'pseudo'/Smart-Garden-Repo.git
 ```
 
-Pour push une branch la première fois il faut `upstream` la branche (remplacer `<feature-branch>` par un nom de votre branche) :
+Pour les push (Se placer sur la branche) :
 
-```bash
-git push --set-upstream origin <feature-branch>
+```shell
+git status
 ```
 
-Pour les push suivant sur cette même branche :
+```shell
+git add *
+```
+
+```shell
+git commit -m "message"
+```
 
 ```bash
 git push
@@ -93,6 +101,12 @@ Pour récupérer la dernière version de l'upstream.
 git fetch upstream 
 ```
 
+Puis pour fusionner le branche main avec la derniere MAJ de l'organisation
+
+```shell
+git merge upstream/main
+```
+
 ##### Merge une branche de fonctionnalité avec la branche main  
 
 1. Se replacer sur le `main` (du fork)
@@ -107,4 +121,4 @@ git checkout main
 git merge <feature-branch>
 ```
 
-Faire une pull requests pour merge son fork avec l'upstream (repository de l'organisation)
+Votre branche main est maintenant fusionnée avec le derniere MAJ du fork et votre nouvelle fonctionnalité maintenant il faut push vers votre main puis faire une pull requests pour merge son fork avec l'upstream (repository de l'organisation). 

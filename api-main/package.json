@@ -1,7 +1,7 @@
 {
   "name": "api-main",
   "version": "1.0.0",
-  "description": "Ceci est l'api pour la gestion des données",
+  "description": "Ceci est l'api principale de WaterPilot",
   "main": "App.js",
   "scripts": {
     "start": "nodemon App.js"
