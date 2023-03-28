@@ -6,4 +6,5 @@ const automaticModel = require('../models/automaticModel');
 
 router.get('/test', automaticModel.testDbConnection);
 
+
 module.exports = router;
