@@ -1,3 +1,7 @@
+// Il faut recuperer la position via le raspberry pi -> DB
+// Il faut recuperer les userSettings en database 
+// Il faut recuperer les donnees meteos en API 
+
 const getCurrentPosition = () => {
   return {
     latitude: 45.7808503213175,
@@ -21,7 +25,7 @@ const userSettings = {
   wateringSchedule: [
     {
       startHour: 6,
-      stopHour: 9,
+      stopHour: 10,
       days: [1, 2, 3, 4, 5],
     },
     {
