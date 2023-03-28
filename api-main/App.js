@@ -1,11 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
-
 const router = require('./routers/automaticRoute')
 
-const app = express();
-
 dotenv.config();
+const app = express();
 
 app.use(express.json());
 app.use('/', router); 
