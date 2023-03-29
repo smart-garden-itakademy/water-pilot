@@ -1,45 +1,30 @@
-// Il faut recuperer la position via le raspberry pi -> DB
-// Il faut recuperer les userSettings en database 
-// Il faut recuperer les donnees meteos en API 
+const {
+  getPosition,
+  getAllValvesWithSettings
+} = require('../models/automaticModel');
 
-const getCurrentPosition = () => {
+const getCurrentPosition = async () => {
+  try {
+    const position = await getPosition();
+    return position;
+  } catch (error) {
+    console.error('Erreur lors de la récupération de la position:', error);
+    return null;
+  }
+};
+
+const getUserPosition = async () => {
+  const position = await getCurrentPosition();
   return {
-    latitude: 45.7808503213175,
-    longitude: 4.736120007422938,
+    latitude: position.latitude,
+    longitude: position.longitude
   };
-};
-
-const getPosition = () => {
-  return new Promise((resolve) => {
-    const position = getCurrentPosition();
-    resolve({
-      latitude: position.latitude,
-      longitude: position.longitude,
-    });
-  });
-};
-
-const userSettings = {
-  rainThreshold: 80,
-  minimumSoilMoistureLevel: 50,
-  wateringSchedule: [
-    {
-      startHour: 6,
-      stopHour: 10,
-      days: [1, 2, 3, 4, 5],
-    },
-    {
-      startHour: 20,
-      stopHour: 23,
-      days: [1, 2, 3, 4, 5],
-    },
-  ],
-  wateringDuration: 1,
 };
 
 const isWateringScheduleValid = (startHour, stopHour, days) => {
   const currentHour = new Date().getHours();
   const currentDay = new Date().getDay();
+  // console.log('days', days);
 
   return (
     (startHour <= stopHour &&
@@ -57,7 +42,6 @@ const getSensors = (callback) => {
     .then((res) => res.json())
     .then((data) => {
       sensors = data;
-      console.log("sensors", sensors);
       callback();
     });
 };
@@ -84,34 +68,36 @@ const stopIrrigation = async () => {
   console.log(start);
 };
 
-const checkIrrigationStatus = () => {
-  for (let i = 0; i < userSettings.wateringSchedule.length; i++) {
-    const schedule = userSettings.wateringSchedule[i];
-    if (
-      isWateringScheduleValid(
-        schedule.startHour,
-        schedule.stopHour,
-        schedule.days
-      )
-    ) {
+function checkIrrigationStatus(valveWithSettings) {
+  valveWithSettings.schedules.forEach((schedule) => {
+    // console.log(schedule)
+    if (isWateringScheduleValid(schedule.hourStart, schedule.hourEnd, schedule.days)) {
+      // console.log(schedule)
       console.log("Le programme d'arrosage est valide");
+
       getSensors(() => {
         const soilMoistureLevel = sensors.soil_moisture;
         console.log("Niveau d'humidité du sol :", soilMoistureLevel);
+        console.log(valveWithSettings.moistureThreshold)
+
         const rain24h = 30; // Remplacer par les données de l'API
         const rainNow = false; // Remplacer par les données de l'API
         console.log("Données de pluie (24h, actuellement) :", rain24h, rainNow);
+        console.log(valveWithSettings.rainThreshold)
 
         if (
           isSoilMoistureLevelValid(
             soilMoistureLevel,
-            userSettings.minimumSoilMoistureLevel
+            valveWithSettings.moistureThreshold
           ) &&
-          isRainNotExpected(rain24h, rainNow, userSettings.rainThreshold)
+          isRainNotExpected(rain24h, rainNow, valveWithSettings.rainThreshold)
         ) {
           console.log("Les conditions d'arrosage sont remplies");
           startIrrigation();
-          setTimeout(stopIrrigation, userSettings.wateringDuration * 60 * 1000);
+          setTimeout(
+            stopIrrigation,
+            valveWithSettings.duration * 60 * 1000,
+          );
         } else {
           console.log("Les conditions d'arrosage ne sont pas remplies");
         }
@@ -119,16 +105,20 @@ const checkIrrigationStatus = () => {
     } else {
       console.log("Le programme d'arrosage n'est pas valide");
     }
-  }
-};
+  });
+}
 
 async function main() {
   try {
-    const position = await getPosition();
+    const position = await getUserPosition();
     console.log("Position récupérée :", position);
 
-    checkIrrigationStatus();
+    const valvesWithSettings = await getAllValvesWithSettings(); // Récupère toutes les électrovannes et leurs paramètres
+    console.log("Électrovannes et paramètres récupérés :", valvesWithSettings);
 
+    for (const valveWithSettings of valvesWithSettings) {
+      checkIrrigationStatus(valveWithSettings);
+    }
   } catch (error) {
     console.error("Erreur lors de la récupération de la position :", error);
   }
@@ -136,7 +126,6 @@ async function main() {
 
 main();
 
-// Pour vérifier l'état de l'arrosage toutes les heures
 setInterval(() => {
   console.log("Vérification de l'état de l'arrosage toutes les heures");
   main();

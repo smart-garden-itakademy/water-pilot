@@ -8,7 +8,7 @@ router.route('/sensors')
             "pressure":100,
             "temperature":25,
             "humidity":60,
-            "soil_moisture":22
+            "soil_moisture":18
         });
     })
 
