@@ -8,11 +8,9 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+
 //parse pour le type mime application/x-www-urlencoded (formulaire)
 app.use(bodyParser.urlencoded({extended: false}));
-
-//parse pour le type mime application/json
-app.use(bodyParser.json());
 
 app.use('/automatic', automaticRoute);
 app.use('/user', userRoute);
