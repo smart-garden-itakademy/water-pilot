@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af4a8198-1540-4174-a0f5-6b2ea1408ffc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-irrigate/yarn.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/Model/UserModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/Model/UserModel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/Test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL/waterPilotDB_createTables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/SQL/waterPilotDB_createTables.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/controllers/UserController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/UserController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/UserRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/UserRoute.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,25 +31,35 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2NaYXhJyPvrTIyfUuFNcqotS4yD" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/it-akademy/Desktop/Sites/water-pilot",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/it-akademy/Desktop/Sites/water-pilot&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.fileTypes&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;,
+      &quot;mariadb&quot;
+    ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -56,6 +67,21 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/api-main/Model" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="water-pilot" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="water-pilot" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -66,6 +92,8 @@
       <option name="presentableId" value="Default" />
       <updated>1679903700583</updated>
       <workItem from="1679903701797" duration="2623000" />
+      <workItem from="1680442509228" duration="1300000" />
+      <workItem from="1680443833948" duration="4866000" />
     </task>
     <servers />
   </component>

@@ -2,9 +2,7 @@ const bcrypt = require('bcrypt')
 const userModel = require ('../models/UserModel')
 
 const passwordValidation = (pwd) => {
-
     let result = false
-
     if (
         pwd.length >= 8 &&   //length must be greater than 8 characters.
         /[A-Z]/.test(pwd) && // One letter should be capital.
@@ -12,21 +10,23 @@ const passwordValidation = (pwd) => {
         /\W/.test(pwd) &&    // contain a special character (@, $, !, &, etc).
         !/\s/.test(pwd)      // no spaces
     ) {
+        console.log("pwdValidation", result);
         return result = true
     }
+    console.log("pwdValidation", result);
     return result
 }
-
-const hash = async (pwd) => {
+const hash =  (pwd) => {
     const saltRounds = 10;
 
-    const H = await bcrypt.hash(pwd, saltRounds, (err, hash) => {
+    return bcrypt.hash(pwd, saltRounds, (err, hash) => {
         if (err)
             throw (err)
-        if (hash)
-            return hash
+
+        console.log("H",hash)
+        return hash
+
     });
-    return H
 }
 
 const newUser = (HashPwd, name, email) => {

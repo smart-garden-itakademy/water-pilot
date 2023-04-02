@@ -1,12 +1,21 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const router = require('./routers/automaticRoute')
+const automaticRoute = require('./routers/automaticRoute');
+const userRoute = require ('./routers/UserRoute')
+const bodyParser = require('body-parser');
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use('/', router); 
+//parse pour le type mime application/x-www-urlencoded (formulaire)
+app.use(bodyParser.urlencoded({extended: false}));
+
+//parse pour le type mime application/json
+app.use(bodyParser.json());
+
+app.use('/automatic', automaticRoute);
+app.use('/user', userRoute);
 
 const port = process.env.PORT;
 app.listen(port, () => {

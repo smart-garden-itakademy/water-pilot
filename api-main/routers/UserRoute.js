@@ -2,26 +2,43 @@ const express = require('express');
 const router = express.Router();
 const userController = require ('../controllers/UserController')
 
+
+
+
+
 //-----------------------Users routes ------------------------------------------
+
+//get all users test
+router.route('/')
+    .get((req,res)=>{
+        res.json({
+            "name": "BobSmith",
+            "email": "bobsmith@example.com",
+            "password": "password789",
+            "latitude": "45.7808503213175",
+            "longitude": "4.736120007422938"
+        })
+    })
+
 //sign-up
 router.route('/sign-up')
     .post((req,res)=>{
+        const { password, name, email } = req.body;
+        console.log("password",password);
+        console.log("name",name);
+        console.log("email",email);
 
-        const { password: pwd, name, email } = req.body;
-
-        if(userController.passwordValidation(pwd)){
+        if(userController.passwordValidation(password)){
             //hash
-            userController.hash(pwd)
+            userController.hash(password)
                 .then((HashPwd) => {
                     //save user in database
                     userController.newUser(HashPwd, name, email)
                     //send status 200
                     res.status(200)
                 })
-        }
-        //check password
-        //post user
-        //redirige page d'accueil
+                .catch((err)  => console.log(err))
+        }else console.log("passwordValid",false)
 
     })
 //check login
@@ -35,3 +52,4 @@ router.route('/sign-up')
 //get irrigations
 
 //get sensors
+module.exports=router;
