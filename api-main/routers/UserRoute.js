@@ -3,42 +3,36 @@ const router = express.Router();
 const userController = require ('../controllers/UserController')
 
 
-
-
-
 //-----------------------Users routes ------------------------------------------
 
 //get all users test
 router.route('/')
     .get((req,res)=>{
-        res.json({
-            "name": "BobSmith",
-            "email": "bobsmith@example.com",
-            "password": "password789",
-            "latitude": "45.7808503213175",
-            "longitude": "4.736120007422938"
-        })
+        userController.showUsers()
+            .then((data)=> res.json(data))
     })
 
 //sign-up
 router.route('/sign-up')
-    .post((req,res)=>{
+    .post((req, res) => {
         const { password, name, email } = req.body;
-        console.log("password",password);
-        console.log("name",name);
-        console.log("email",email);
+        console.log("password", password);
+        console.log("name", name);
+        console.log("email", email);
 
-        if(userController.passwordValidation(password)){
+        if (userController.passwordValidation(password)) {
             //hash
             userController.hash(password)
                 .then((HashPwd) => {
                     //save user in database
-                    userController.newUser(HashPwd, name, email)
-                    //send status 200
-                    res.status(200)
+                    return userController.newUser(HashPwd, name, email)
                 })
-                .catch((err)  => console.log(err))
-        }else console.log("passwordValid",false)
+                .then((data) => {
+                    //send status 200
+                    res.status(200).json(data)
+                })
+                .catch((err) => res.status(400).json(err))
+        } else console.log("passwordValid", false)
 
     })
 //check login

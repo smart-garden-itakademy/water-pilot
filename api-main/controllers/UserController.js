@@ -3,6 +3,11 @@ const userModel = require ('../models/UserModel')
 
 const passwordValidation = (pwd) => {
     let result = false
+    /*if(pwd.length >= 8) console.log("pwd length > 8");
+    if(/[A-Z]/.test(pwd)) console.log("pwd contain One letter is capital");
+    if(/\d/.test(pwd)) console.log("pwd contain alphanumeric");
+    if( /\W/.test(pwd)) console.log("pwd contain a special character");
+    if( /\W/.test(pwd)) console.log("pwd contain no spaces");*/
     if (
         pwd.length >= 8 &&   //length must be greater than 8 characters.
         /[A-Z]/.test(pwd) && // One letter should be capital.
@@ -10,8 +15,9 @@ const passwordValidation = (pwd) => {
         /\W/.test(pwd) &&    // contain a special character (@, $, !, &, etc).
         !/\s/.test(pwd)      // no spaces
     ) {
+        result = true
         console.log("pwdValidation", result);
-        return result = true
+        return result
     }
     console.log("pwdValidation", result);
     return result
@@ -19,18 +25,24 @@ const passwordValidation = (pwd) => {
 const hash =  (pwd) => {
     const saltRounds = 10;
 
-    return bcrypt.hash(pwd, saltRounds, (err, hash) => {
-        if (err)
-            throw (err)
-
-        console.log("H",hash)
-        return hash
-
-    });
+    return new Promise ((resolve,reject)  => {
+        bcrypt.hash(pwd, saltRounds, (err, hash) => {
+            if (err){
+                throw (err);
+                reject(err)
+            }
+            console.log("H",hash);
+            resolve(hash)
+        });
+    })
 }
 
 const newUser = (HashPwd, name, email) => {
-    userModel.saveNewUser(HashPwd, name, email)
+    return userModel.saveNewUser(HashPwd, name, email)
 }
 
-module.exports={passwordValidation,hash, newUser}
+const showUsers = () => {
+    return userModel.getUsers()
+}
+
+module.exports={passwordValidation,hash, newUser, showUsers}
