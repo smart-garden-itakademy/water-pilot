@@ -40,6 +40,9 @@ console.log('inH')
 
 const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
     try{
+        //verify if email is unique
+        
+        //add user
         const addUser = await userModel.saveNewUser(hashPwd, name, email, city, longitude, latitude);
         return addUser
     }
@@ -59,13 +62,27 @@ const showUsers = async () => {
     }
 }
 
-const findUser = (hashPwd,email) => {
+const findUser = async (Pwd,email) => {
     try{
-        return userModel.getUser()
+        const user = await userModel.isUserMailExist(email);
+        console.log("user",user);
+        if(user){
+            const match = await bcrypt.compare(Pwd, user[0].password);
+            if(match) {
+                return true
+            }else {
+                //throw new Error ("wrong password");
+                return false
+
+            }
+        }else{
+            //throw new Error ("wrong mail");
+            return false
+        }
     }
-    catch (error){
-        console.error("utilisateur introuvable :", error);
-        return null;
+    catch (e){
+        console.error(e);
+        return false;
     }
 }
 

@@ -31,10 +31,10 @@ router.route('/sign-up')
                 const hashPwd = await userController.hash(password);
 
                 // Save user in database
-                const data = await userController.newUser(hashPwd, name, email, city, longitude, latitude);
+                const saveUser = await userController.newUser(hashPwd, name, email, city, longitude, latitude);
 
                 // Send response
-                res.status(200).json(data);
+                res.status(200).json(saveUser);
             }
 
         } catch (err) {
@@ -46,12 +46,23 @@ router.route('/sign-up')
         }
     });
 //check login
-router.route('/login')
+/*router.route('/login')
     .get((req,res) => {
         const { password, email } = req.body;
         try {
             userController.hash(password)
                 .then((hashPwd) => userController.findUser(hashPwd,email))
+                .then((isExist) => res.status(200).json(isExist))
+        } catch(err){
+            res.status(400).json(err)
+        }
+    })*/
+router.route('/login')
+    .get((req,res) => {
+        const { password, email } = req.body;
+        try {
+                userController.findUser(password,email)
+                .then((isExist) => res.status(200).json(isExist))
         } catch(err){
             res.status(400).json(err)
         }

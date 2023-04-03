@@ -31,7 +31,28 @@ const getUsers = () => {
         );
     });
 };
+const isUserMailExist = (email) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            "SELECT * FROM User WHERE email = ? ",
+            [email],
+            (error, results) => {
+                if (error) {
+                    console.error("Erreur lors de la récupération des données de l'utilisateur :", error);
+                    reject(error);
+                } else {
+                    console.log("results",results.length);
+                    if(results.length>0){
+                        resolve(results); // utilisateur trouvé
+                    }else
+                        resolve(false); // utilisateur trouvé
+                    }
+            }
 
-module.exports = {saveNewUser,getUsers}
+        )
+    });
+};
+
+module.exports = {saveNewUser,getUsers,isUserMailExist}
 
 

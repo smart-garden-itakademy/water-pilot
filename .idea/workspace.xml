@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af4a8198-1540-4174-a0f5-6b2ea1408ffc" name="Changes" comment="api-main user, 2 routes added get all user and sign-up. create table user modified.">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="af4a8198-1540-4174-a0f5-6b2ea1408ffc" name="Changes" comment="api-main user, newUser function modified and table user added city">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL/waterPilotDB_createTables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/SQL/waterPilotDB_createTables.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL/waterPilotDB_insert.sql" beforeDir="false" afterPath="$PROJECT_DIR$/SQL/waterPilotDB_insert.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-irrigate/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/api-irrigate/yarn.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/controllers/UserController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/UserController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/models/UserModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/UserModel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/routers/UserRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/UserRoute.js" afterDir="false" />
@@ -97,7 +94,7 @@
       <workItem from="1680442509228" duration="1300000" />
       <workItem from="1680443833948" duration="4866000" />
       <workItem from="1680464816127" duration="9359000" />
-      <workItem from="1680507838705" duration="15245000" />
+      <workItem from="1680507838705" duration="21732000" />
     </task>
     <task id="LOCAL-00001" summary="api-main user">
       <created>1680465248875</created>
@@ -113,7 +110,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680473223662</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="api-main user, newUser function modified and table user added city">
+      <created>1680527874078</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680527874078</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +154,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="api-main user" />
     <MESSAGE value="api-main user, 2 routes added get all user and sign-up. create table user modified." />
-    <option name="LAST_COMMIT_MESSAGE" value="api-main user, 2 routes added get all user and sign-up. create table user modified." />
+    <MESSAGE value="api-main user, newUser function modified and table user added city" />
+    <option name="LAST_COMMIT_MESSAGE" value="api-main user, newUser function modified and table user added city" />
   </component>
 </project>
