@@ -60,10 +60,9 @@ CREATE TABLE Schedule (
                       id INT PRIMARY KEY AUTO_INCREMENT,
                       hourStart INT NOT NULL,
                       hourEnd INT NOT NULL,
-                      day INT NOT NULL,
+                      days TEXT NOT NULL,
                       idSettings INT,
                       FOREIGN KEY (idSettings) REFERENCES ValveSettings(id)
 );
-
 
 

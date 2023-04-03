@@ -137,23 +137,23 @@ VALUES
 
 /* Insertion des planifications pour les valves */
 
-/* Valve 1 */
+/* Valve 1 UPDATE : changement des insert days */ 
 INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
-                                                               (6, 8, 1, 1),
-                                                               (12, 14, 3, 1),
-                                                               (18, 20, 5, 1);
+                                                               (6, 8, '1', 1),
+                                                               (12, 14, '2, 3, 4', 1),
+                                                               (18, 20, '1, 2, 3, 4, 5', 1);
 
 /* Valve 2 */
 INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
-                                                               (7, 9, 2, 2),
-                                                               (13, 15, 4, 2),
-                                                               (19, 21, 6, 2);
+                                                               (7, 9, '5, 6', 2),
+                                                               (13, 15, '1, 2, 3, 4', 2),
+                                                               (19, 21, '1, 2, 3, 4, 5, 6, 7', 2);
 
 /* Valve 3 */
 INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
-                                                               (8, 10, 3, 3),
-                                                               (14, 16, 5, 3),
-                                                               (20, 22, 1, 3);
+                                                               (8, 10, '1, 2, 3', 3),
+                                                               (14, 16, '1, 2, 3, 4, 5', 3),
+                                                               (20, 22, '1, 2, 3, 4, 5', 3);
 
 
 /* Insertion de données d'irrigation */

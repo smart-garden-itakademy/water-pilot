@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
 })
 
 if (connection) {
-    console.log('Connection à la base de donnée établi')
+    console.log('Connection à la base de donnée établie')
 }
 
 module.exports = connection
