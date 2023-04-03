@@ -6,7 +6,9 @@ const getPosition = (req, res) => {
       if (error) {
         console.error('Erreur lors de la connexion à la base de données:', error);
         reject(error);
-      } else {
+      } else if (results.length === 0) {
+        reject(new Error('Aucune position trouvée.'));
+      }else {
         resolve({
           latitude: results[0].latitude,
           longitude: results[0].longitude
