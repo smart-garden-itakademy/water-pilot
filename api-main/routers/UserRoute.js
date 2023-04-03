@@ -14,36 +14,55 @@ router.route('/')
 
 //sign-up
 router.route('/sign-up')
-    .post((req, res) => {
-        const { password, name, email } = req.body;
+    .post(async (req, res) => {
+        const { password, name, email, city,longitude, latitude } = req.body;
         console.log("password", password);
         console.log("name", name);
         console.log("email", email);
+        console.log("city", city);
+        console.log("longitude", longitude);
+        console.log("latitude", latitude);
+        
+        try {
+            if(
+            // Validate password
+            await userController.passwordValidation(password)) {
+                // Hash password
+                const hashPwd = await userController.hash(password);
 
-        if (userController.passwordValidation(password)) {
-            //hash
-            userController.hash(password)
-                .then((HashPwd) => {
-                    //save user in database
-                    return userController.newUser(HashPwd, name, email)
-                })
-                .then((data) => {
-                    //send status 200
-                    res.status(200).json(data)
-                })
-                .catch((err) => res.status(400).json(err))
-        } else console.log("passwordValid", false)
+                // Save user in database
+                const data = await userController.newUser(hashPwd, name, email, city, longitude, latitude);
 
-    })
+                // Send response
+                res.status(200).json(data);
+            }
+
+        } catch (err) {
+            console.error(err);
+            res.status(400).json({
+                errorMsg: 'Une erreur est survenue',
+                error: err.message
+            });
+        }
+    });
 //check login
+router.route('/login')
+    .get((req,res) => {
+        const { password, email } = req.body;
+        try {
+            userController.hash(password)
+                .then((hashPwd) => userController.findUser(hashPwd,email))
+        } catch(err){
+            res.status(400).json(err)
+        }
+    })
+//save garden position
+
 
 //------------------------valve settings------------------------------------------
 //creation de valve setting
 
 //get valve setting
 
-//-------------------------get datas-------------------------------------------------
-//get irrigations
 
-//get sensors
 module.exports=router;

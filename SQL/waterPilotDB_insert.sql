@@ -114,9 +114,9 @@ INSERT INTO Type (name, unit) VALUES ('Rain', 'mm');
 
 /* Insertion de données pour la table user */
 
-INSERT INTO User (name, email, password, longitude, latitude)
+INSERT INTO User (name, email, password, longitude, latitude, city)
 VALUES
-    ('BobSmith', 'bobsmith@example.com', 'password789', 4.736120007422938, 45.7808503213175);
+    ('BobSmith', 'bobsmith@example.com', 'password789', 4.736120007422938, 45.7808503213175, "parla");
 
 
 /* Insertion de données pour la table Electrovalve */
@@ -138,19 +138,19 @@ VALUES
 /* Insertion des planifications pour les valves */
 
 /* Valve 1 UPDATE : changement des insert days */ 
-INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
+INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
                                                                (6, 8, '1', 1),
                                                                (12, 14, '2, 3, 4', 1),
                                                                (18, 20, '1, 2, 3, 4, 5', 1);
 
 /* Valve 2 */
-INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
+INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
                                                                (7, 9, '5, 6', 2),
                                                                (13, 15, '1, 2, 3, 4', 2),
                                                                (19, 21, '1, 2, 3, 4, 5, 6, 7', 2);
 
 /* Valve 3 */
-INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
+INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
                                                                (8, 10, '1, 2, 3', 3),
                                                                (14, 16, '1, 2, 3, 4, 5', 3),
                                                                (20, 22, '1, 2, 3, 4, 5', 3);

@@ -5,7 +5,8 @@ CREATE TABLE User (
                       email varchar(100) NOT NULL,
                       password varchar(100) NOT NULL,
                       latitude varchar(100) ,
-                      longitude varchar(100)
+                      longitude varchar(100),
+                      city varchar (100)
 );
 
 /* Création de la table Sensor */
