@@ -41,18 +41,11 @@ const isUserMailExist = (email) => {
                     console.error("Erreur lors de la récupération des données de l'utilisateur :", error);
                     reject(error);
                 } else {
-                    console.log("results",results.length);
-                    if(results.length>0){
-                        resolve(results); // utilisateur trouvé
-                    }else
-                        resolve(false); // utilisateur trouvé
-                    }
-            }
-
-        )
-    });
-};
+                    console.log("results", results.length);
+                    resolve(results.length);
+                }
+            });
+    })
+}
 
 module.exports = {saveNewUser,getUsers,isUserMailExist}
-
-

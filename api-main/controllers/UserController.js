@@ -37,7 +37,15 @@ console.log('inH')
         });
     })
 }
-
+const isInDb = async (mail) => {
+try {
+    const checkMail = await userModel.isUserMailExist(mail);
+    return checkMail
+}catch (e){
+    console.error(e)
+    return false
+}
+}
 const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
     try{
         //verify if email is unique
@@ -71,13 +79,10 @@ const findUser = async (Pwd,email) => {
             if(match) {
                 return true
             }else {
-                //throw new Error ("wrong password");
-                return false
-
+                throw new Error ("wrong password");
             }
         }else{
-            //throw new Error ("wrong mail");
-            return false
+            throw new Error ("wrong mail");
         }
     }
     catch (e){
@@ -86,4 +91,4 @@ const findUser = async (Pwd,email) => {
     }
 }
 
-module.exports={passwordValidation,hash, newUser, showUsers, findUser}
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb}

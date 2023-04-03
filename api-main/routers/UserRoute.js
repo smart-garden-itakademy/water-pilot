@@ -24,6 +24,7 @@ router.route('/sign-up')
         console.log("latitude", latitude);
         
         try {
+            if(userController.isInDb(email)) res.status(400).json({"msg:":"Il existe déjà un compte enregistré avec cet Email"})
             if(
             // Validate password
             await userController.passwordValidation(password)) {
@@ -45,24 +46,15 @@ router.route('/sign-up')
             });
         }
     });
-//check login
-/*router.route('/login')
-    .get((req,res) => {
-        const { password, email } = req.body;
-        try {
-            userController.hash(password)
-                .then((hashPwd) => userController.findUser(hashPwd,email))
-                .then((isExist) => res.status(200).json(isExist))
-        } catch(err){
-            res.status(400).json(err)
-        }
-    })*/
+
 router.route('/login')
     .get((req,res) => {
         const { password, email } = req.body;
         try {
                 userController.findUser(password,email)
-                .then((isExist) => res.status(200).json(isExist))
+                .then((isExist) => {
+                   isExist ? res.status(200).json(isExist) : res.status(400).json(isExist);
+                })
         } catch(err){
             res.status(400).json(err)
         }
