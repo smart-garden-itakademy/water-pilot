@@ -42,7 +42,7 @@ const isUserMailExist = (email) => {
                     reject(error);
                 } else {
                     console.log("results", results.length);
-                    resolve(results.length);
+                    resolve(results);
                 }
             });
     })

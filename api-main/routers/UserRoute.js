@@ -7,7 +7,8 @@ const userController = require ('../controllers/UserController')
 
 //get all users test
 router.route('/')
-    .get((req,res)=>{
+    .get(userController.authenticate,(req,res)=>{
+        console.log("userId",req.userId);
         userController.showUsers()
             .then((data)=> res.json(data))
     })
@@ -24,18 +25,24 @@ router.route('/sign-up')
         console.log("latitude", latitude);
         
         try {
-            if(userController.isInDb(email)) res.status(400).json({"msg:":"Il existe déjà un compte enregistré avec cet Email"})
-            if(
+            const isInDB = await userController.isInDb(email)
+            console.log("isInDb",isInDB.length)
+            if(isInDB.length) {
+                //mail exist in DB
+                res.status(400).json({"msg:": "Il existe déjà un compte enregistré avec cet Email"})
+            }else if(
+            // mail doesn't exist in DB
+
             // Validate password
-            await userController.passwordValidation(password)) {
+                await userController.passwordValidation(password)) {
                 // Hash password
-                const hashPwd = await userController.hash(password);
+                    const hashPwd = await userController.hash(password);
 
                 // Save user in database
-                const saveUser = await userController.newUser(hashPwd, name, email, city, longitude, latitude);
+                    const saveUser = await userController.newUser(hashPwd, name, email, city, longitude, latitude);
 
                 // Send response
-                res.status(200).json(saveUser);
+                    res.status(200).json(saveUser);
             }
 
         } catch (err) {
@@ -48,19 +55,36 @@ router.route('/sign-up')
     });
 
 router.route('/login')
-    .get((req,res) => {
+    .post((req,res) => {
         const { password, email } = req.body;
         try {
                 userController.findUser(password,email)
-                .then((isExist) => {
-                   isExist ? res.status(200).json(isExist) : res.status(400).json(isExist);
-                })
+        .then((user) => {
+            if(user.length===0) {
+                res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+                return
+            }
+            const token = userController.generateToken(user[0]);
+            res.status(200).json({token});
+        })
         } catch(err){
             res.status(400).json(err)
         }
     })
-//save garden position
+//déconnexion
 
+//save garden position
+router.route('/gardenLocation')
+    
+    .PATCH(userController.authenticate,(req,res) => {
+        console.log("userId",req.userId);
+        const { longitude, latitude } = req.body;
+        const patchGardenLocation = userController.modifyGardenLocation(req.userId, longitude, latitude)
+    })
+
+// vérification de l'adresse mail lors de l'inscription en envoyant un mail
+
+//fonctionnalité forgot password
 
 //------------------------valve settings------------------------------------------
 //creation de valve setting

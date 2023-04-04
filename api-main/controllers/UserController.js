@@ -1,5 +1,36 @@
-const bcrypt = require('bcrypt')
-const userModel = require ('../models/UserModel')
+const bcrypt = require('bcrypt');
+const userModel = require ('../models/UserModel');
+const jwt = require('jsonwebtoken');
+
+const generateToken = (user) => {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    return token;
+}
+function verifyToken(token) {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return decoded;
+    } catch (error) {
+        return null;
+    }
+}
+
+// middleware qui protège les routes qui nécessite une authentification
+const authenticate = (req, res, next) => {
+    const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+    if (!token) {
+        res.status(401).json({ message: 'Token non fourni' });
+        return;
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+        res.status(401).json({ message: 'Token invalide' });
+        return;
+    }
+    req.userId = decoded.id;
+    next();
+}
 
 const passwordValidation = (pwd) => {
     let result = false
@@ -48,8 +79,6 @@ try {
 }
 const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
     try{
-        //verify if email is unique
-        
         //add user
         const addUser = await userModel.saveNewUser(hashPwd, name, email, city, longitude, latitude);
         return addUser
@@ -74,10 +103,10 @@ const findUser = async (Pwd,email) => {
     try{
         const user = await userModel.isUserMailExist(email);
         console.log("user",user);
-        if(user){
+        if(user.length){
             const match = await bcrypt.compare(Pwd, user[0].password);
             if(match) {
-                return true
+                return user
             }else {
                 throw new Error ("wrong password");
             }
@@ -90,5 +119,12 @@ const findUser = async (Pwd,email) => {
         return false;
     }
 }
+const modifyGardenLocation = async (userId, longitude, latitude) => {
+    try{
+        const
+    }catch(e){
+        throw new Error("Unable to modify the garden's coordinates.")
+    }
+}
 
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb}
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, modifyGardenLocation}
