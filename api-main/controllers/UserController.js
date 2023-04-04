@@ -14,7 +14,6 @@ function verifyToken(token) {
         return null;
     }
 }
-
 // middleware qui protège les routes qui nécessite une authentification
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
@@ -31,14 +30,8 @@ const authenticate = (req, res, next) => {
     req.userId = decoded.id;
     next();
 }
-
 const passwordValidation = (pwd) => {
     let result = false
-    /*if(pwd.length >= 8) console.log("pwd length > 8");
-    if(/[A-Z]/.test(pwd)) console.log("pwd contain One letter is capital");
-    if(/\d/.test(pwd)) console.log("pwd contain alphanumeric");
-    if( /\W/.test(pwd)) console.log("pwd contain a special character");
-    if( /\W/.test(pwd)) console.log("pwd contain no spaces");*/
     if (
         pwd.length >= 8 &&   //length must be greater than 8 characters.
         /[A-Z]/.test(pwd) && // One letter should be capital.
@@ -88,7 +81,6 @@ const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
         return null;
     }
 }
-
 const showUsers = async () => {
     try{
         return userModel.getUsers()
@@ -98,7 +90,6 @@ const showUsers = async () => {
         return null;
     }
 }
-
 const findUser = async (Pwd,email) => {
     try{
         const user = await userModel.isUserMailExist(email);
@@ -119,12 +110,13 @@ const findUser = async (Pwd,email) => {
         return false;
     }
 }
-const modifyGardenLocation = async (userId, longitude, latitude) => {
+const updateGardenLocation = async (userId, longitude, latitude) => {
     try{
-        const
+        const updateLocation =await userModel.updateLocation(userId, longitude, latitude);
+        console.log(updateLocation);
     }catch(e){
         throw new Error("Unable to modify the garden's coordinates.")
     }
 }
 
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, modifyGardenLocation}
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation}

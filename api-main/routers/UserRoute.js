@@ -37,6 +37,7 @@ router.route('/sign-up')
                 await userController.passwordValidation(password)) {
                 // Hash password
                     const hashPwd = await userController.hash(password);
+                //Email validation
 
                 // Save user in database
                     const saveUser = await userController.newUser(hashPwd, name, email, city, longitude, latitude);
@@ -75,11 +76,10 @@ router.route('/login')
 
 //save garden position
 router.route('/gardenLocation')
-    
-    .PATCH(userController.authenticate,(req,res) => {
+    .patch(userController.authenticate,(req,res) => {
         console.log("userId",req.userId);
         const { longitude, latitude } = req.body;
-        const patchGardenLocation = userController.modifyGardenLocation(req.userId, longitude, latitude)
+        const patchGardenLocation = userController.updateGardenLocation(req.userId, longitude, latitude)
     })
 
 // vérification de l'adresse mail lors de l'inscription en envoyant un mail
