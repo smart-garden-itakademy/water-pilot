@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const userModel = require ('../models/UserModel');
 const jwt = require('jsonwebtoken');
+const validator = require('validator');
 
 const generateToken = (user) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
@@ -81,6 +82,11 @@ const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
         return null;
     }
 }
+const isEmail = (email) => {
+    if (!validator.isEmail(email)) {
+        return false
+    } else return true
+}
 const showUsers = async () => {
     try{
         return userModel.getUsers()
@@ -119,4 +125,4 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
     }
 }
 
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation}
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail}

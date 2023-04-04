@@ -38,7 +38,8 @@ router.route('/sign-up')
                 // Hash password
                     const hashPwd = await userController.hash(password);
                 //Email validation
-
+                    const isValidEmail = await userController.isEmail(email);
+                    if(!isValidEmail ) return res.status(400).send({message: 'Veuillez fournir une adresse e-mail valide.'});
                 // Save user in database
                     const saveUser = await userController.newUser(hashPwd, name, email, city, longitude, latitude);
 
