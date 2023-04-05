@@ -4,7 +4,6 @@ const automaticRoute = require('./routers/AutomaticRoute');
 const userRoute = require ('./routers/UserRoute')
 const statsRoute = require ('./routers/StatsRoute')
 const bodyParser = require('body-parser');
-const {verifyToken} = require ('./controllers/UserController')
 
 dotenv.config();
 const app = express();

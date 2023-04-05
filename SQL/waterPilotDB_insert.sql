@@ -1,108 +1,10 @@
+/* Insertion de données pour la table user */
 
-/* Insertion de données pour le capteur de température*/
-
-INSERT INTO Sensor (name, position, value, date)
+INSERT INTO User (name, email, password, longitude, latitude, city)
 VALUES
-    ('Temperature sensor', 1, 20, '2022-03-28'),
-    ('Temperature sensor', 1, 22, '2022-03-28'),
-    ('Temperature sensor', 1, 24, '2022-03-28'),
-    ('Temperature sensor', 1, 25, '2022-03-28'),
-    ('Temperature sensor', 1, 23, '2022-03-28'),
-    ('Temperature sensor', 1, 21, '2022-03-28'),
-    ('Temperature sensor', 1, 18, '2022-03-28'),
-    ('Temperature sensor', 1, 17, '2022-03-28'),
-    ('Temperature sensor', 1, 19, '2022-03-28'),
-    ('Temperature sensor', 1, 16, '2022-03-28'),
-    ('Temperature Sensor', 1, 20, '2023-03-29'),
-    ('Temperature Sensor', 1, 19, '2023-03-29'),
-    ('Temperature Sensor', 1, 18, '2023-03-29'),
-    ('Temperature Sensor', 1, 21, '2023-03-29'),
-    ('Temperature Sensor', 1, 22, '2023-03-29'),
-    ('Temperature Sensor', 1, 20, '2023-03-29'),
-    ('Temperature Sensor', 1, 19, '2023-03-29'),
-    ('Temperature Sensor', 1, 18, '2023-03-29'),
-    ('Temperature Sensor', 1, 21, '2023-03-29'),
-    ('Temperature Sensor', 1, 22, '2023-03-29'),
-    ('Temperature Sensor', 1, 23, '2023-03-30'),
-    ('Temperature Sensor', 1, 22, '2023-03-30'),
-    ('Temperature Sensor', 1, 21, '2023-03-30'),
-    ('Temperature Sensor', 1, 24, '2023-03-30'),
-    ('Temperature Sensor', 1, 23, '2023-03-30'),
-    ('Temperature Sensor', 1, 22, '2023-03-30'),
-    ('Temperature Sensor', 1, 21, '2023-03-30'),
-    ('Temperature Sensor', 1, 20, '2023-03-30'),
-    ('Temperature Sensor', 1, 22, '2023-03-30'),
-    ('Temperature Sensor', 1, 21, '2023-03-30');
+    ('BobSmith', 'bobsmith@example.com', 'password789', 4.736120007422938, 45.7808503213175, "parla"),
+    ('JohnDoe', 'johndoe@example.com', 'password123', 4.736120007422938, 45.7808503213175, "lyon");
 
-/* Insertion de données pour le capteur d'humidité au sol'*/
-
-INSERT INTO Sensor (name, position, value, date)
-VALUES
-    ('Soil Moisture Sensor', 2, 70, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 65, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 60, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 75, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 80, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 70, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 65, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 60, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 75, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 80, '2023-03-28'),
-    ('Soil Moisture Sensor', 2, 72, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 68, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 64, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 70, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 75, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 72, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 68, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 64, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 70, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 75, '2023-03-29'),
-    ('Soil Moisture Sensor', 2, 74, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 69, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 63, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 71, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 76, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 74, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 69, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 63, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 71, '2023-03-30'),
-    ('Soil Moisture Sensor', 2, 76, '2023-03-30');
-
-/* Insertion de données pour le capteur de pluie */
-
-INSERT INTO Sensor (name, position, value, date)
-VALUES
-    ('Rain Sensor', 3, 5, '2023-03-28'),
-    ('Rain Sensor', 3, 3, '2023-03-28'),
-    ('Rain Sensor', 3, 6, '2023-03-28'),
-    ('Rain Sensor', 3, 4, '2023-03-28'),
-    ('Rain Sensor', 3, 2, '2023-03-28'),
-    ('Rain Sensor', 3, 4, '2023-03-28'),
-    ('Rain Sensor', 3, 6, '2023-03-28'),
-    ('Rain Sensor', 3, 3, '2023-03-28'),
-    ('Rain Sensor', 3, 5, '2023-03-28'),
-    ('Rain Sensor', 3, 2, '2023-03-28'),
-    ('Rain Sensor', 3, 4, '2023-03-29'),
-    ('Rain Sensor', 3, 5, '2023-03-29'),
-    ('Rain Sensor', 3, 2, '2023-03-29'),
-    ('Rain Sensor', 3, 6, '2023-03-29'),
-    ('Rain Sensor', 3, 3, '2023-03-29'),
-    ('Rain Sensor', 3, 5, '2023-03-29'),
-    ('Rain Sensor', 3, 4, '2023-03-29'),
-    ('Rain Sensor', 3, 2, '2023-03-29'),
-    ('Rain Sensor', 3, 3, '2023-03-29'),
-    ('Rain Sensor', 3, 6, '2023-03-29'),
-    ('Rain Sensor', 3, 5, '2023-03-30'),
-    ('Rain Sensor', 3, 2, '2023-03-30'),
-    ('Rain Sensor', 3, 4, '2023-03-30'),
-    ('Rain Sensor', 3, 3, '2023-03-30'),
-    ('Rain Sensor', 3, 6, '2023-03-30'),
-    ('Rain Sensor', 3, 5, '2023-03-30'),
-    ('Rain Sensor', 3, 2, '2023-03-30'),
-    ('Rain Sensor', 3, 4, '2023-03-30'),
-    ('Rain Sensor', 3, 3, '2023-03-30'),
-    ('Rain Sensor', 3, 6, '2023-03-30');
 
 /* Insertion de données pour le type de capteur'*/
 
@@ -110,19 +12,118 @@ INSERT INTO Type (name, unit) VALUES ('Temperature', '°C');
 INSERT INTO Type (name, unit) VALUES ('Soil Moisture', '%');
 INSERT INTO Type (name, unit) VALUES ('Rain', 'mm');
 
-/* Insertion de données pour la table user */
 
-INSERT INTO User (name, email, password, longitude, latitude, city)
+/* Insertion de données pour le capteur de température*/
+
+INSERT INTO Sensor (name, position, value, date, userId, typeId)
 VALUES
-    ('BobSmith', 'bobsmith@example.com', 'password789', 4.736120007422938, 45.7808503213175, "parla");
+    ('Temperature sensor', 1, 20, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 22, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 24, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 25, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 23, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 21, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 18, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 17, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 19, '2022-03-28', 1, 1),
+    ('Temperature sensor', 1, 16, '2022-03-28', 1, 1),
+    ('Temperature Sensor', 1, 20, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 19, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 18, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 21, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 22, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 20, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 19, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 18, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 21, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 22, '2023-03-29', 1, 1),
+    ('Temperature Sensor', 1, 23, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 22, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 21, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 24, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 23, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 22, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 21, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 20, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 22, '2023-03-30', 1, 1),
+    ('Temperature Sensor', 1, 21, '2023-03-30', 1, 1);
 
+/* Insertion de données pour le capteur d'humidité au sol'*/
+
+INSERT INTO Sensor (name, position, value, date, userId, typeId)
+VALUES
+    ('Soil Moisture Sensor', 2, 70, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 65, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 60, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 75, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 80, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 70, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 65, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 60, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 75, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 80, '2023-03-28', 1, 2),
+    ('Soil Moisture Sensor', 2, 72, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 68, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 64, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 70, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 75, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 72, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 68, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 64, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 70, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 75, '2023-03-29', 1, 2),
+    ('Soil Moisture Sensor', 2, 74, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 69, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 63, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 71, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 76, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 74, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 69, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 63, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 71, '2023-03-30', 1, 2),
+    ('Soil Moisture Sensor', 2, 76, '2023-03-30', 1, 2);
+
+/* Insertion de données pour le capteur de pluie */
+
+INSERT INTO Sensor (name, position, value, date, userId, typeId)
+VALUES
+    ('Rain Sensor', 3, 5, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 3, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 6, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 4, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 2, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 4, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 6, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 3, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 5, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 2, '2023-03-28', 1, 3),
+    ('Rain Sensor', 3, 4, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 5, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 2, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 6, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 3, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 5, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 4, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 2, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 3, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 6, '2023-03-29', 1, 3),
+    ('Rain Sensor', 3, 5, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 2, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 4, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 3, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 6, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 5, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 2, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 4, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 3, '2023-03-30', 1, 3),
+    ('Rain Sensor', 3, 6, '2023-03-30', 1, 3);
 
 /* Insertion de données pour la table Electrovalve */
 
-INSERT INTO Electrovalve (name, position) VALUES
-                                              ('Tomatoes', 4),
-                                              ('Lettuce', 5),
-                                              ('Strawberry', 6);
+INSERT INTO Electrovalve (name, position, userId) VALUES
+                                              ('Tomatoes', 4, 1),
+                                              ('Lettuce', 5, 1),
+                                              ('Strawberry', 6, 1);
 
 /* Insertion de données pour la table Valvesettings */
 
