@@ -1,7 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const automaticRoute = require('./routers/automaticRoute');
-const userRoute = require ('./routers/UserRoute');
+const userRoute = require ('./routers/UserRoute')
+const statsRoute = require ('./routers/StatsRoute')
 const bodyParser = require('body-parser');
 const {verifyToken} = require ('./controllers/UserController')
 
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/automatic', automaticRoute);
 app.use('/user', userRoute);
+app.use('/stats', statsRoute);
 
 const port = process.env.PORT;
 app.listen(port, () => {

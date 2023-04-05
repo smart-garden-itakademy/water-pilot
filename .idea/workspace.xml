@@ -4,9 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="af4a8198-1540-4174-a0f5-6b2ea1408ffc" name="Changes" comment="api-main user, newUser function modified and table user added city">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-irrigate/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/api-irrigate/.gitignore" afterDir="false" />
+=======
+    <list default="true" id="af4a8198-1540-4174-a0f5-6b2ea1408ffc" name="Changes" comment="api-main user, 2 routes added get all user and sign-up. create table user modified.">
+      <change afterPath="$PROJECT_DIR$/api-main/controllers/StatsController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/models/StatsModel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/routers/StatsRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL/waterPilotDB_createTables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/SQL/waterPilotDB_createTables.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-irrigate/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/api-irrigate/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/App.js" afterDir="false" />
+>>>>>>> myBranch
       <change beforePath="$PROJECT_DIR$/api-main/routers/UserRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/UserRoute.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,6 +48,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -49,6 +62,21 @@
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
+=======
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/it-akademy/Desktop/Sites/water-pilot&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+>>>>>>> myBranch
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -92,7 +120,11 @@
       <workItem from="1680442509228" duration="1300000" />
       <workItem from="1680443833948" duration="4866000" />
       <workItem from="1680464816127" duration="9359000" />
+<<<<<<< HEAD
       <workItem from="1680507838705" duration="37811000" />
+=======
+      <workItem from="1680683877109" duration="905000" />
+>>>>>>> myBranch
     </task>
     <task id="LOCAL-00001" summary="api-main user">
       <created>1680465248875</created>

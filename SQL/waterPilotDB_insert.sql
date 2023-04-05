@@ -137,7 +137,6 @@ VALUES
 
 /* Valve 1 UPDATE : changement des insert days */ 
 INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
-<<<<<<< HEAD
                                                                (6, 12, '1', 1),
                                                                (12, 19, '2, 3, 4', 1),
                                                                (20, 23, '1, 2, 3, 4, 5', 1);
