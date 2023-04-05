@@ -93,9 +93,4 @@ router.route('/gardenLocation')
 //2. creer setting 
 
 //get valve setting
-<<<<<<< HEAD
-
-
-=======
->>>>>>> myBranch
 module.exports=router;
