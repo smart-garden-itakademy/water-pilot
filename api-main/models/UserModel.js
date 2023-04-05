@@ -81,4 +81,22 @@ const addElectrovalveInDb = (userId,pinPosition,name) => {
         )
     })
 }
-module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation,addElectrovalveInDb}
+const deleteElectrovalveInDb = (electrovalveId, userId) => {
+    return new Promise ((resolve, reject) => {
+        connection.query(
+            "DELETE FROM Electrovalve WHERE id = ? AND userId = ?",
+            [electrovalveId, userId],
+            (error, results) => {
+                if (error) {
+                    console.error("Erreur lors de la suppression de l'éléctrovalve dans la base de données :", error);
+                    reject(error);
+                } else {
+                    console.log("L'éléctrovalve a été supprimée avec succès");
+                    resolve(results);
+                    return results
+                }
+            }
+        )
+    })
+}
+module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation,addElectrovalveInDb,deleteElectrovalveInDb}

@@ -121,15 +121,29 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
         const updateLocation =await userModel.updateLocation(userId, longitude, latitude);
         console.log(updateLocation);
     }catch(e){
-        throw new Error("Unable to modify the garden's coordinates.")
+        throw new Error("Unable to modify the garden's coordinates.Errormsg:"+e)
     }
 }
 const addElectrovalve = async (userId, pinPosition, name) => {
     try{
-        const addElectrovalveInDb = await userModel.addElectrovalveInDb(userId,pinPosition,name)
+        const addElectrovalveInDb = await userModel.addElectrovalveInDb(userId,pinPosition,name);
+        return addElectrovalveInDb
     }catch(e){
-        throw new Error("Unable to add electrovalve.")
+        throw new Error("Unable to add electrovalve.Errormsg:"+e)
     }
 }
-
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail}
+const deleteElectrovalve = async (electrovalveId, userId) => {
+    try{
+        return await userModel.deleteElectrovalveInDb(electrovalveId, userId);
+    }catch(e){
+        throw new Error("Unable to delete electrovalve.Errormsg:"+e)
+    }
+}
+const getElectrovalve = async (electrovalveId, userId) => {
+    try{
+        return userModel.getElectrovalveInDb(electrovalveId, userId);
+    }catch(e){
+        throw new Error("Unable to delete electrovalve.Errormsg:"+e)
+    }
+}
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail, addElectrovalve,deleteElectrovalve, getElectrovalve}

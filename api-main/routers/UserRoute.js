@@ -80,7 +80,14 @@ router.route('/gardenLocation')
     .patch(userController.authenticate,(req,res) => {
         console.log("userId",req.userId);
         const { longitude, latitude } = req.body;
-        const patchGardenLocation = userController.updateGardenLocation(req.userId, longitude, latitude)
+        try{
+            const patchGardenLocation = userController.updateGardenLocation(req.userId, longitude, latitude);
+            res.status(200).json({patchGardenLocation});
+        }
+        catch(e){
+            res.status(400).json(err)
+        }
+
     })
 
 // vérification de l'adresse mail lors de l'inscription en envoyant un mail
@@ -95,7 +102,41 @@ router.route('/electrovalve')
     .post(userController.authenticate,(req,res) => {
         console.log("userId",req.userId);
         const { pinPosition, name } = req.body;
-        const addElectrovalve = userController.addElectrovalve(req.userId,pinPosition,name)
+        if(pinPosition && name){
+            try{
+                const addElectrovalve = userController.addElectrovalve(req.userId,pinPosition,name);
+                res.status(200).json({})
+            }catch(err){
+                res.status(400).json({"msg":"Un problème est survenu lors de l'enregistrement de l'éléctrovalve:"+err})
+            }
+        }else res.status(400).json({"msg":"la position de l'éléctrovanne et son nom doivent être renseignés"})
+
+    })
+    .delete(userController.authenticate,(req,res) => {
+        const { electrovalveId } = req.body;
+        console.log(electrovalveId)
+        if(electrovalveId){
+            try{
+                const deleteElectrovalve = userController.deleteElectrovalve(electrovalveId, req.userId);
+                console.log("deleteElectrovalve",deleteElectrovalve);
+                res.status(200).json(deleteElectrovalve)
+            }catch(err){
+                res.status(400).json({"msg":"Un problème est survenu lors de la suppression de l'éléctrovalve:"+err})
+            }
+        }else res.status(400).json({"msg":"l'éléctrovanne n'est pas identifiée"})
+
+    })
+    .get(userController.authenticate,(req,res) => {
+        const { electrovalveId } = req.body;
+        console.log(electrovalveId)
+        if(electrovalveId){
+            try{
+                const getElectrovalve = userController.getElectrovalve(electrovalveId, req.userId);
+                res.status(200).json(getElectrovalve)
+            }catch(err){
+                res.status(400).json({"msg":"Un problème est survenu lors de la suppression de l'éléctrovalve:"+err})
+            }
+        }else res.status(400).json({"msg":"l'éléctrovanne n'est pas identifiée"})
     })
 //2. creer setting
 
