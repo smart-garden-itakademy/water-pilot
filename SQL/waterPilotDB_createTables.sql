@@ -11,15 +11,15 @@ CREATE TABLE User (
 
 /* Création de la table Sensor */
 CREATE TABLE Sensor (
-                        id INT PRIMARY KEY AUTO_INCREMENT,
-                        name varchar(100) NOT NULL,
-                        position int NOT NULL,
-                        value int NOT NULL,
-                        date DATE NOT NULL,
-                        idUser INT,
-                        FOREIGN KEY (idUser) REFERENCES User(id),
-                        idType INT,
-                        FOREIGN KEY (idType) REFERENCES Type(id)
+                      id INT PRIMARY KEY AUTO_INCREMENT,
+                      name varchar(100) NOT NULL,
+                      position int NOT NULL,
+                      value int NOT NULL,
+                      date DATE NOT NULL,
+                      userId INT,
+                      FOREIGN KEY (userId) REFERENCES User(id),
+                      idType INT,
+                      FOREIGN KEY (idType) REFERENCES Type(id)
 );
 
 /* Création de la table Type */

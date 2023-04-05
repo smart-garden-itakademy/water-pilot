@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const automaticRoute = require('./routers/automaticRoute');
+const automaticRoute = require('./routers/AutomaticRoute');
 const userRoute = require ('./routers/UserRoute')
 const statsRoute = require ('./routers/StatsRoute')
 const bodyParser = require('body-parser');
