@@ -7,25 +7,26 @@ CREATE TABLE User (
                       latitude varchar(100) ,
                       longitude varchar(100),
                       city varchar (100)
->>>>>>> apifront
 );
 
 /* Création de la table Sensor */
 CREATE TABLE Sensor (
-                      id INT PRIMARY KEY AUTO_INCREMENT,
-                      name varchar(100) NOT NULL,
-                      position int NOT NULL,
-                      value int NOT NULL,
-                      date DATE NOT NULL
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        name varchar(100) NOT NULL,
+                        position int NOT NULL,
+                        value int NOT NULL,
+                        date DATE NOT NULL,
+                        idUser INT,
+                        FOREIGN KEY (idUser) REFERENCES User(id),
+                        idType INT,
+                        FOREIGN KEY (idType) REFERENCES Type(id)
 );
 
 /* Création de la table Type */
 CREATE TABLE Type (
                       id INT PRIMARY KEY AUTO_INCREMENT,
                       name varchar(100) NOT NULL,
-                      unit varchar(50) NOT NULL,
-                      idSensor INT,
-                      FOREIGN KEY (idSensor) REFERENCES Sensor(id)
+                      unit varchar(50) NOT NULL
 );
 
 /* Création de la table Electrovalve */
