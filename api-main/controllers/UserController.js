@@ -124,5 +124,12 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
         throw new Error("Unable to modify the garden's coordinates.")
     }
 }
+const addElectrovalve = async (userId, pinPosition, name) => {
+    try{
+        const addElectrovalveInDb = await userModel.addElectrovalveInDb(userId,pinPosition,name)
+    }catch(e){
+        throw new Error("Unable to add electrovalve.")
+    }
+}
 
 module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail}

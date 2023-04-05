@@ -91,6 +91,12 @@ router.route('/gardenLocation')
 //------------------------valve settings------------------------------------------
 //creation de valve setting
 //1. creer une valve et récupérer l'ID
+router.route('/electrovalve')
+    .post(userController.authenticate,(req,res) => {
+        console.log("userId",req.userId);
+        const { pinPosition, name } = req.body;
+        const addElectrovalve = userController.addElectrovalve(req.userId,pinPosition,name)
+    })
 //2. creer setting
 
 //get valve setting

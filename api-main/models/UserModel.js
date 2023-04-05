@@ -64,5 +64,21 @@ const updateLocation = (userId, longitude, latitude) => {
         )
     })
 }
-
-module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation}
+const addElectrovalveInDb = (userId,pinPosition,name) => {
+    return new Promise ((resolve, reject) => {
+        connection.query(
+            "INSERT INTO Electrovalve (name, position, userId) VALUES (?, ?, ?)",
+            [name, pinPosition, userId],
+            (error, results) => {
+                if (error) {
+                    console.error("Erreur lors de l'enregistrement de l'éléctrovalve dans la base de données :", error);
+                    reject(error);
+                } else {
+                    console.log("L'éléctrovalve a été mise à jour avec succès");
+                    resolve(results);
+                }
+            }
+        )
+    })
+}
+module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation,addElectrovalveInDb}
