@@ -15,16 +15,18 @@ CREATE TABLE Sensor (
                       name varchar(100) NOT NULL,
                       position int NOT NULL,
                       value int NOT NULL,
-                      date DATE NOT NULL
+                      date DATE NOT NULL,
+                      userId INT,
+                      FOREIGN KEY (userId) REFERENCES User(id),
+                      idType INT,
+                      FOREIGN KEY (idType) REFERENCES Type(id)
 );
 
 /* Création de la table Type */
 CREATE TABLE Type (
                       id INT PRIMARY KEY AUTO_INCREMENT,
                       name varchar(100) NOT NULL,
-                      unit varchar(50) NOT NULL,
-                      idSensor INT,
-                      FOREIGN KEY (idSensor) REFERENCES Sensor(id)
+                      unit varchar(50) NOT NULL
 );
 
 /* Création de la table Electrovalve */

@@ -1,4 +1,4 @@
-const { getAllValvesWithSettings } = require('../models/automaticModel');
+const { getAllValvesWithSettings } = require('../models/AutomaticModel');
 
 const getWeatherData = async (latitude, longitude) => {
   const API_KEY = process.env.KEY;

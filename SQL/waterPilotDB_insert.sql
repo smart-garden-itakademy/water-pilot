@@ -126,18 +126,16 @@ INSERT INTO Electrovalve (name, position) VALUES
 
 /* Insertion de données pour la table Valvesettings */
 
-INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, idElectrovalve)
-VALUES
-    (50, 20, 10, (SELECT id FROM Electrovalve WHERE name = 'Tomatoes')),
-    (40, 25, 15, (SELECT id FROM Electrovalve WHERE name = 'Lettuce')),
-    (60, 18, 12, (SELECT id FROM Electrovalve WHERE name = 'Strawberry'));
+INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, idElectrovalve) VALUES
+    (5, 20, 1, (SELECT id FROM Electrovalve WHERE name = 'Tomatoes')),
+    (6, 25, 2, (SELECT id FROM Electrovalve WHERE name = 'Lettuce')),
+    (4, 18, 1, (SELECT id FROM Electrovalve WHERE name = 'Strawberry'));
 
 
 /* Insertion des planifications pour les valves */
 
 /* Valve 1 UPDATE : changement des insert days */ 
 INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
-<<<<<<< HEAD
                                                                (6, 12, '1', 1),
                                                                (12, 19, '2, 3, 4', 1),
                                                                (20, 23, '1, 2, 3, 4, 5', 1);
