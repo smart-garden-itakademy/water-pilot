@@ -44,6 +44,7 @@ CREATE TABLE ValveSettings (
                               rainThreshold INT NOT NULL,
                               moistureThreshold INT NOT NULL,
                               duration INT NOT NULL,
+                              state BOOLEAN NOT NULL,
                               idElectrovalve INT,
                               FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id)
 );
