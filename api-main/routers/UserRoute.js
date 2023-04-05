@@ -84,13 +84,14 @@ router.route('/gardenLocation')
     })
 
 // vérification de l'adresse mail lors de l'inscription en envoyant un mail
+//piste: nodemailer
 
 //fonctionnalité forgot password
 
 //------------------------valve settings------------------------------------------
 //creation de valve setting
 //1. creer une valve et récupérer l'ID
-//2. creer setting 
+//2. creer setting
 
 //get valve setting
 

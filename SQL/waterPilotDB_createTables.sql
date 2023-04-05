@@ -7,7 +7,6 @@ CREATE TABLE User (
                       latitude varchar(100) ,
                       longitude varchar(100),
                       city varchar (100)
->>>>>>> apifront
 );
 
 /* Création de la table Sensor */
