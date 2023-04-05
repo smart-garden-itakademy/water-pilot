@@ -89,6 +89,8 @@ router.route('/gardenLocation')
 
 //------------------------valve settings------------------------------------------
 //creation de valve setting
+//1. creer une valve et récupérer l'ID
+//2. creer setting 
 
 //get valve setting
 
