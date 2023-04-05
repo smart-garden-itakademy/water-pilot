@@ -5,7 +5,6 @@ const userRoute = require ('./routers/UserRoute')
 const statsRoute = require ('./routers/StatsRoute')
 const bodyParser = require('body-parser');
 
-
 dotenv.config();
 const app = express();
 

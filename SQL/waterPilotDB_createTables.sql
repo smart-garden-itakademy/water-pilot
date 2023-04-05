@@ -9,24 +9,24 @@ CREATE TABLE User (
                       city varchar (100)
 );
 
-/* Création de la table Sensor */
-CREATE TABLE Sensor (
-                      id INT PRIMARY KEY AUTO_INCREMENT,
-                      name varchar(100) NOT NULL,
-                      position int NOT NULL,
-                      value int NOT NULL,
-                      date DATE NOT NULL,
-                      userId INT,
-                      FOREIGN KEY (userId) REFERENCES User(id),
-                      idType INT,
-                      FOREIGN KEY (idType) REFERENCES Type(id)
-);
-
 /* Création de la table Type */
 CREATE TABLE Type (
                       id INT PRIMARY KEY AUTO_INCREMENT,
                       name varchar(100) NOT NULL,
                       unit varchar(50) NOT NULL
+);
+
+/* Création de la table Sensor */
+CREATE TABLE Sensor (
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        name varchar(100) NOT NULL,
+                        position int NOT NULL,
+                        value int NOT NULL,
+                        date DATE NOT NULL,
+                        userId INT,
+                        FOREIGN KEY (userId) REFERENCES User(id),
+                        typeId INT,
+                        FOREIGN KEY (typeId) REFERENCES Type(id)
 );
 
 /* Création de la table Electrovalve */
@@ -44,6 +44,7 @@ CREATE TABLE ValveSettings (
                               rainThreshold INT NOT NULL,
                               moistureThreshold INT NOT NULL,
                               duration INT NOT NULL,
+                              isAutomatic BOOLEAN NOT NULL,
                               idElectrovalve INT,
                               FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id)
 );

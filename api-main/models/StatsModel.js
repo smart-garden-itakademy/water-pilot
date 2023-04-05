@@ -8,7 +8,7 @@ const getIrrigationStats = () => {
             "SELECT Irrigation.dateStart, Irrigation.dateEnd, Irrigation.volume, Electrovalve.name AS electrovalve_name\n" +
             "FROM Irrigation\n" +
             "INNER JOIN Electrovalve ON Irrigation.idElectrovalve = Electrovalve.id\n" +
-            "INNER JOIN User ON Electrovalve.idUser = User.id\n" +
+            "INNER JOIN User ON Electrovalve.userId = User.id\n" +
             "WHERE User.id = ?;",
             [userId], (error, results) => {
                 if (error) {
