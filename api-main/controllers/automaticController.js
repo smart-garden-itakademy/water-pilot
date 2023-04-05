@@ -1,4 +1,4 @@
-const { getAllValvesWithSettings } = require('../models/AutomaticModel');
+const { getAllValvesWithSettings, insertIrrigationData } = require('../models/AutomaticModel');
 
 const getWeatherData = async (latitude, longitude) => {
   const API_KEY = process.env.KEY;
@@ -38,13 +38,20 @@ const isRainBelowThresholdAndNotExpectedNow = (rainThreshold24h, isRainingNow, m
 };
 
 const startIrrigation = async (userId, electrovalveId) => {
+  const dateStart = new Date(); // La date actuelle est la date de début de l'irrigation
   const start = await fetch("http://localhost:8090/startIrrigation", {
     method: "POST",
   }).then((res) => res.json());
   console.log(`Arrosage démarré pour l'utilisateur ${userId} et la Valve ${electrovalveId}:`, start);
+  return dateStart;
 };
 
-const stopIrrigation = async (userId, electrovalveId) => {
+const stopIrrigation = async (userId, electrovalveId, dateStart) => {
+  const dateEnd = new Date();
+  const volume = 777;
+
+  await insertIrrigationData(electrovalveId, dateStart, dateEnd, volume);
+
   const stop = await fetch("http://localhost:8090/stopIrrigation", {
     method: "POST",
   }).then((res) => res.json());
@@ -52,24 +59,31 @@ const stopIrrigation = async (userId, electrovalveId) => {
 };
 
 const processWeatherData = (weatherData) => {
-  if (!weatherData) {
-    console.log("Echec de la récupération des données");
+  if (weatherData && parseInt(weatherData.cod) === 200) {
+    const rainNow = weatherData.list[0].weather.some((weather) => weather.main === 'Rain');
+    const rain24h = weatherData.list
+      .slice(0, 8)
+      .reduce((accumulator, forecast) => accumulator + (forecast.rain?.['3h'] || 0), 0);
+
+    console.log("Pluie actuelle :", rainNow);
+    console.log("Pluie dans les 24 prochaines heures :", rain24h);
+
+    return { rainNow, rain24h, weatherDataError: false };
+  } else if (weatherData && parseInt(weatherData.cod) >= 400) {
+    console.log("Echec de la récupération des données météos via l'API:", weatherData.message);
+    return { rainNow: false, rain24h: 0, weatherDataError: true };
+  } else {
+    console.log("Erreur inattendue lors de la récupération des données météos");
     return { rainNow: false, rain24h: 0, weatherDataError: true };
   }
-
-  const rainNow = weatherData.list[0].weather.some((weather) => weather.main === 'Rain');
-  const rain24h = weatherData.list
-    .slice(0, 8)
-    .reduce((accumulator, forecast) => accumulator + (forecast.rain?.['3h'] || 0), 0);
-
-  console.log("Pluie actuelle :", rainNow);
-  console.log("Pluie dans les 24 prochaines heures :", rain24h);
-
-  return { rainNow, rain24h, weatherDataError: false };
 }
 
 const checkIrrigationStatus = async (valveWithSettings) => {
   for (const schedule of valveWithSettings.schedules) {
+    if (!valveWithSettings.isAutomatic) {
+      console.log(`L'arrosage automatique est désactivé pour la valve ${valveWithSettings.idElectrovalve} de l'user ${valveWithSettings.userId}.`);
+      return;
+    }
     if (isWateringScheduleValid(schedule.hourStart, schedule.hourEnd, schedule.days)) {
       console.log("Le programme d'arrosage est valide");
 
@@ -86,9 +100,9 @@ const checkIrrigationStatus = async (valveWithSettings) => {
           isRainBelowThresholdAndNotExpectedNow(rain24h, rainNow, valveWithSettings.rainThreshold, weatherDataError)
         ) {
           console.log("Les conditions d'arrosage sont remplies");
-          startIrrigation(valveWithSettings.userId, valveWithSettings.idElectrovalve);
+          const dateStart = await startIrrigation(valveWithSettings.userId, valveWithSettings.idElectrovalve);
           setTimeout(
-            () => stopIrrigation(valveWithSettings.userId, valveWithSettings.idElectrovalve),
+            () => stopIrrigation(valveWithSettings.userId, valveWithSettings.idElectrovalve, dateStart),
             valveWithSettings.duration * 60 * 1000,
           );
 
