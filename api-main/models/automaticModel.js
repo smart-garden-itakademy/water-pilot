@@ -1,23 +1,5 @@
 const connection = require('../cores/database');
 
-const getPosition = (req, res) => {
-  return new Promise((resolve, reject) => {
-    connection.query('SELECT latitude, longitude FROM User', (error, results) => {
-      if (error) {
-        console.error('Erreur lors de la connexion à la base de données:', error);
-        reject(error);
-      } else if (results.length === 0) {
-        reject(new Error('Aucune position trouvée.'));
-      }else {
-        resolve({
-          latitude: results[0].latitude,
-          longitude: results[0].longitude
-        });
-      }
-    });
-  });
-};
-
 const getSchedules = (idSettings) => {
   return new Promise((resolve, reject) => {
     connection.query(
@@ -41,7 +23,16 @@ const getSchedules = (idSettings) => {
 const getAllValvesWithSettings = async () => {
   return new Promise(async (resolve, reject) => {
     connection.query(
-      'SELECT Electrovalve.*, ValveSettings.* FROM Electrovalve INNER JOIN ValveSettings ON Electrovalve.id = ValveSettings.idElectrovalve',
+      `SELECT 
+        Electrovalve.*, 
+        ValveSettings.*, 
+        User.id as userId,
+        User.latitude as latitude,
+        User.longitude as longitude
+      FROM 
+        Electrovalve 
+        INNER JOIN ValveSettings ON Electrovalve.id = ValveSettings.idElectrovalve 
+        INNER JOIN User ON Electrovalve.userId = User.id`,
       async (error, results) => {
         if (error) {
           console.error(
@@ -66,6 +57,5 @@ const getAllValvesWithSettings = async () => {
 };
 
 module.exports = {
-  getPosition,
   getAllValvesWithSettings,
 };

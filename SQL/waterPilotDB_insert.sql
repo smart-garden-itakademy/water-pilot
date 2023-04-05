@@ -36,7 +36,6 @@ VALUES
 
 /* Insertion de données pour le capteur d'humidité au sol'*/
 
-
 INSERT INTO Sensor (name, position, value, date)
 VALUES
     ('Soil Moisture Sensor', 2, 70, '2023-03-28'),
@@ -69,7 +68,6 @@ VALUES
     ('Soil Moisture Sensor', 2, 63, '2023-03-30'),
     ('Soil Moisture Sensor', 2, 71, '2023-03-30'),
     ('Soil Moisture Sensor', 2, 76, '2023-03-30');
-
 
 /* Insertion de données pour le capteur de pluie */
 
@@ -138,23 +136,22 @@ VALUES
 /* Insertion des planifications pour les valves */
 
 /* Valve 1 UPDATE : changement des insert days */ 
-INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
-                                                               (6, 8, '1', 1),
-                                                               (12, 14, '2, 3, 4', 1),
-                                                               (18, 20, '1, 2, 3, 4, 5', 1);
+INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
+                                                               (6, 12, '1', 1),
+                                                               (12, 19, '2, 3, 4', 1),
+                                                               (20, 23, '1, 2, 3, 4, 5', 1);
 
 /* Valve 2 */
-INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
-                                                               (7, 9, '5, 6', 2),
-                                                               (13, 15, '1, 2, 3, 4', 2),
-                                                               (19, 21, '1, 2, 3, 4, 5, 6, 7', 2);
+INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
+                                                               (7, 15, '5, 6', 2),
+                                                               (16, 18, '1, 2, 3, 4', 2),
+                                                               (19, 6, '1, 2, 3, 4, 5, 6, 7', 2);
 
 /* Valve 3 */
-INSERT INTO Schedule (hourStart, hourEnd, day, idSettings) VALUES
-                                                               (8, 10, '1, 2, 3', 3),
-                                                               (14, 16, '1, 2, 3, 4, 5', 3),
+INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
+                                                               (8, 15, '1, 2, 3', 3),
+                                                               (15, 19, '1, 2, 3, 4, 5', 3),
                                                                (20, 22, '1, 2, 3, 4, 5', 3);
-
 
 /* Insertion de données d'irrigation */
 
@@ -180,7 +177,3 @@ VALUES
     ('2023-03-24 12:00:00', '2023-03-24 12:30:00', 450, 3),
     ('2023-03-26 13:00:00', '2023-03-26 13:30:00', 500, 1),
     ('2023-03-28 16:00:00', '2023-03-28 16:30:00', 600, 2);
-
-
-
-
