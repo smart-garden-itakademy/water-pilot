@@ -127,10 +127,10 @@ INSERT INTO Electrovalve (name, position, userId) VALUES
 
 /* Insertion de données pour la table Valvesettings */
 
-INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, idElectrovalve, state) VALUES
-    (5, 20, 1, (SELECT id FROM Electrovalve WHERE name = 'Tomatoes'),"true"),
-    (6, 25, 2, (SELECT id FROM Electrovalve WHERE name = 'Lettuce'),"true"),
-    (4, 18, 1, (SELECT id FROM Electrovalve WHERE name = 'Strawberry'),"true");
+INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, idElectrovalve, isAutomatic) VALUES
+    (5, 20, 1, (SELECT id FROM Electrovalve WHERE name = 'Tomatoes'),true),
+    (6, 25, 2, (SELECT id FROM Electrovalve WHERE name = 'Lettuce'),true),
+    (4, 18, 1, (SELECT id FROM Electrovalve WHERE name = 'Strawberry'),true);
 
 
 /* Insertion des planifications pour les valves */
@@ -146,20 +146,6 @@ INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
                                                                (7, 15, '5, 6', 2),
                                                                (16, 18, '1, 2, 3, 4', 2),
                                                                (19, 6, '1, 2, 3, 4, 5, 6, 7', 2);
-
-/* Valve 3 */
-INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
-                                                               (8, 15, '1, 2, 3', 3),
-                                                               (15, 19, '1, 2, 3, 4, 5', 3),
-                                                               (6, 8, '1', 1),
-                                                               (12, 14, '2, 3, 4', 1),
-                                                               (18, 20, '1, 2, 3, 4, 5', 1);
-
-/* Valve 2 */
-INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
-                                                               (7, 9, '5, 6', 2),
-                                                               (13, 15, '1, 2, 3, 4', 2),
-                                                               (19, 21, '1, 2, 3, 4, 5, 6, 7', 2);
 
 /* Valve 3 */
 INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
