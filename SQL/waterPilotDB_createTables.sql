@@ -4,8 +4,10 @@ CREATE TABLE User (
                       name varchar(50) NOT NULL,
                       email varchar(100) NOT NULL,
                       password varchar(100) NOT NULL,
-                      latitude varchar(100),
-                      longitude varchar(100)
+                      latitude varchar(100) ,
+                      longitude varchar(100),
+                      city varchar (100)
+>>>>>>> apifront
 );
 
 /* Création de la table Sensor */
