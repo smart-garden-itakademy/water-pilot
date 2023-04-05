@@ -41,9 +41,4 @@ router.route('/sign-up')
 //creation de valve setting
 
 //get valve setting
-
-//-------------------------get datas-------------------------------------------------
-//get irrigations
-
-//get sensors
 module.exports=router;
