@@ -1,8 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const automaticRoute = require('./routers/AutomaticRoute');
-const userRoute = require ('./routers/UserRoute')
-const statsRoute = require ('./routers/StatsRoute')
+const userRoute = require ('./routers/UserRoute');
+const electrovalveRoute = require ('./routers/ElectrovalveRoute')
+const statsRoute = require ('./routers/StatsRoute');
 const bodyParser = require('body-parser');
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/automatic', automaticRoute);
 app.use('/user', userRoute);
+app.use('/electrovalve', electrovalveRoute);
 app.use('/stats', statsRoute);
 
 const port = process.env.PORT;

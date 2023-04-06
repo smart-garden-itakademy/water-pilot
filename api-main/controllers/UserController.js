@@ -124,47 +124,6 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
         throw new Error("Unable to modify the garden's coordinates.Errormsg:"+e)
     }
 }
-const addElectrovalve = async (userId, pinPosition, name) => {
-    const getElectrovalves = await getElectrovalve(userId);
-    if(!getElectrovalves.find(e => e.position == pinPosition)){
-        try{
-            const addElectrovalveInDb = await userModel.addElectrovalveInDb(userId,pinPosition,name);
-            return true;
-
-        }catch(e){
-            throw new Error("Unable to add electrovalve.Errormsg:"+e)
-        }
-    }else return false;
 
 
-    //console.log("find",getElectrovalve)
-    /*try{
-        const addElectrovalveInDb = await userModel.addElectrovalveInDb(userId,pinPosition,name);
-        
-    }catch(e){
-        throw new Error("Unable to add electrovalve.Errormsg:"+e)
-    }*/
-}
-const deleteElectrovalve = (pinPosition, userId) => {
-    try{
-        return userModel.deleteElectrovalveInDb(pinPosition, userId);
-    }catch(e){
-        throw new Error("Unable to delete electrovalve.Errormsg:"+e)
-    }
-}
-const getElectrovalve = (userId) => {
-    try{
-        return userModel.getElectrovalveInDb(userId);
-    }catch(e){
-        throw new Error("Unable to delete electrovalve.Errormsg:"+e)
-    }
-}
-const updateElectrovalve = (name,userId,pinPosition) => {
-    try{
-        return userModel.updateElectrovalveInDb(name,userId,pinPosition);
-    }catch(e){
-        throw new Error("Unable to rename electrovalve."+e)
-    }
-}
-
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail, addElectrovalve,deleteElectrovalve, getElectrovalve,updateElectrovalve}
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail}
