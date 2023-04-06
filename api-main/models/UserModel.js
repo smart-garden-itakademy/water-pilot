@@ -99,4 +99,20 @@ const deleteElectrovalveInDb = (pinPosition, userId) => {
         )
     })
 }
-module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation,addElectrovalveInDb,deleteElectrovalveInDb}
+const getElectrovalveInDb = (userId) => {
+    return new Promise ((resolve, reject) => {
+        connection.query(
+            "SELECT * FROM Electrovalve WHERE userId = ? ",
+            [userId],
+            (error, results) => {
+                if (error) {
+                    console.error("Erreur lors de la récupération des éléctrovalves dans la base de données :", error);
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            }
+        )
+    })
+}
+module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation, addElectrovalveInDb, deleteElectrovalveInDb, getElectrovalveInDb}

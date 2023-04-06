@@ -123,17 +123,13 @@ router.route('/electrovalve')
         }else res.status(400).json({"msg":"l'éléctrovanne n'est pas identifiée"})
 
     })
-    .get(userController.authenticate,(req,res) => {
-        const { electrovalveId } = req.body;
-        console.log(electrovalveId)
-        if(electrovalveId){
+    .get(userController.authenticate,async (req,res) => {
             try{
-                const getElectrovalve = userController.getElectrovalve(electrovalveId, req.userId);
+                const getElectrovalve = await userController.getElectrovalve(req.userId);
                 res.status(200).json(getElectrovalve)
             }catch(err){
                 res.status(400).json({"msg":"Un problème est survenu lors de la suppression de l'éléctrovalve:"+err})
             }
-        }else res.status(400).json({"msg":"l'éléctrovanne n'est pas identifiée"})
     })
 //2. creer setting
 
