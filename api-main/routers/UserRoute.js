@@ -110,15 +110,12 @@ router.route('/electrovalve')
                 res.status(400).json({"msg":"Un problème est survenu lors de l'enregistrement de l'éléctrovalve:"+err})
             }
         }else res.status(400).json({"msg":"la position de l'éléctrovanne et son nom doivent être renseignés"})
-
     })
-    .delete(userController.authenticate,(req,res) => {
-        const { electrovalveId } = req.body;
-        console.log(electrovalveId)
-        if(electrovalveId){
+    .delete(userController.authenticate,async (req,res) => {
+        const { pinPosition } = req.body;
+        if(pinPosition){
             try{
-                const deleteElectrovalve = userController.deleteElectrovalve(electrovalveId, req.userId);
-                console.log("deleteElectrovalve",deleteElectrovalve);
+                const deleteElectrovalve = await userController.deleteElectrovalve(pinPosition, req.userId);
                 res.status(200).json(deleteElectrovalve)
             }catch(err){
                 res.status(400).json({"msg":"Un problème est survenu lors de la suppression de l'éléctrovalve:"+err})

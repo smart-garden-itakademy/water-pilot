@@ -127,14 +127,15 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
 const addElectrovalve = async (userId, pinPosition, name) => {
     try{
         const addElectrovalveInDb = await userModel.addElectrovalveInDb(userId,pinPosition,name);
-        return addElectrovalveInDb
+        
     }catch(e){
         throw new Error("Unable to add electrovalve.Errormsg:"+e)
     }
 }
-const deleteElectrovalve = async (electrovalveId, userId) => {
+const deleteElectrovalve = async (pinPosition, userId) => {
     try{
-        return await userModel.deleteElectrovalveInDb(electrovalveId, userId);
+        return userModel.deleteElectrovalveInDb(pinPosition, userId);
+
     }catch(e){
         throw new Error("Unable to delete electrovalve.Errormsg:"+e)
     }

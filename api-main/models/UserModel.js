@@ -81,19 +81,19 @@ const addElectrovalveInDb = (userId,pinPosition,name) => {
         )
     })
 }
-const deleteElectrovalveInDb = (electrovalveId, userId) => {
+const deleteElectrovalveInDb = (pinPosition, userId) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "DELETE FROM Electrovalve WHERE id = ? AND userId = ?",
-            [electrovalveId, userId],
+            "DELETE FROM Electrovalve WHERE position = ? AND userId = ?",
+            [pinPosition, userId],
             (error, results) => {
                 if (error) {
                     console.error("Erreur lors de la suppression de l'éléctrovalve dans la base de données :", error);
                     reject(error);
                 } else {
-                    console.log("L'éléctrovalve a été supprimée avec succès");
+                    console.log(`L'éléctrovalve branchée sur le pin ${pinPosition} du user ${userId} a été supprimée avec succès`);
+                    results.msg = `L'éléctrovalve branchée sur le pin ${pinPosition} a été supprimée avec succès`;
                     resolve(results);
-                    return results
                 }
             }
         )
