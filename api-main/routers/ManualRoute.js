@@ -1,18 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { startManualIrrigation, stopManualIrrigation } = require('../controllers/ManualController');
+
+const { startManualIrrigation, stopManualIrrigation, timers } = require('../controllers/ManualController');
 
 router.route('/start')
     .post(async (req, res) => {
         const userId = req.body.userId;
         const electrovalveId = req.body.electrovalveId;
         const duration = req.body.duration;
-        
-        console.log('Received request body:', req.body);
-
-        console.log('userId', userId);
-        console.log('electrovalveId', electrovalveId);
-        console.log('duration', duration);
 
         try {
             const dateStart = await startManualIrrigation(userId, electrovalveId, duration);
@@ -22,14 +17,21 @@ router.route('/start')
         }
     });
 
-router.route('/stop')
+    router.route('/stop')
     .post(async (req, res) => {
         const userId = req.body.userId;
         const electrovalveId = req.body.electrovalveId;
-        const dateStart = req.body.dateStart;
+
+        const timerKey = `${userId}-${electrovalveId}`;
+        const dateStart = timers[timerKey]?.dateStart;
+
+        if (!dateStart) {
+            res.status(404).json({ "error": "Irrigation not found" });
+            return;
+        }
 
         try {
-            await stopManualIrrigation(userId, electrovalveId, new Date(dateStart));
+            await stopManualIrrigation(userId, electrovalveId, dateStart);
             res.status(200).json({"stopIrrigation": new Date()});
         } catch (error) {
             res.status(500).json({"error": error.message});
