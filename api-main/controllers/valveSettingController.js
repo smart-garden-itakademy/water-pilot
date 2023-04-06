@@ -22,6 +22,7 @@ const addValveSetting = async (rainThreshold, moistureThreshold, duration, isAut
         return false
     }
 }
+//const deleteValveSetting = async valveSettingModel.deleteValveSettingInDb(idElectrovalve,idValveSetting)
 
 
 

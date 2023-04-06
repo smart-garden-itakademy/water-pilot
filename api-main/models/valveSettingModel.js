@@ -32,5 +32,21 @@ const addValveSettingInDb = (rainThreshold, moistureThreshold, duration, isAutom
         )
     })
 }
+const deleteValveSettingInDb = (idElectrovalve,idValveSetting) => {
+    return new Promise ((resolve, reject) => {
+        connection.query(
+            "DELETE FROM ValveSettings WHERE id = ? AND idElectrovalve = ?",
+            [idValveSetting,idElectrovalve],
+            (error, results) => {
+                if (error) {
+                    console.error("Erreur lors de la suppression des settings dans la base de données :", error);
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            }
+        )
+    })
+}
 
-module.exports = {getValveSettingInDb,addValveSettingInDb}
+module.exports = {getValveSettingInDb,addValveSettingInDb,deleteValveSettingInDb}
