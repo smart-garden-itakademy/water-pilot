@@ -159,4 +159,12 @@ const getElectrovalve = (userId) => {
         throw new Error("Unable to delete electrovalve.Errormsg:"+e)
     }
 }
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail, addElectrovalve,deleteElectrovalve, getElectrovalve}
+const updateElectrovalve = (name,userId,pinPosition) => {
+    try{
+        return userModel.updateElectrovalveInDb(name,userId,pinPosition);
+    }catch(e){
+        throw new Error("Unable to rename electrovalve."+e)
+    }
+}
+
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail, addElectrovalve,deleteElectrovalve, getElectrovalve,updateElectrovalve}

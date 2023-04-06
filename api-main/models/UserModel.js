@@ -115,4 +115,19 @@ const getElectrovalveInDb = (userId) => {
         )
     })
 }
-module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation, addElectrovalveInDb, deleteElectrovalveInDb, getElectrovalveInDb}
+const updateElectrovalveInDb = (name,userId,pinPosition) => {
+    return new Promise ((resolve, reject) => {
+        connection.query(
+            "UPDATE Electrovalve SET name = ? WHERE userId = ? AND position = ?",
+            [name,userId,pinPosition],
+            (error, results) => {
+                if (error) {
+                    console.error("Erreur lors de la modification de l'éléctrovalve dans la base de données :", error);
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            })
+    })
+}
+module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation, addElectrovalveInDb, deleteElectrovalveInDb, getElectrovalveInDb,updateElectrovalveInDb}
