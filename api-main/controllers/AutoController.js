@@ -1,4 +1,4 @@
-const { getAllValvesWithSettings, insertIrrigationData } = require('../models/AutomaticModel');
+const { getAllValvesWithSettings, insertIrrigationData } = require('../models/AutoModel');
 
 const getWeatherData = async (latitude, longitude) => {
   const API_KEY = process.env.KEY;
@@ -38,7 +38,7 @@ const isRainBelowThresholdAndNotExpectedNow = (rainThreshold24h, isRainingNow, m
 };
 
 const startIrrigation = async (userId, electrovalveId) => {
-  const dateStart = new Date(); // La date actuelle est la date de début de l'irrigation
+  const dateStart = new Date();
   const start = await fetch("http://localhost:8090/startIrrigation", {
     method: "POST",
   }).then((res) => res.json());
