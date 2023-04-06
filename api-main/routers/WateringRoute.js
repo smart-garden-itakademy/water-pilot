@@ -1,23 +1,23 @@
 const express = require('express');
 const router = express.Router();
 
-const { startManualIrrigation, stopManualIrrigation, timers } = require('../controllers/ManualController');
+const { startIrrigation, stopIrrigation, timers } = require('../controllers/WateringController');
 
-router.route('/start')
+router.route('/manual/start')
     .post(async (req, res) => {
         const userId = req.body.userId;
         const electrovalveId = req.body.electrovalveId;
         const duration = req.body.duration;
 
         try {
-            const dateStart = await startManualIrrigation(userId, electrovalveId, duration);
-            res.status(200).json({"startIrrigation": dateStart});
+            const dateStart = await startIrrigation(userId, electrovalveId, duration);
+            res.status(200).json({"startManualIrrigation": dateStart});
         } catch (error) {
             res.status(500).json({"error": error.message});
         }
     });
 
-    router.route('/stop')
+    router.route('/manual/stop')
     .post(async (req, res) => {
         const userId = req.body.userId;
         const electrovalveId = req.body.electrovalveId;
@@ -31,8 +31,8 @@ router.route('/start')
         }
 
         try {
-            await stopManualIrrigation(userId, electrovalveId, dateStart);
-            res.status(200).json({"stopIrrigation": new Date()});
+            await stopIrrigation(userId, electrovalveId, dateStart);
+            res.status(200).json({"stopManualIrrigation": new Date()});
         } catch (error) {
             res.status(500).json({"error": error.message});
         }
