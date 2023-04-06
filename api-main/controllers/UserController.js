@@ -125,14 +125,25 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
     }
 }
 const addElectrovalve = async (userId, pinPosition, name) => {
-    // a implémenter!: ne pas enregistrer l'éléctrovalve si il y en a déjà une existante à cette position
+    const getElectrovalves = await getElectrovalve(userId);
+    if(!getElectrovalves.find(e => e.position == pinPosition)){
+        try{
+            const addElectrovalveInDb = await userModel.addElectrovalveInDb(userId,pinPosition,name);
+            return true;
 
-    try{
+        }catch(e){
+            throw new Error("Unable to add electrovalve.Errormsg:"+e)
+        }
+    }else return false;
+
+
+    //console.log("find",getElectrovalve)
+    /*try{
         const addElectrovalveInDb = await userModel.addElectrovalveInDb(userId,pinPosition,name);
         
     }catch(e){
         throw new Error("Unable to add electrovalve.Errormsg:"+e)
-    }
+    }*/
 }
 const deleteElectrovalve = (pinPosition, userId) => {
     try{

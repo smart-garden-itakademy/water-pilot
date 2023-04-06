@@ -99,13 +99,19 @@ router.route('/gardenLocation')
 //creation de valve setting
 //1. creer une valve et récupérer l'ID
 router.route('/electrovalve')
-    .post(userController.authenticate,(req,res) => {
+    .post(userController.authenticate,async (req,res) => {
         console.log("userId",req.userId);
         const { pinPosition, name } = req.body;
         if(pinPosition && name){
             try{
-                const addElectrovalve = userController.addElectrovalve(req.userId,pinPosition,name);
-                res.status(200).json({})
+                const addElectrovalve = await userController.addElectrovalve(req.userId,pinPosition,name);
+                console.log(addElectrovalve);
+                if (addElectrovalve === true) { // vérifie si l'ajout a réussi
+                    res.status(200).end();
+                } else {
+                    console.log(addElectrovalve)
+                    res.status(400).json({"msg": "Une électrovanne existe déjà à cette position."}); // renvoie une erreur si l'ajout a échoué
+                }
             }catch(err){
                 res.status(400).json({"msg":"Un problème est survenu lors de l'enregistrement de l'éléctrovalve:"+err})
             }
@@ -121,7 +127,6 @@ router.route('/electrovalve')
                 res.status(400).json({"msg":"Un problème est survenu lors de la suppression de l'éléctrovalve:"+err})
             }
         }else res.status(400).json({"msg":"l'éléctrovanne n'est pas identifiée"})
-
     })
     .get(userController.authenticate,async (req,res) => {
             try{
