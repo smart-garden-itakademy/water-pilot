@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const automaticController = require('../controllers/AutomaticController');
-
+const AutoController = require('../controllers/AutoController');
 
 module.exports = router;
