@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const electrovalveController = require ('../controllers/ElectrovalveController')
-const userController = require ('../controllers/UserController')
+const electrovalveController = require ('../controllers/ElectrovalveController');
+const userController = require ('../controllers/UserController');
 
 router.route('/')
     .post(userController.authenticate,async (req,res) => {

@@ -1,6 +1,7 @@
 const electrovalveModel = require ('../models/ElectrovalveModel');
 
 const addElectrovalve = async (userId, pinPosition, name) => {
+    //check if electrovalve already exist at this slot and if not it saves
     const getElectrovalves = await getElectrovalve(userId);
     if(!getElectrovalves.find(e => e.position == pinPosition)){
         try{
@@ -8,7 +9,8 @@ const addElectrovalve = async (userId, pinPosition, name) => {
             return true;
 
         }catch(e){
-            throw new Error("Unable to add electrovalve.Errormsg:"+e)
+            throw new Error("Unable to add electrovalve.Errormsg:"+e);
+            return false
         }
     }else return false;
 }
