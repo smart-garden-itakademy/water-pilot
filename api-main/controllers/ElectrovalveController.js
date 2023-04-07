@@ -1,11 +1,22 @@
 const electrovalveModel = require ('../models/ElectrovalveModel');
 
 const giveValvePostion = async (userId, idElectrovalve) => {
-    const getElectrovalves = await getElectrovalve(userId);
+    const electrovalves = await getElectrovalve(userId);
+    const valve = electrovalves.find(e => e.id == idElectrovalve);
     //console.log('giveValve', getElectrovalves.find(e => e.id == idElectrovalve))
-    if (getElectrovalves.find(e => e.id == idElectrovalve)){
-        return getElectrovalves.find(e => e.id == idElectrovalve).position
-    }else return false
+    if (valve) {
+        return {
+            exists:true,
+            position:valve.position,
+            errmsg:""
+        };
+    }else{
+        return {
+            exists:false,
+            position:null,
+            errmsg:`Electrovalve with id ${idElectrovalve} does not exist or does not belong to user with id ${userId}`
+        };
+    }
 }
 
 const isValveNotInDb = async (userId, pinPosition) => {

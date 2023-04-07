@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/controllers/ElectrovalveController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/ElectrovalveController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/controllers/valveSettingController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/valveSettingController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/models/valveSettingModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/valveSettingModel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/routers/valveSettingRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/valveSettingRoute.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +96,7 @@
       <workItem from="1680464816127" duration="9359000" />
       <workItem from="1680507838705" duration="42523000" />
       <workItem from="1680693583522" duration="260000" />
-      <workItem from="1680693872792" duration="46784000" />
+      <workItem from="1680693872792" duration="54671000" />
     </task>
     <task id="LOCAL-00001" summary="api-main user">
       <created>1680465248875</created>
