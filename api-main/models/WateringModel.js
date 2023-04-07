@@ -56,6 +56,24 @@ const getAllValvesWithSettings = async () => {
   });
 };
 
+const insertIrrigationData = (idElectrovalve, dateStart, dateEnd, volume) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      'INSERT INTO Irrigation (idElectrovalve, dateStart, dateEnd, volume) VALUES (?, ?, ?, ?)',
+      [idElectrovalve, dateStart, dateEnd, volume],
+      (error, results) => {
+        if (error) {
+          console.error("Erreur lors de l'insertion des données d'irrigation :", error);
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getAllValvesWithSettings,
+  insertIrrigationData,
 };

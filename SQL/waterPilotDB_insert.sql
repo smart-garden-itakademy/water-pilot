@@ -123,7 +123,9 @@ VALUES
 INSERT INTO Electrovalve (name, position, userId) VALUES
                                               ('Tomatoes', 4, 1),
                                               ('Lettuce', 5, 1),
-                                              ('Strawberry', 6, 1);
+                                              ('Strawberry', 6, 1),
+                                              ('Cactus', 2, 2),
+                                              ('Blew', 3, 2);
 
 /* Insertion de données pour la table Valvesettings */
 
@@ -152,6 +154,10 @@ INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
                                                                (8, 10, '1, 2, 3', 3),
                                                                (14, 16, '1, 2, 3, 4, 5', 3),
                                                                (20, 22, '1, 2, 3, 4, 5', 3);
+
+INSERT INTO Schedule (hourStart, hourEnd, days, idSettings) VALUES
+                                                               (8, 18, '1, 2, 3, 4, 5', 4),
+                                                               (8, 18, '1, 2, 3, 4, 5', 5);
 
 /* Insertion de données d'irrigation */
 
