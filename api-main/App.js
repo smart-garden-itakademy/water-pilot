@@ -1,8 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
 
-const autoRoute = require('./routers/AutoRoute');
-const manualRoute = require('./routers/ManualRoute');
+require('./controllers/AutoController');
+
+const wateringRoute = require('./routers/WateringRoute');
 const userRoute = require ('./routers/UserRoute');
 const statsRoute = require ('./routers/StatsRoute');
 
@@ -11,8 +12,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/manual', manualRoute)
-app.use('/auto', autoRoute);
+app.use('/watering', wateringRoute)
 app.use('/user', userRoute);
 app.use('/stats', statsRoute);
 
