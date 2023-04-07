@@ -23,8 +23,14 @@ const isWateringScheduleValid = (startHour, stopHour, days) => {
 };
 
 const getSensorsData = async () => {
-  const res = await fetch("http://localhost:8090/sensors");
-  return res.json();
+  try {
+    const response = await fetch("http://localhost:8090/sensors");
+    return await response.json();
+    
+  } catch (error) {
+    console.error("Erreur lors de la récupératon des données du capteur :", error);
+    return null;
+  }
 };
 
 const isSoilMoistureLevelValid = (soilMoistureLevel, minSoilMoistureLevel) => {
@@ -66,31 +72,32 @@ const checkIrrigationStatus = async (valveWithSettings) => {
     }
     if (isWateringScheduleValid(schedule.hourStart, schedule.hourEnd, schedule.days)) {
       console.log("Le programme d'arrosage est valide");
+      console.log(valveWithSettings.schedules);
 
-      try {
-        const sensorsData = await getSensorsData();
-        const soilMoistureLevel = sensorsData.soil_moisture;
-        console.log("Niveau d'humidité du sol :", soilMoistureLevel);
+      const sensorsData = await getSensorsData();
+      const soilMoistureLevel = sensorsData.soil_moisture;
+      console.log("Niveau d'humidité du sol :", soilMoistureLevel);
 
-        const weatherData = await getWeatherData(valveWithSettings.latitude, valveWithSettings.longitude);
-        const { rainNow, rain24h, weatherDataError } = processWeatherData(weatherData);
+      const weatherData = await getWeatherData(valveWithSettings.latitude, valveWithSettings.longitude);
+      const { rainNow, rain24h, weatherDataError } = processWeatherData(weatherData);
 
-        if (
-          isSoilMoistureLevelValid(soilMoistureLevel, valveWithSettings.moistureThreshold) &&
-          isRainBelowThresholdAndNotExpectedNow(rain24h, rainNow, valveWithSettings.rainThreshold, weatherDataError)
-        ) {
-          console.log("Les conditions d'arrosage sont remplies");
-          const dateStart = await startIrrigation(valveWithSettings.userId, valveWithSettings.idElectrovalve);
-          setTimeout(
-            () => stopIrrigation(valveWithSettings.userId, valveWithSettings.idElectrovalve, dateStart),
-            valveWithSettings.duration * 60 * 1000,
+      if (
+        isSoilMoistureLevelValid(soilMoistureLevel, valveWithSettings.moistureThreshold) &&
+        isRainBelowThresholdAndNotExpectedNow(rain24h, rainNow, valveWithSettings.rainThreshold, weatherDataError)
+      ) {
+        console.log("Les conditions d'arrosage sont remplies");
+        const dateStart = await startIrrigation(
+          valveWithSettings.userId, 
+          valveWithSettings.idElectrovalve, 
+          valveWithSettings.duration, 
+          valveWithSettings.isAutomatic
           );
-
-        } else {
-          console.log("Les conditions d'arrosage ne sont pas remplies");
-        }
-      } catch (error) {
-        console.error("Error checking irrigation status:", error);
+        setTimeout(
+          () => stopIrrigation(valveWithSettings.userId, valveWithSettings.idElectrovalve, dateStart),
+          valveWithSettings.duration * 60 * 1000,
+        );
+      } else {
+        console.log("Les conditions d'arrosage ne sont pas remplies");
       }
     } else {
       console.log("Le programme d'arrosage n'est pas valide");

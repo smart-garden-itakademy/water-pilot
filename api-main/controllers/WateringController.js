@@ -3,16 +3,28 @@ const { insertIrrigationData } = require('../models/WateringModel');
 const timers = {};
 
 const startIrrigation = async (userId, electrovalveId, duration, isAutomatic = false) => {
+  const timerKey = `${userId}-${electrovalveId}`;
+
+  if (timers[timerKey]) {
+    console.log(`Il y a déjà un arrosage en cours pour l'utilisateur ${userId} et la Valve ${electrovalveId}.`);
+    return;
+  }
+
   const dateStart = new Date();
-  const start = await fetch("http://localhost:8090/startIrrigation", {
+  const response = await fetch("http://localhost:8090/startIrrigation", {
     method: "POST",
-  }).then((res) => res.json());
+  });
+
+  if (!response.ok) {
+    throw new Error(`Fetch failed with status ${response.status}: ${response.statusText}`);
+  }
+
+  const start = await response.json();
   console.log(
     `${isAutomatic ? "Arrosage automatique" : "Arrosage manuel"} démarré pour l'utilisateur ${userId} et la Valve ${electrovalveId}: pour un temps de ${duration} minute(s)`,
     start
   );
 
-  const timerKey = `${userId}-${electrovalveId}`;
   timers[timerKey] = {
     timeout: setTimeout(async () => {
       await stopIrrigation(userId, electrovalveId, isAutomatic);
@@ -27,23 +39,35 @@ const startIrrigation = async (userId, electrovalveId, duration, isAutomatic = f
   return dateStart;
 };
 
+
 const stopIrrigation = async (userId, electrovalveId, isAutomatic = false) => {
   const dateEnd = new Date();
-  const volume = isAutomatic ? 777 : 999;
+  const volume = isAutomatic ? 111 : 222;
 
   const timerKey = `${userId}-${electrovalveId}`;
   const storedDateStart = timers[timerKey]?.dateStart;
 
-  if (storedDateStart) {
-    await insertIrrigationData(electrovalveId, storedDateStart, dateEnd, volume);
+  if (!storedDateStart) {
+    console.log(`Aucune irrigation en cours pour l'utilisateur ${userId} et la Valve ${electrovalveId}.`);
+    return;
   }
 
-  const stop = await fetch("http://localhost:8090/stopIrrigation", {
+  delete timers[timerKey];
+
+  await insertIrrigationData(electrovalveId, storedDateStart, dateEnd, volume);
+
+  const response = await fetch("http://localhost:8090/stopIrrigation", {
     method: "POST",
-  }).then((res) => res.json());
+  });
+
+  if (!response.ok) {
+    throw new Error(`Fetch failed with status ${response.status}: ${response.statusText}`);
+  }
+
+  const stop = await response.json();
   console.log(
     `${isAutomatic ? "Arrosage automatique" : "Arrosage manuel"} arrêté pour l'utilisateur ${userId} et la Valve ${electrovalveId}:`,
-    stop
+    stop,
   );
 };
 
