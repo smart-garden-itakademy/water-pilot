@@ -1,19 +1,18 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const automaticRoute = require('./routers/AutomaticRoute');
-const userRoute = require ('./routers/UserRoute')
-const statsRoute = require ('./routers/StatsRoute')
-const bodyParser = require('body-parser');
+
+require('./controllers/AutoController');
+
+const wateringRoute = require('./routers/WateringRoute');
+const userRoute = require ('./routers/UserRoute');
+const statsRoute = require ('./routers/StatsRoute');
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
 
-//parse pour le type mime application/x-www-urlencoded (formulaire)
-app.use(bodyParser.urlencoded({extended: false}));
-
-app.use('/automatic', automaticRoute);
+app.use('/watering', wateringRoute)
 app.use('/user', userRoute);
 app.use('/stats', statsRoute);
 
