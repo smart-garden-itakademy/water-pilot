@@ -1,6 +1,7 @@
 const electrovalveModel = require ('../models/ElectrovalveModel');
 
 const giveValvePostion = async (userId, idElectrovalve) => {
+    console.log("idElectrovalve",idElectrovalve);
     const electrovalves = await getElectrovalve(userId);
     const valve = electrovalves.find(e => e.id == idElectrovalve);
     //console.log('giveValve', getElectrovalves.find(e => e.id == idElectrovalve))

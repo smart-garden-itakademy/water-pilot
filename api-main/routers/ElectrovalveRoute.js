@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const electrovalveController = require ('../controllers/ElectrovalveController');
-const userController = require ('../controllers/UserController');
+const {authenticate} = require ('../controllers/UserController');
 
 router.route('/')
-    .post(userController.authenticate,async (req,res) => {
+    .post(authenticate,async (req,res) => {
         console.log("userId",req.userId);
         const { pinPosition, name } = req.body;
         if(pinPosition && name){
@@ -22,15 +22,15 @@ router.route('/')
             }
         }else res.status(400).json({"msg":"la position de l'éléctrovanne et son nom doivent être renseignés"})
     })
-    .get(userController.authenticate,async (req,res) => {
+    .get(authenticate,async (req,res) => {
         try{
             const getElectrovalve = await electrovalveController.getElectrovalve(req.userId);
             res.status(200).json(getElectrovalve)
         }catch(err){
-            res.status(400).json({"msg":"Un problème est survenu lors de la suppression de l'éléctrovalve:"+err})
+            res.status(400).json({"msg":"Un problème est survenu lors de la récupération des l'éléctrovalves:"+err})
         }
     })
-    .patch(userController.authenticate,async (req,res) => {
+    .patch(authenticate,async (req,res) => {
         const { name, pinPosition } = req.body;
         try{
             const putElectrovalve = await electrovalveController.updateElectrovalve(name,req.userId,pinPosition);
@@ -39,7 +39,7 @@ router.route('/')
             res.status(400).json({"msg":"Un problème est survenu lors de la modification de l'éléctrovalve:"+err})
         }
     })
-    .delete(userController.authenticate,async (req,res) => {
+    .delete(authenticate,async (req,res) => {
         const { pinPosition } = req.body;
         if(pinPosition){
             try{

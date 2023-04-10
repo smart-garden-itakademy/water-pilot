@@ -16,9 +16,7 @@ const getValveSetting = (userId) => {
 }
 const addValveSetting = async (rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve, userId) => {
     //check if idElectrovalve exist and belongs this userId
-    console.log(await giveValvePostion(userId, idElectrovalve));
-    //const valveNotInDb = await isValveNotInDb(userId, pinPosition)
-    //check if electrovalve exists
+
     if (await giveValvePostion(userId, idElectrovalve)){
         //save only if a setting doesn't exist on this valve
         if(await isSettingNotInDb(userId, idElectrovalve)){
@@ -59,7 +57,7 @@ const updateValveSetting = async (rainThreshold, moistureThreshold, duration, is
     if (valvePosition.exists){
         try {
             await updateValveSettingInDb(rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting);
-            return true
+            return {msg:`Les settings de l'éléctrovalve ${idElectrovalve} appartenant à l'utilisateur ${userId} sont mis à jour`}
         }catch (e) {
             throw new Error ("Unable to update electrovalve settings.Errormsg:" + e);
         }
