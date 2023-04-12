@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {authenticate} = require ('../controllers/UserController');
-const {getSchedules,addSchedule} = require ('../controllers/ScheduleController');
+const {getSchedules,addSchedule, deleteSchedule} = require ('../controllers/ScheduleController');
 
 router.route('/')
     .get(async (req,res) => {
@@ -20,6 +20,15 @@ router.route('/')
             res.status(200).json(schedule)
         }catch (err){
             res.status(400).json({"msg":"Un problème est survenu lors de l'enregistrement des plages horaires:"+err})
+        }
+    })
+    .delete(async (req, res) => {
+        const {idSchedule} = req.body;
+        try {
+            const deleteSc = await deleteSchedule (idSchedule);
+            res.status(200).json(deleteSc)
+        } catch (err){
+            res.status(400).json({"msg":"Un problème est survenu lors de la suppression des plages horaires:"+err})
         }
     })
 module.exports=router;

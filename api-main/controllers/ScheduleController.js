@@ -1,4 +1,4 @@
-const {getSchedulesInDb,addScheduleInDb} = require ('../models/ScheduleModel');
+const {getSchedulesInDb, addScheduleInDb, deleteScheduleInDb} = require ('../models/ScheduleModel');
 const {giveValvePostion} = require ('../controllers/ElectrovalveController');
 const {isSettingNotInDb} = require ('../controllers/ValveSettingController');
 
@@ -14,7 +14,7 @@ const getSchedules = async (idSettings) => {
     try{
         return await getSchedulesInDb(idSettings);
     }catch(e){
-        throw new Error("Unable to get electrovalves.Errormsg:"+e)
+        throw new Error("Unable to get schedules.Errormsg:"+e)
     }
 }
 
@@ -26,11 +26,17 @@ const addSchedule = async (hourStart, hourEnd, days, idSettings) => {
         const scheduleAdded =  await addScheduleInDb (hourStart, hourEnd, days, idSettings);
         return scheduleAdded ;
     } catch (e) {
-        throw new Error("Unable to add electrovalve settings.Errormsg:" + e);
-        return false
+        throw new Error("Unable to add schedule.Errormsg:" + e);
+    }
+}
+const deleteSchedule = async (idSchedule) => {
+    try {
+        const scheduledeleted =  await deleteScheduleInDb (idSchedule) ;
+        return scheduledeleted ;
+    } catch (e) {
+        throw new Error("Unable to delete schedule.Errormsg:" + e);
     }
 }
 
 
-
-module.exports={getSchedules,addSchedule}
+module.exports={getSchedules,addSchedule,deleteSchedule}

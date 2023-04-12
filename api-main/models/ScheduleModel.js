@@ -30,6 +30,21 @@ const addScheduleInDb = (hourStart, hourEnd, days, idSettings) => {
         )
     })
 }
+const deleteScheduleInDb = (idSchedule) => {
+    return new Promise ((resolve, reject) => {
+        connection.query(
+            "DELETE FROM Schedule WHERE id = ?",
+            [idSchedule],
+            (error, results) => {
+                if (error) {
+                    console.error("Erreur lors de la suppression du schedule dans la base de données :", error);
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            }
+        )
+    })
+}
 
-
-module.exports = {getSchedulesInDb, addScheduleInDb}
+module.exports = {getSchedulesInDb, addScheduleInDb, deleteScheduleInDb}
