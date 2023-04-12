@@ -22,7 +22,6 @@ const authenticate = (req, res, next) => {
         res.status(401).json({ message: 'Token non fourni' });
         return;
     }
-
     const decoded = verifyToken(token);
     if (!decoded) {
         res.status(401).json({ message: 'Token invalide' });
@@ -124,6 +123,5 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
         throw new Error("Unable to modify the garden's coordinates.Errormsg:"+e)
     }
 }
-
 
 module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail}
