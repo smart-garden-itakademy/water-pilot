@@ -13,5 +13,13 @@ router.route('/')
             res.status(400).json({"msg":"Un problème est survenu lors de la récupération des plages horaires:"+err})
         }
     })
-
+    .post (async (req,res) => {
+        const {hourStart, hourEnd, days, idSettings} = req.body;
+        try{
+            const schedule = await addSchedule(hourStart, hourEnd, days, idSettings);
+            res.status(200).json(schedule)
+        }catch (err){
+            res.status(400).json({"msg":"Un problème est survenu lors de l'enregistrement des plages horaires:"+err})
+        }
+    })
 module.exports=router;

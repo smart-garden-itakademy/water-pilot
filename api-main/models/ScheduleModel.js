@@ -30,4 +30,6 @@ const addScheduleInDb = (hourStart, hourEnd, days, idSettings) => {
         )
     })
 }
+
+
 module.exports = {getSchedulesInDb, addScheduleInDb}

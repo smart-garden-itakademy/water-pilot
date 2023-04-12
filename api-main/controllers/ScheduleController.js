@@ -19,9 +19,12 @@ const getSchedules = async (idSettings) => {
 }
 
 const addSchedule = async (hourStart, hourEnd, days, idSettings) => {
+    //check if idSetting exist and belong this user
+    
+    //-------
     try {
-        await addScheduleInDb (hourStart, hourEnd, days, idSettings);
-        return true;
+        const scheduleAdded =  await addScheduleInDb (hourStart, hourEnd, days, idSettings);
+        return scheduleAdded ;
     } catch (e) {
         throw new Error("Unable to add electrovalve settings.Errormsg:" + e);
         return false
@@ -30,4 +33,4 @@ const addSchedule = async (hourStart, hourEnd, days, idSettings) => {
 
 
 
-module.exports={getSchedules}
+module.exports={getSchedules,addSchedule}
