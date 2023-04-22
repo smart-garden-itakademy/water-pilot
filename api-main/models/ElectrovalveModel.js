@@ -17,11 +17,11 @@ const addElectrovalveInDb = (userId,pinPosition,name) => {
         )
     })
 }
-const deleteElectrovalveInDb = (pinPosition, userId) => {
+const deleteElectrovalveInDb = (idElectrovalve, userId) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "DELETE FROM Electrovalve WHERE position = ? AND userId = ?",
-            [pinPosition, userId],
+            "DELETE FROM Electrovalve WHERE id = ? AND userId = ?",
+            [idElectrovalve, userId],
             (error, results) => {
                 if (error) {
                     console.error("Erreur lors de la suppression de l'éléctrovalve dans la base de données :", error);
@@ -51,16 +51,17 @@ const getElectrovalveInDb = (userId) => {
         )
     })
 }
-const updateElectrovalveInDb = (name,userId,pinPosition) => {
+const updateElectrovalveInDb = (name,userId,idElectrovalve) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "UPDATE Electrovalve SET name = ? WHERE userId = ? AND position = ?",
-            [name,userId,pinPosition],
+            "UPDATE Electrovalve SET name = ? WHERE userId = ? AND id = ?",
+            [name,userId,idElectrovalve],
             (error, results) => {
                 if (error) {
                     console.error("Erreur lors de la modification de l'éléctrovalve dans la base de données :", error);
                     reject(error);
                 } else {
+                    console.log(`modification name:${name}, idValve: ${idElectrovalve}`)
                     resolve(results);
                 }
             })

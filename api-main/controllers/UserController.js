@@ -63,8 +63,9 @@ console.log('inH')
 }
 const isInDb = async (mail) => {
 try {
-    const checkMail = await userModel.isUserMailExist(mail);
-    return checkMail
+    const isMailAlreadyInDb = await userModel.isUserMailExist(mail);
+    console.log("isMailAlreadyInDb",isMailAlreadyInDb);
+    return isMailAlreadyInDb
 }catch (e){
     console.error(e)
     return false
@@ -97,9 +98,9 @@ const showUsers = async () => {
 }
 const findUser = async (Pwd,email) => {
     try{
-        const user = await userModel.isUserMailExist(email);
+        const user = await userModel.findUserInDb(email);
         console.log("user",user);
-        if(user.length){
+        if(user){
             const match = await bcrypt.compare(Pwd, user[0].password);
             if(match) {
                 return user

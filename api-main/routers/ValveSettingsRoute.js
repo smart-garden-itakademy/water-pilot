@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const valveSettingController = require ('../controllers/valveSettingController');
 const userController = require ('../controllers/UserController');
+const scheduleRoute = require ('./ScheduleRoute');
+const app = express();
 
+app.use('/:id/schedule', scheduleRoute);
 router.route('/')
     .post(userController.authenticate,async (req,res) => {
         const {rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve} = req.body;

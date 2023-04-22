@@ -5,6 +5,9 @@ const {getSchedules,addSchedule, deleteSchedule} = require ('../controllers/Sche
 
 router.route('/')
     .get(async (req,res) => {
+        //const idElectrovalve= req.params.id;
+        console.log(req.params);
+
         const {idSettings} = req.body;
         try{
             const schedules = await getSchedules(idSettings);
@@ -29,6 +32,15 @@ router.route('/')
             res.status(200).json(deleteSc)
         } catch (err){
             res.status(400).json({"msg":"Un problème est survenu lors de la suppression des plages horaires:"+err})
+        }
+    })
+    .patch(async (req,res) => {
+        const { } = req.body;
+        try{
+            const patchSchedule = await updateSchedule();
+            res.status(200).json(patchSchedule)
+        }catch(err){
+            res.status(400).json({"msg":"Un problème est survenu lors de la modification de l'éléctrovalve:"+err})
         }
     })
 module.exports=router;

@@ -4,11 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af4a8198-1540-4174-a0f5-6b2ea1408ffc" name="Changes" comment="api-main user, newUser function modified and table user added city">
+    <list default="true" id="af4a8198-1540-4174-a0f5-6b2ea1408ffc" name="Changes" comment="api-main added middleware in app.js">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/controllers/ScheduleController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/ScheduleController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/models/ScheduleModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/ScheduleModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/controllers/ElectrovalveController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/ElectrovalveController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/controllers/UserController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/UserController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/models/ElectrovalveModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/ElectrovalveModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/models/UserModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/UserModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/ElectrovalveRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ElectrovalveRoute.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/routers/ScheduleRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ScheduleRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/UserRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/UserRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/ValveSettingRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ValveSettingsRoute.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,27 +43,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/it-akademy/Desktop/Sites/water-pilot&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/Axel/formations web/water-pilot",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;,
-      &quot;mariadb&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql",
+      "mariadb"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -93,9 +99,15 @@
       <workItem from="1680442509228" duration="1300000" />
       <workItem from="1680443833948" duration="4866000" />
       <workItem from="1680464816127" duration="9359000" />
-      <workItem from="1680507838705" duration="42523000" />
-      <workItem from="1680693583522" duration="260000" />
-      <workItem from="1680693872792" duration="63080000" />
+      <workItem from="1680507838705" duration="21732000" />
+      <workItem from="1680636536836" duration="5423000" />
+      <workItem from="1680891065629" duration="6115000" />
+      <workItem from="1680897275463" duration="5000" />
+      <workItem from="1681127387409" duration="3388000" />
+      <workItem from="1681369992638" duration="388000" />
+      <workItem from="1681675504097" duration="1161000" />
+      <workItem from="1681758391522" duration="361000" />
+      <workItem from="1682162108459" duration="11103000" />
     </task>
     <task id="LOCAL-00001" summary="api-main user">
       <created>1680465248875</created>
@@ -140,7 +152,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="HEAD" />
+                        <option value="apifront" />
                       </list>
                     </value>
                   </entry>
@@ -149,28 +161,6 @@
             </State>
           </value>
         </entry>
-        <entry key="bcea655a-5af2-43ba-a55e-82bb92d3a3e3">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="HEAD" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="bcea655a-5af2-43ba-a55e-82bb92d3a3e3" value="TOOL_WINDOW" />
       </map>
     </option>
   </component>

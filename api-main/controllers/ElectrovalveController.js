@@ -31,17 +31,16 @@ const addElectrovalve = async (userId, pinPosition, name) => {
     if(await isValveNotInDb(userId, pinPosition)){
         try{
             const addElectrovalveInDb = await electrovalveModel.addElectrovalveInDb(userId,pinPosition,name);
-            return true;
+            return addElectrovalveInDb;
 
         }catch(e){
             throw new Error("Unable to add electrovalve.Errormsg:"+e);
-            return false
         }
-    }else return false;
+    }
 }
-const deleteElectrovalve = (pinPosition, userId) => {
+const deleteElectrovalve = (idElectrovalve, userId) => {
     try{
-        return electrovalveModel.deleteElectrovalveInDb(pinPosition, userId);
+        return electrovalveModel.deleteElectrovalveInDb(idElectrovalve, userId);
     }catch(e){
         throw new Error("Unable to delete electrovalve.Errormsg:"+e)
     }
@@ -53,9 +52,9 @@ const getElectrovalve = (userId) => {
         throw new Error("Unable to get electrovalves.Errormsg:"+e)
     }
 }
-const updateElectrovalve = (name,userId,pinPosition) => {
+const updateElectrovalve = (name,userId,idElectrovalve) => {
     try{
-        return electrovalveModel.updateElectrovalveInDb(name,userId,pinPosition);
+        return electrovalveModel.updateElectrovalveInDb(name,userId, idElectrovalve);
     }catch(e){
         throw new Error("Unable to rename electrovalve."+e)
     }
