@@ -1,43 +1,46 @@
 const express = require('express');
 const router = express.Router();
-const valveSettingController = require ('../controllers/valveSettingController');
-const userController = require ('../controllers/UserController');
-const scheduleRoute = require ('./ScheduleRoute');
-const app = express();
+const {addValveSetting,getValveSetting,deleteValveSetting,updateValveSetting} = require ('../controllers/valveSettingController');
+const {authenticate} = require ('../controllers/UserController');
 
-app.use('/:id/schedule', scheduleRoute);
 router.route('/')
-    .post(userController.authenticate,async (req,res) => {
-        const {rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve} = req.body;
-        try{
-            const addValveSetting = await valveSettingController.addValveSetting(rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve, req.userId);
-            res.status(200).json(addValveSetting)
-        }catch(err){
-            res.status(400).json({"msg":"Un problème est survenu lors de l'enregistrement des paramètres de l'éléctrovalve:"+err})
-        }
+    .post(authenticate,async (req,res) => {
+        const {rainThreshold, moistureThreshold, duration, isAutomatic} = req.body;
+        if(rainThreshold && moistureThreshold && duration && isAutomatic){
+            try{
+                const addSetting = await addValveSetting(rainThreshold, moistureThreshold, duration, isAutomatic, req.idValve, req.userId);
+                if (addSetting.errorMsg) throw new Error (addSetting.errorMsg);
+                res.status(200).json(addSetting)
+            }catch(err){
+                res.status(400).json(`${err}`)
+            }
+        }else res.status(400).json({"error":"tous les champs doivent être remplis: rainThreshold, moistureThreshold, duration, isAutomatic"})
     })
     
-    .get(userController.authenticate,async (req,res) => {
+    .get(authenticate,async (req,res) => {
         try{
-            const getValveSetting= await valveSettingController.getValveSetting(req.userId);
-            res.status(200).json(getValveSetting)
+            const getSetting= await getValveSetting(req.idValve,req.userId);
+            res.status(200).json(getSetting)
         }catch(err){
-            res.status(400).json({"msg":"Un problème est survenu lors de l'obtention des paramètres des éléctrovalves:"+err})
+            res.status(400).json(`${err}`)
         }
     })
-    .delete (userController.authenticate,async (req,res) => {
-        const {idElectrovalve,idValveSetting} = req.body;
+    router.route('/:idSettings')
+    .delete (authenticate,async (req,res) => {
+        const idSettings = parseInt (req.params.idSettings)
         try {
-            const deleteValveSetting = valveSettingController.deleteValveSetting(idElectrovalve,idValveSetting, req.userId);
-            res.status(200).json(deleteValveSetting)
-        }catch (e) {
-            res.status(400).json({"msg":"Un problème est survenu lors de la suppression des paramètres de l'éléctrovalve:"+e})
+            const deleteSettings = await deleteValveSetting(req.idValve,idSettings, req.userId);
+            console.log("deleteSettings",deleteSettings)
+            if(deleteSettings.errorMsg) throw new Error (deleteSettings.errorMsg);
+            res.status(200).json(deleteSettings.msg)
+        }catch (err) {
+            res.status(400).json(`${err}`)
         }
     })
-    .put (userController.authenticate,async (req,res) => {
+    .put (authenticate,async (req,res) => {
         const {rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting, idElectrovalve} = req.body;
         try{
-            const updateValveSetting = await valveSettingController.updateValveSetting(rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting, req.userId,idElectrovalve)
+            const updateValveSetting = await updateValveSetting(rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting, req.userId,idElectrovalve)
             res.status(200).json(updateValveSetting)
         }catch(e){
             res.status(400).json({"msg":"Un problème est survenu lors de la modification des paramètres de l'éléctrovalve:"+e})
