@@ -30,7 +30,7 @@ router.route('/sign-up')
             if(isInDB.length) {
                 console.log('la');
                 //mail exist in DB
-                res.status(400).json({"error:": "Il existe déjà un compte enregistré avec cet Email"})
+                res.status(400).json({"errorMsg": "Il existe déjà un compte enregistré avec cet Email"})
             }else if(
             // mail doesn't exist in DB
 
@@ -49,14 +49,11 @@ router.route('/sign-up')
                     res.status(200).json(saveUser);
             }else{
                 console.log("wrong password");
-                res.status(400).json({"error:":"wrong password"})
+                res.status(400).json({"errorMsg":"wrong password"})
             }
         } catch (err) {
             console.error(err);
-            res.status(400).json({
-                errorMsg: 'Une erreur est survenue',
-                error: err.message
-            });
+            res.status(400).json({"errorMsg": err});
         }
     });
 
@@ -67,14 +64,14 @@ router.route('/login')
                 userController.findUser(password,email)
         .then((user) => {
             if(user.length===0) {
-                res.status(401).json({ "error": 'Email ou mot de passe incorrect' });
+                res.status(401).json({ "errorMsg": 'Email ou mot de passe incorrect' });
                 return
             }
             const token = userController.generateToken(user[0]);
             res.status(200).json({token});
         })
         } catch(err){
-            res.status(400).json(err)
+            res.status(400).json({"errorMsg":err})
         }
     })
 //déconnexion
@@ -89,7 +86,7 @@ router.route('/gardenLocation')
             res.status(200).json({patchGardenLocation});
         }
         catch(e){
-            res.status(400).json(err)
+            res.status(400).json({"errorMsg":err})
         }
 
     })

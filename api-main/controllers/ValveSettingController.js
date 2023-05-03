@@ -24,24 +24,24 @@ const addValveSetting = async (rainThreshold, moistureThreshold, duration, isAut
     //stop if this id Electrovalve not belongs this user
     const valvePosition = await giveValvePostion(userId, idElectrovalve);
     if (!valvePosition.exists){
-        return {"errorMsg": "this electrovalve is unknown."}
+        return {errorMsg: "this electrovalve is unknown."}
     }
     //stop if settings already exist on this valve
     const alreadyInDb = await isSettingInDb(userId, idElectrovalve);
     if(alreadyInDb) {
-        return {"errorMsg": "A setting already exist on this electrovalve."}
+        return {errorMsg: "A setting already exist on this electrovalve."}
     }
 
     try {
         const addSettingsInDb = await addValveSettingInDb(rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve);
         let response = {
-            "idSettings": addSettingsInDb.insertId,
-            "rainThreshold": rainThreshold,
-            "moistureThreshold":moistureThreshold,
-            "duration": duration,
-            "isAutomatic": isAutomatic,
-            "idElectrovalve": idElectrovalve,
-            "errorMsg": ""
+            idSettings: addSettingsInDb.insertId,
+            rainThreshold: rainThreshold,
+            moistureThreshold:moistureThreshold,
+            duration: duration,
+            isAutomatic: isAutomatic,
+            idElectrovalve: idElectrovalve,
+            errorMsg: ""
         }
         return response
     } catch (e) {
@@ -82,12 +82,15 @@ const updateValveSetting = async (rainThreshold, moistureThreshold, duration, is
     if (valvePosition.exists){
         try {
             await updateValveSettingInDb(rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting);
-            return {msg:`Les settings de l'éléctrovalve ${idElectrovalve} appartenant à l'utilisateur ${userId} sont mis à jour`}
+            return ({
+                msg:`Les settings de l'éléctrovalve ${idElectrovalve} appartenant à l'utilisateur ${userId} sont mis à jour`,
+                errorMsg:""
+            })
         }catch (e) {
-            throw new Error ("Unable to update electrovalve settings.Errormsg:" + e);
+            throw new Error (e);
         }
     }else{
-        return valvePosition.errmsg
+        return ({errorMsg:valvePosition.errmsg})
     }
 }
 

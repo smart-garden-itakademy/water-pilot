@@ -9,9 +9,9 @@
       <change beforePath="$PROJECT_DIR$/api-main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/controllers/ElectrovalveController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/ElectrovalveController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/controllers/ValveSettingController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/ValveSettingController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/models/ElectrovalveModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/ElectrovalveModel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/models/valveSettingModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/valveSettingModel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/routers/ElectrovalveRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ElectrovalveRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/ScheduleRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ScheduleRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/UserRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/UserRoute.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-main/routers/ValveSettingsRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ValveSettingsRoute.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +106,9 @@
       <workItem from="1681675504097" duration="1161000" />
       <workItem from="1681758391522" duration="361000" />
       <workItem from="1682162108459" duration="11240000" />
-      <workItem from="1682248794318" duration="22079000" />
+      <workItem from="1682248794318" duration="22229000" />
+      <workItem from="1682778998133" duration="926000" />
+      <workItem from="1683141737183" duration="4693000" />
     </task>
     <task id="LOCAL-00001" summary="api-main user">
       <created>1680465248875</created>

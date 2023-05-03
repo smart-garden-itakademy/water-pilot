@@ -12,9 +12,9 @@ router.route('/')
                 if (addSetting.errorMsg) throw new Error (addSetting.errorMsg);
                 res.status(200).json(addSetting)
             }catch(err){
-                res.status(400).json(`${err}`)
+                res.status(400).json({errorMsg:err})
             }
-        }else res.status(400).json({"error":"tous les champs doivent être remplis: rainThreshold, moistureThreshold, duration, isAutomatic"})
+        }else res.status(400).json({errorMsg:"tous les champs doivent être remplis: rainThreshold, moistureThreshold, duration, isAutomatic"})
     })
     
     .get(authenticate,async (req,res) => {
@@ -22,28 +22,32 @@ router.route('/')
             const getSetting= await getValveSetting(req.idValve,req.userId);
             res.status(200).json(getSetting)
         }catch(err){
-            res.status(400).json(`${err}`)
+            res.status(400).json({errorMsg:err})
         }
     })
     router.route('/:idSettings')
     .delete (authenticate,async (req,res) => {
-        const idSettings = parseInt (req.params.idSettings)
+        const req.idSettings = parseInt (req.params.idSettings);
         try {
-            const deleteSettings = await deleteValveSetting(req.idValve,idSettings, req.userId);
+            //A faire!:
+            //ajouter la suppression des schedules affiliés à ce setting!
+            const deleteSettings = await deleteValveSetting(req.idValve,req.idSettings, req.userId);
             console.log("deleteSettings",deleteSettings)
             if(deleteSettings.errorMsg) throw new Error (deleteSettings.errorMsg);
             res.status(200).json(deleteSettings.msg)
         }catch (err) {
-            res.status(400).json(`${err}`)
+            res.status(400).json({errorMsg:err})
         }
     })
     .put (authenticate,async (req,res) => {
-        const {rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting, idElectrovalve} = req.body;
+        const req.idSettings = parseInt (req.params.idSettings);
+        const {rainThreshold, moistureThreshold, duration, isAutomatic} = req.body;
         try{
-            const updateValveSetting = await updateValveSetting(rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting, req.userId,idElectrovalve)
+            const updateValveSetting = await updateValveSetting(rainThreshold, moistureThreshold, duration, isAutomatic, req.idSettings, req.userId,req.idValve)
+            if(updateValveSetting.errorMsg) throw new Error (updateValveSetting.errorMsg);
             res.status(200).json(updateValveSetting)
-        }catch(e){
-            res.status(400).json({"msg":"Un problème est survenu lors de la modification des paramètres de l'éléctrovalve:"+e})
+        }catch(err){
+            res.status(400).json({errorMsg:err})
         }
     })
 

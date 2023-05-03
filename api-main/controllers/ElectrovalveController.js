@@ -7,17 +7,17 @@ const giveValvePostion = async (userId, idElectrovalve) => {
     console.log("valve",valve)
     //console.log('giveValve', getElectrovalves.find(e => e.id == idElectrovalve))
     if (valve) {
-        return {
+        return ({
             exists:true,
             position:valve.position,
             errmsg:""
-        };
+        );
     }else{
-        return {
+        return ({
             exists:false,
             position:null,
             errmsg:`Electrovalve with id ${idElectrovalve} does not exist or does not belong this user with id ${userId}`
-        };
+        });
     }
 }
 
@@ -35,15 +35,15 @@ const addElectrovalve = async (userId, pinPosition, name) => {
             console.log("addValveInDb ",addValveInDb )
             if (addValveInDb) { // vérifie si l'ajout a réussi
                 let response={
-                    "id":addValveInDb.insertId,
-                    "name":name,
-                    "position":pinPosition,
-                    "userId":userId
+                    id:addValveInDb.insertId,
+                    name:name,
+                    position:pinPosition,
+                    userId:userId
                 };
             return response;
             }else throw new Error ("Unable to add electrovalve.")
-        }catch(e){
-            throw new Error(e);
+        }catch(err){
+            throw new Error(err);
         }
     }
 }
@@ -52,10 +52,10 @@ const deleteElectrovalve = async (idElectrovalve, userId) => {
         const deleteValveInDb = await deleteElectrovalveInDb(idElectrovalve, userId);
 
         if (deleteValveInDb.affectedRows) {
-            return {"msg": `L'éléctrovalve  qui a pour ID: ${idElectrovalve} a été supprimée avec succès`,
-            "errMsg":""}
+            return {msg: `L'éléctrovalve  qui a pour ID: ${idElectrovalve} a été supprimée avec succès`,
+            errMsg:""}
         } else {
-            return {"errMsg": 'electrovalve not found'}
+            return {errMsg: 'electrovalve not found'}
         }
     }catch(e){
         throw new Error(e)

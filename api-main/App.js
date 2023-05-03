@@ -20,10 +20,14 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/automatic', automaticRoute);
 app.use('/user', userRoute);
-app.use('/electrovalve/:idValve/valveSettings/:idSetting/schedule', scheduleRoute);
+app.use('/electrovalve/:idValve/valveSettings/:idSetting/schedule',(req,res,next)=>{
+    req.idValve = parseInt(req.params.idValve);
+    req.idSetting = parseInt(req.params.idSetting);
+    next()
+}, scheduleRoute);
 app.use('/electrovalve/:idValve/valveSettings',(req,res,next)=> {
- req.idValve = parseInt(req.params.idValve);
-  next()
+    req.idValve = parseInt(req.params.idValve);
+    next()
 },valveSettingsRoute );
 app.use('/electrovalve', electrovalveRoute);
 app.use('/stats', statsRoute);
