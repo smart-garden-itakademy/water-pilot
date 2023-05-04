@@ -1,13 +1,12 @@
 const connection = require('../cores/database');
 
-const getValveSettingInDb = (userId) => {
+const getValveSettingInDb = (idValve) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "SELECT vs.* FROM ValveSettings vs INNER JOIN Electrovalve ev ON ev.id = vs.idElectrovalve INNER JOIN User u ON u.id = ev.userId WHERE u.id = ?",
-            [userId],
+            "SELECT * FROM ValveSettings WHERE idElectrovalve = ?",
+            [idValve],
             (error, results) => {
                 if (error) {
-                    console.error("Erreur lors de la récupération des paramètres dans la base de données :", error);
                     reject(error);
                 } else {
                     resolve(results);

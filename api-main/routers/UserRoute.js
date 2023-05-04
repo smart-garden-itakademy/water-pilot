@@ -7,7 +7,7 @@ const userController = require ('../controllers/UserController')
 
 //get all users test
 router.route('/')
-    .get(userController.authenticate,(req,res)=>{
+    .get((req,res)=>{
         console.log("userId",req.userId);
         userController.showUsers()
             .then((data)=> res.json(data))
@@ -16,7 +16,7 @@ router.route('/')
 //sign-up
 router.route('/sign-up')
     .post(async (req, res) => {
-        const { password, name, email, city,longitude, latitude } = req.body;
+        const { password, name, email, city, longitude, latitude } = req.body;
         console.log("password", password);
         console.log("name", name);
         console.log("email", email);
@@ -26,15 +26,17 @@ router.route('/sign-up')
         
         try {
             const isInDB = await userController.isInDb(email)
-            console.log("isInDb",isInDB.length)
+            console.log("isInDb",isInDB)
             if(isInDB.length) {
+                console.log('la');
                 //mail exist in DB
-                res.status(400).json({"msg:": "Il existe déjà un compte enregistré avec cet Email"})
+                res.status(400).json({"errorMsg": "Il existe déjà un compte enregistré avec cet Email"})
             }else if(
             // mail doesn't exist in DB
 
             // Validate password
                 await userController.passwordValidation(password)) {
+                console.log('ici');
                 // Hash password
                     const hashPwd = await userController.hash(password);
                 //Email validation
@@ -45,14 +47,13 @@ router.route('/sign-up')
 
                 // Send response
                     res.status(200).json(saveUser);
+            }else{
+                console.log("wrong password");
+                res.status(400).json({"errorMsg":"wrong password"})
             }
-
         } catch (err) {
             console.error(err);
-            res.status(400).json({
-                errorMsg: 'Une erreur est survenue',
-                error: err.message
-            });
+            res.status(400).json({"errorMsg": err});
         }
     });
 
@@ -63,14 +64,14 @@ router.route('/login')
                 userController.findUser(password,email)
         .then((user) => {
             if(user.length===0) {
-                res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+                res.status(401).json({ "errorMsg": 'Email ou mot de passe incorrect' });
                 return
             }
             const token = userController.generateToken(user[0]);
             res.status(200).json({token});
         })
         } catch(err){
-            res.status(400).json(err)
+            res.status(400).json({"errorMsg":err})
         }
     })
 //déconnexion
@@ -85,7 +86,7 @@ router.route('/gardenLocation')
             res.status(200).json({patchGardenLocation});
         }
         catch(e){
-            res.status(400).json(err)
+            res.status(400).json({"errorMsg":err})
         }
 
     })

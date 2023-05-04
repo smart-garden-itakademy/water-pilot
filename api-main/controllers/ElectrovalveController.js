@@ -1,21 +1,23 @@
-const electrovalveModel = require ('../models/ElectrovalveModel');
+const {addElectrovalveInDb,getElectrovalveInDb,updateElectrovalveInDb, deleteElectrovalveInDb} = require ('../models/ElectrovalveModel');
 
 const giveValvePostion = async (userId, idElectrovalve) => {
     const electrovalves = await getElectrovalve(userId);
+    console.log("electrovalves",electrovalves)
     const valve = electrovalves.find(e => e.id == idElectrovalve);
+    console.log("valve",valve)
     //console.log('giveValve', getElectrovalves.find(e => e.id == idElectrovalve))
     if (valve) {
-        return {
+        return ({
             exists:true,
             position:valve.position,
             errmsg:""
-        };
+        );
     }else{
-        return {
+        return ({
             exists:false,
             position:null,
-            errmsg:`Electrovalve with id ${idElectrovalve} does not exist or does not belong to user with id ${userId}`
-        };
+            errmsg:`Electrovalve with id ${idElectrovalve} does not exist or does not belong this user with id ${userId}`
+        });
     }
 }
 
@@ -29,32 +31,46 @@ const isValveNotInDb = async (userId, pinPosition) => {
 const addElectrovalve = async (userId, pinPosition, name) => {
     if(await isValveNotInDb(userId, pinPosition)){
         try{
-            const addElectrovalveInDb = await electrovalveModel.addElectrovalveInDb(userId,pinPosition,name);
-            return true;
-
-        }catch(e){
-            throw new Error("Unable to add electrovalve.Errormsg:"+e);
-            return false
+            const addValveInDb = await addElectrovalveInDb(userId,pinPosition,name);
+            console.log("addValveInDb ",addValveInDb )
+            if (addValveInDb) { // vérifie si l'ajout a réussi
+                let response={
+                    id:addValveInDb.insertId,
+                    name:name,
+                    position:pinPosition,
+                    userId:userId
+                };
+            return response;
+            }else throw new Error ("Unable to add electrovalve.")
+        }catch(err){
+            throw new Error(err);
         }
-    }else return false;
+    }
 }
-const deleteElectrovalve = (pinPosition, userId) => {
-    try{
-        return electrovalveModel.deleteElectrovalveInDb(pinPosition, userId);
+const deleteElectrovalve = async (idElectrovalve, userId) => {
+    try {
+        const deleteValveInDb = await deleteElectrovalveInDb(idElectrovalve, userId);
+
+        if (deleteValveInDb.affectedRows) {
+            return {msg: `L'éléctrovalve  qui a pour ID: ${idElectrovalve} a été supprimée avec succès`,
+            errMsg:""}
+        } else {
+            return {errMsg: 'electrovalve not found'}
+        }
     }catch(e){
-        throw new Error("Unable to delete electrovalve.Errormsg:"+e)
+        throw new Error(e)
     }
 }
 const getElectrovalve = (userId) => {
     try{
-        return electrovalveModel.getElectrovalveInDb(userId);
+        return getElectrovalveInDb(userId);
     }catch(e){
         throw new Error("Unable to get electrovalves.Errormsg:"+e)
     }
 }
-const updateElectrovalve = (name,userId,pinPosition) => {
+const updateElectrovalve = (name,userId,idElectrovalve) => {
     try{
-        return electrovalveModel.updateElectrovalveInDb(name,userId,pinPosition);
+        return updateElectrovalveInDb(name,userId, idElectrovalve);
     }catch(e){
         throw new Error("Unable to rename electrovalve."+e)
     }

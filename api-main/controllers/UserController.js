@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
 const generateToken = (user) => {
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '10d' });
     return token;
 }
 function verifyToken(token) {
@@ -22,7 +22,6 @@ const authenticate = (req, res, next) => {
         res.status(401).json({ message: 'Token non fourni' });
         return;
     }
-
     const decoded = verifyToken(token);
     if (!decoded) {
         res.status(401).json({ message: 'Token invalide' });
@@ -64,8 +63,9 @@ console.log('inH')
 }
 const isInDb = async (mail) => {
 try {
-    const checkMail = await userModel.isUserMailExist(mail);
-    return checkMail
+    const isMailAlreadyInDb = await userModel.isUserMailExist(mail);
+    console.log("isMailAlreadyInDb",isMailAlreadyInDb);
+    return isMailAlreadyInDb
 }catch (e){
     console.error(e)
     return false
@@ -98,9 +98,9 @@ const showUsers = async () => {
 }
 const findUser = async (Pwd,email) => {
     try{
-        const user = await userModel.isUserMailExist(email);
+        const user = await userModel.findUserInDb(email);
         console.log("user",user);
-        if(user.length){
+        if(user){
             const match = await bcrypt.compare(Pwd, user[0].password);
             if(match) {
                 return user
@@ -124,6 +124,5 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
         throw new Error("Unable to modify the garden's coordinates.Errormsg:"+e)
     }
 }
-
 
 module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail}
