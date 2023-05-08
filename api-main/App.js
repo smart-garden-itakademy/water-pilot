@@ -8,9 +8,7 @@ const wateringRoute = require('./routers/WateringRoute');
 require ('./controllers/AutoController');
 const valveSettingsRoute = require ('./routers/ValveSettingsRoute');
 const scheduleRoute = require ('./routers/ScheduleRoute');
-
-
->>>>>>> apifront
+const {errorLogger, errorResponder} = require('./middlewares/ErrorHandler');
 
 dotenv.config();
 const app = express();
@@ -31,7 +29,9 @@ app.use('/electrovalve/:idValve/valveSettings',(req,res,next)=> {
 app.use('/electrovalve', electrovalveRoute);
 app.use('/stats', statsRoute);
 
-
+//middleware pour gérer les erreurs
+app.use(errorLogger)
+app.use(errorResponder)
 
 const port = process.env.PORT;
 app.listen(port, () => {

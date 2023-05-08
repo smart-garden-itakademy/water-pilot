@@ -7,31 +7,9 @@ const generateToken = (user) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '10d' });
     return token;
 }
-function verifyToken(token) {
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return decoded;
-    } catch (error) {
-        return null;
-    }
-}
-// middleware qui protège les routes qui nécessite une authentification
-const authenticate = (req, res, next) => {
-    const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
-    if (!token) {
-        res.status(401).json({ message: 'Token non fourni' });
-        return;
-    }
-    const decoded = verifyToken(token);
-    if (!decoded) {
-        res.status(401).json({ message: 'Token invalide' });
-        return;
-    }
-    req.userId = decoded.id;
-    next();
-}
+
 const passwordValidation = (pwd) => {
-    let result = false
+    /*let result = false
     if (
         pwd.length >= 8 &&   //length must be greater than 8 characters.
         /[A-Z]/.test(pwd) && // One letter should be capital.
@@ -44,7 +22,21 @@ const passwordValidation = (pwd) => {
         return result
     }
     console.log("pwdValidation", result);
-    return result
+    return result*/
+    let response = {
+        msg:[],
+        valid : false
+    }
+    (! pwd.length >= 8) ? response.msg.push("length must be greater than 8 characters.") : null;
+    (! /[A-Z]/.test(pwd)) ? response.msg.push("One letter should be capital.") : null;
+    (! /\d/.test(pwd)) ? response.msg.push("contain alphanumeric.") : null;
+    (! /\W/.test(pwd)) ? response.msg.push("contain a special character (@, $, !, &, etc).") : null;
+    (! !/\s/.test(pwd)) ? response.msg.push("no spaces") : null;
+
+    if (response.msg.length == 0) {
+        response.valid = true
+    }
+    return response
 }
 const hash =  (pwd) => {
     const saltRounds = 10;
@@ -125,4 +117,4 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
     }
 }
 
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail}
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, updateGardenLocation, isEmail}
