@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const userModel = require ('../models/UserModel');
+const {findUserInDb,saveNewUser,getUsers,updateLocation} = require ('../models/UserModel');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
@@ -55,7 +55,7 @@ console.log('inH')
 }
 const isInDb = async (mail) => {
 try {
-    const isMailAlreadyInDb = await userModel.isUserMailExist(mail);
+    const isMailAlreadyInDb = await findUserInDb(mail);
     console.log("isMailAlreadyInDb",isMailAlreadyInDb);
     return isMailAlreadyInDb
 }catch (e){
@@ -66,7 +66,7 @@ try {
 const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
     try{
         //add user
-        const addUser = await userModel.saveNewUser(hashPwd, name, email, city, longitude, latitude);
+        const addUser = await saveNewUser(hashPwd, name, email, city, longitude, latitude);
         return addUser
     }
     catch (error){
@@ -81,7 +81,7 @@ const isEmail = (email) => {
 }
 const showUsers = async () => {
     try{
-        return userModel.getUsers()
+        return getUsers()
     }
     catch (error){
         console.error("Erreur lors de la recherche des utilisateurs :", error);
@@ -90,7 +90,7 @@ const showUsers = async () => {
 }
 const findUser = async (Pwd,email) => {
     try{
-        const user = await userModel.findUserInDb(email);
+        const user = await findUserInDb(email);
         console.log("user",user);
         if(user){
             const match = await bcrypt.compare(Pwd, user[0].password);
@@ -110,7 +110,7 @@ const findUser = async (Pwd,email) => {
 }
 const updateGardenLocation = async (userId, longitude, latitude) => {
     try{
-        const updateLocation =await userModel.updateLocation(userId, longitude, latitude);
+        const updateLocation =await updateLocation(userId, longitude, latitude);
         console.log(updateLocation);
     }catch(e){
         throw new Error("Unable to modify the garden's coordinates.Errormsg:"+e)

@@ -18,13 +18,15 @@ router.route('/')
 router.route('/sign-up')
     .post(async (req, res, next) => {
         const { password, name, email, city, longitude, latitude } = req.body;
+        console.log("reqBody",req.body);
         console.log("password", password);
         console.log("name", name);
         console.log("email", email);
         console.log("city", city);
         console.log("longitude", longitude);
         console.log("latitude", latitude);
-        
+        //TODO vérifier que tous les champs sont remplis
+
         try {
             const mailAlreadyInDB = await isInDb(email)
             console.log("mailAlreadyInDB",mailAlreadyInDB)
@@ -57,6 +59,7 @@ router.route('/sign-up')
 router.route('/login')
     .post((req,res) => {
         const { password, email } = req.body;
+        console.log("reqBody",req.body);
         try {
             findUser(password,email)
             .then((user) => {

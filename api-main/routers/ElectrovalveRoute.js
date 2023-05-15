@@ -7,8 +7,8 @@ router.route('/')
     //renvoi toutes les éléctrovalves
     .get(authenticate,async (req,res) => {
         try{
-            const getElectrovalve = await getElectrovalve(req.userId);
-            res.status(200).json(getElectrovalve)
+            const getValve = await getElectrovalve(req.userId);
+            res.status(200).json(getValve)
         }catch(err){
             res.status(400).json({"errorMsg":err})
         }

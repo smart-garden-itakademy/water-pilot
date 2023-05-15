@@ -15,6 +15,7 @@ const app = express();
 
 app.use(express.json());
 
+
 app.use('/watering', wateringRoute)
 app.use('/user', userRoute);
 app.use('/electrovalve/:idValve/valveSettings/:idSetting/schedule',(req,res,next)=>{
