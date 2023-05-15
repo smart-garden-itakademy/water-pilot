@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const userModel = require ('../models/UserModel');
+const {findUserInDb,saveNewUser,getUsers,updateLocation} = require ('../models/UserModel');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
@@ -7,31 +7,9 @@ const generateToken = (user) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '10d' });
     return token;
 }
-function verifyToken(token) {
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return decoded;
-    } catch (error) {
-        return null;
-    }
-}
-// middleware qui protège les routes qui nécessite une authentification
-const authenticate = (req, res, next) => {
-    const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
-    if (!token) {
-        res.status(401).json({ message: 'Token non fourni' });
-        return;
-    }
-    const decoded = verifyToken(token);
-    if (!decoded) {
-        res.status(401).json({ message: 'Token invalide' });
-        return;
-    }
-    req.userId = decoded.id;
-    next();
-}
+
 const passwordValidation = (pwd) => {
-    let result = false
+    /*let result = false
     if (
         pwd.length >= 8 &&   //length must be greater than 8 characters.
         /[A-Z]/.test(pwd) && // One letter should be capital.
@@ -44,7 +22,21 @@ const passwordValidation = (pwd) => {
         return result
     }
     console.log("pwdValidation", result);
-    return result
+    return result*/
+    let response = {
+        msg:[],
+        valid : false
+    }
+    if (! pwd.length >= 8)  response.msg.push("length must be greater than 8 characters.");
+    if (! /[A-Z]/.test(pwd)) response.msg.push("One letter should be capital.") ;
+    if (! /\d/.test(pwd)) response.msg.push("contain alphanumeric.") ;
+    if (! /\W/.test(pwd)) response.msg.push("contain a special character (@, $, !, &, etc).") ;
+    if (! /\s/.test(pwd)) response.msg.push("no spaces");
+
+    if (response.msg.length == 0) {
+        response.valid = true
+    }
+    return response
 }
 const hash =  (pwd) => {
     const saltRounds = 10;
@@ -63,7 +55,9 @@ console.log('inH')
 }
 const isInDb = async (mail) => {
 try {
-    const isMailAlreadyInDb = await userModel.findUserInDb(mail);
+
+    const isMailAlreadyInDb = await findUserInDb(mail);
+
     console.log("isMailAlreadyInDb",isMailAlreadyInDb);
     return isMailAlreadyInDb
 }catch (e){
@@ -74,7 +68,7 @@ try {
 const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
     try{
         //add user
-        const addUser = await userModel.saveNewUser(hashPwd, name, email, city, longitude, latitude);
+        const addUser = await saveNewUser(hashPwd, name, email, city, longitude, latitude);
         return addUser
     }
     catch (error){
@@ -89,7 +83,7 @@ const isEmail = (email) => {
 }
 const showUsers = async () => {
     try{
-        return userModel.getUsers()
+        return getUsers()
     }
     catch (error){
         console.error("Erreur lors de la recherche des utilisateurs :", error);
@@ -98,7 +92,7 @@ const showUsers = async () => {
 }
 const findUser = async (Pwd,email) => {
     try{
-        const user = await userModel.findUserInDb(email);
+        const user = await findUserInDb(email);
         console.log("user",user);
         if(user){
             const match = await bcrypt.compare(Pwd, user[0].password);
@@ -118,11 +112,11 @@ const findUser = async (Pwd,email) => {
 }
 const updateGardenLocation = async (userId, longitude, latitude) => {
     try{
-        const updateLocation =await userModel.updateLocation(userId, longitude, latitude);
+        const updateLocation =await updateLocation(userId, longitude, latitude);
         console.log(updateLocation);
     }catch(e){
         throw new Error("Unable to modify the garden's coordinates.Errormsg:"+e)
     }
 }
 
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, verifyToken, authenticate, updateGardenLocation, isEmail}
+module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, updateGardenLocation, isEmail}

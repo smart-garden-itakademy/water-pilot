@@ -11,7 +11,7 @@ const giveValvePostion = async (userId, idElectrovalve) => {
             exists: true,
             position: valve.position,
             errmsg: ""
-        });
+        })
     }else{
         return ({
             exists:false,
