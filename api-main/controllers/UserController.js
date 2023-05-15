@@ -27,11 +27,11 @@ const passwordValidation = (pwd) => {
         msg:[],
         valid : false
     }
-    (! pwd.length >= 8) ? response.msg.push("length must be greater than 8 characters.") : null;
-    (! /[A-Z]/.test(pwd)) ? response.msg.push("One letter should be capital.") : null;
-    (! /\d/.test(pwd)) ? response.msg.push("contain alphanumeric.") : null;
-    (! /\W/.test(pwd)) ? response.msg.push("contain a special character (@, $, !, &, etc).") : null;
-    (! !/\s/.test(pwd)) ? response.msg.push("no spaces") : null;
+    if (! pwd.length >= 8)  response.msg.push("length must be greater than 8 characters.");
+    if (! /[A-Z]/.test(pwd)) response.msg.push("One letter should be capital.") ;
+    if (! /\d/.test(pwd)) response.msg.push("contain alphanumeric.") ;
+    if (! /\W/.test(pwd)) response.msg.push("contain a special character (@, $, !, &, etc).") ;
+    if (! /\s/.test(pwd)) response.msg.push("no spaces");
 
     if (response.msg.length == 0) {
         response.valid = true
