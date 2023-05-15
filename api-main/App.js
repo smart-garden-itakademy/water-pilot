@@ -10,12 +10,13 @@ const valveSettingsRoute = require ('./routers/ValveSettingsRoute');
 const scheduleRoute = require ('./routers/ScheduleRoute');
 
 
->>>>>>> apifront
+
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/watering', wateringRoute)
 app.use('/user', userRoute);

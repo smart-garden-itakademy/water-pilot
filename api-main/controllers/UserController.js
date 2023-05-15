@@ -63,7 +63,7 @@ console.log('inH')
 }
 const isInDb = async (mail) => {
 try {
-    const isMailAlreadyInDb = await userModel.isUserMailExist(mail);
+    const isMailAlreadyInDb = await userModel.findUserInDb(mail);
     console.log("isMailAlreadyInDb",isMailAlreadyInDb);
     return isMailAlreadyInDb
 }catch (e){
