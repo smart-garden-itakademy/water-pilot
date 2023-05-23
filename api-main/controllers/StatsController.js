@@ -1,6 +1,6 @@
 const statsModel = require("../models/StatsModel");
 const showIrrigationStats = () => {
-    return statsModel.getIrrigationStats()
+    return statsModel.getLast14DaysIrrigationStats()
 }
 
 const showSensorsStats = () => {
