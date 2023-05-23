@@ -11,6 +11,6 @@ app.use('/', router);
 
 
 const port = process.env.SERVER_PORT;
-app.listen(8090, () => {
+app.listen(port, () => {
     console.log(`Le serveur a démarré sur le port ${port}`)
 })

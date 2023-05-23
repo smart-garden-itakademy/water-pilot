@@ -31,7 +31,7 @@ const getUsers = () => {
         )
     })
 }
-const isUserMailExist = (email) => {
+const findUserInDb = (email) => {
     return new Promise((resolve, reject) => {
         connection.query(
             "SELECT * FROM User WHERE email = ? ",
@@ -41,7 +41,7 @@ const isUserMailExist = (email) => {
                     console.error("Erreur lors de la récupération des données de l'utilisateur :", error);
                     reject(error);
                 } else {
-                    console.log("results", results.length);
+                    console.log("results", results);
                     resolve(results);
                 }
             });
@@ -65,4 +65,4 @@ const updateLocation = (userId, longitude, latitude) => {
     })
 }
 
-module.exports = {saveNewUser,getUsers,isUserMailExist, updateLocation}
+module.exports = {saveNewUser,getUsers,findUserInDb, updateLocation}
