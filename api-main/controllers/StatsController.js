@@ -1,10 +1,10 @@
 const statsModel = require("../models/StatsModel");
-const showIrrigationStats = () => {
-    return statsModel.getLast14DaysIrrigationStats()
+const getIrrigationStats = (userId) => {
+    return statsModel.getLast14DaysIrrigationStats(userId)
 }
 
-const showSensorsStats = () => {
+const getSensorsStats = () => {
     return statsModel.getSensorsStats()
 }
 
-module.exports={showIrrigationStats, showSensorsStats}
+module.exports={getIrrigationStats, getSensorsStats}

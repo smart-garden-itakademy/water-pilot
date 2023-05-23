@@ -1,11 +1,9 @@
 const connection = require("../cores/database");
 
-const userId = 1;
-
 // Get the last 14 days of irrigation stats for each electrovalve
 // Returns an object with the electrovalve name as key and an object with the date as key and the total volume as value
 // Example: { "Electrovalve 1": { "01/01/2021": 10, "02/01/2021": 20 }, "Electrovalve 2": { "01/01/2021": 5, "02/01/2021": 15 } }
-const getLast14DaysIrrigationStats = () => {
+const getLast14DaysIrrigationStats = (userId) => {
     return new Promise((resolve, reject) => {
 
         connection.query(
