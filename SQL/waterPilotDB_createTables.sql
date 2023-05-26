@@ -24,7 +24,7 @@ CREATE TABLE Sensor (
                         value int NOT NULL,
                         date DATE NOT NULL,
                         userId INT,
-                        FOREIGN KEY (userId) REFERENCES User(id),
+                        FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE,
                         typeId INT,
                         FOREIGN KEY (typeId) REFERENCES Type(id)
 );
@@ -35,7 +35,8 @@ CREATE TABLE Electrovalve (
                               name VARCHAR(50),
                               position INT NOT NULL, -- Position pas nécéssaire
                               userId INT,
-                              FOREIGN KEY (userId) REFERENCES User(id)
+                              isAutomatic BOOLEAN NOT NULL,
+                              FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE
 );
 
 /* Création de la table UserSettings */
@@ -44,9 +45,8 @@ CREATE TABLE ValveSettings (
                               rainThreshold INT NOT NULL,
                               moistureThreshold INT NOT NULL,
                               duration INT NOT NULL,
-                              isAutomatic BOOLEAN NOT NULL,
                               idElectrovalve INT,
-                              FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id)
+                              FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id) ON DELETE CASCADE
 );
 
 
@@ -57,7 +57,7 @@ CREATE TABLE Irrigation (
                           dateEnd DATE NOT NULL,
                           volume INT NOT NULL,
                           idElectrovalve INT NOT NULL,
-                          FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id)
+                          FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id) ON DELETE CASCADE
 );
 
 
@@ -68,7 +68,8 @@ CREATE TABLE Schedule (
                       hourEnd INT NOT NULL,
                       days TEXT NOT NULL,
                       idSettings INT,
-                      FOREIGN KEY (idSettings) REFERENCES ValveSettings(id)
+                      isActivated BOOLEAN NOT NULL,
+                      FOREIGN KEY (idSettings) REFERENCES ValveSettings(id) ON DELETE CASCADE
 );
 
 

@@ -25,16 +25,11 @@ router.route('/')
             res.status(400).json({errorMsg:err})
         }
     })
-    router.route('/:idSettings')
     .delete (authenticate,async (req,res) => {
-
-
-        req.idSettings = parseInt (req.params.idSettings);
-
         try {
             //A faire!:
             //ajouter la suppression des schedules affiliés à ce setting!
-            const deleteSettings = await deleteValveSetting(req.idValve,req.idSettings, req.userId);
+            const deleteSettings = await deleteValveSetting(req.idValve, req.userId);
             console.log("deleteSettings",deleteSettings)
             if(deleteSettings.errorMsg) throw new Error (deleteSettings.errorMsg);
             res.status(200).json(deleteSettings.msg)

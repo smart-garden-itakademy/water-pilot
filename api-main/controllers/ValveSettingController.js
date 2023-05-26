@@ -48,7 +48,7 @@ const addValveSetting = async (rainThreshold, moistureThreshold, duration, isAut
         throw new Error(e);
     }
 }
-const deleteValveSetting = async (idElectrovalve,idSetting,userId) => {
+const deleteValveSetting = async (idElectrovalve,userId) => {
     //stop if this id Electrovalve not belongs this user
     const valvePosition = await giveValvePostion(userId, idElectrovalve);
     console.log("valvePosition",valvePosition)
@@ -64,7 +64,7 @@ const deleteValveSetting = async (idElectrovalve,idSetting,userId) => {
     }
 
     try {
-        const deleteInDb = await deleteValveSettingInDb(idElectrovalve,idSetting);
+        const deleteInDb = await deleteValveSettingInDb(idElectrovalve);
         console.log()
         if (deleteInDb.affectedRows) {
             return {"msg": `Les settings de l'éléctrovalve qui a pour ID: ${idElectrovalve} ont été supprimés avec succès`,
@@ -76,12 +76,14 @@ const deleteValveSetting = async (idElectrovalve,idSetting,userId) => {
         throw new Error (e);
     }
 }
-const updateValveSetting = async (rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting,userId,idElectrovalve) => {
+const updateValveSetting = async (rainThreshold, moistureThreshold, duration, isAutomatic,userId,idElectrovalve) => {
     //check if idElectrovalve exist and belongs this userId
     const valvePosition = await giveValvePostion(userId, idElectrovalve);
+    //TODO: check if settings already exist on this valve
+
     if (valvePosition.exists){
         try {
-            await updateValveSettingInDb(rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting);
+            await updateValveSettingInDb(rainThreshold, moistureThreshold, duration, isAutomatic,idElectrovalve);
             return ({
                 msg:`Les settings de l'éléctrovalve ${idElectrovalve} appartenant à l'utilisateur ${userId} sont mis à jour`,
                 errorMsg:""

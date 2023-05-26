@@ -1,101 +1,186 @@
 const express = require('express');
 const router = express.Router();
-const {showUsers, isInDb, passwordValidation, hash, isEmail, newUser, findUser, generateToken, updateGardenLocation} = require ('../controllers/UserController')
+const {checkArgumentsDefined,showUsers, isInDb, passwordValidation, hash, isEmailValid, newUser, findUser, generateToken, updateGardenLocation,deleteUser} = require ('../controllers/UserController')
 const {authenticate} = require ('../middlewares/AuthMiddleware')
-const {PwdConditionError} = require ('../errors')
+const {CustomError} = require ('../errors/CustomError')
 
 //-----------------------Users routes ------------------------------------------
-
+/**
+ * @swagger
+ * /user:
+ *   get:
+ *     summary: Récupère la liste de tous les utilisateurs
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: La liste des utilisateurs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *       401:
+ *         description: Non autorisé
+ */
 //get all users test
 router.route('/')
-    .get(authenticate,(req,res)=>{
-        console.log("userId",req.userId);
-        showUsers()
-            .then((data)=> res.json(data))
-    })
+    .get(authenticate, async (req, res, next) => {
+        try {
+            const users = await showUsers();
+            res.status(200).json(users);
+        } catch (err) {
+            next(err);
+        }
+    });
+//TODO: tester la route delete user apres avoir refait la db avec ON DELETE CASCADE
+//pour supprimer les enregistrements des tables liées
+//cette route est créée pour un role admin qui doit être implémenté
+router.route('/:id')
+    .delete(authenticate, async (req, res, next) => {
+        try {
+            const id = parseInt(req.params.id);
+            if(isNaN(id)) return next(new CustomError("Invalid user id", 400));
+
+            await deleteUser(id);
+            res.status(200).json({message: "Utilisateur supprimé"});
+        } catch (err) {
+            next(err);
+        }
+    });
+//TODO: patch user
 
 //sign-up
+/**
+ * @swagger
+ * /user/sign-up:
+ *   post:
+ *     summary: Inscription d'un nouvel utilisateur
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               longitude:
+ *                 type: number
+ *               latitude:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Le compte de l'utilisateur a été créé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Une erreur est survenue lors de la création du compte
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 cause:
+ *                   type: string
+ *                 statusCode:
+ *                   type: integer
+ *       500:
+ *         description: Erreur serveur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 cause:
+ *                   type: string
+ *                 statusCode:
+ *                   type: integer
+ */
 router.route('/sign-up')
     .post(async (req, res, next) => {
         const { password, name, email, city, longitude, latitude } = req.body;
         console.log("reqBody",req.body);
-        console.log("password", password);
-        console.log("name", name);
-        console.log("email", email);
-        console.log("city", city);
-        console.log("longitude", longitude);
-        console.log("latitude", latitude);
-        //TODO vérifier que tous les champs sont remplis
 
         try {
-            const mailAlreadyInDB = await isInDb(email)
-            console.log("mailAlreadyInDB",mailAlreadyInDB)
-            const isvalidPassword = await passwordValidation(password)
-            if(mailAlreadyInDB.length) {
-                //mail already exist in DB
-                res.status(400).json({"errorMsg": "Il existe déjà un compte enregistré avec cet Email"})
-            }else if( isvalidPassword.valid) { //password validation
-                // Hash password
-                    const hashPwd = await hash(password);
-                //Email validation
-                    const isValidEmail = await isEmail(email);
-                    if(!isValidEmail ) return res.status(400).send({message: 'Veuillez fournir une adresse e-mail valide.'});
-                // Save user in database
-                    const saveUser = await newUser(hashPwd, name, email, city, longitude, latitude);
+            checkArgumentsDefined(password, name, email, city, longitude, latitude);
 
-                // Send response
-                    res.status(200).json(saveUser);
-            }else{
-                console.log("isvalidPassword",isvalidPassword.msg);
-                throw new PwdConditionError(isvalidPassword.msg)
-            }
+            //vérifier que tous les champs sont renseignés sinon renvoyer une erreur
+            // if(password === undefined) return next( new CustomError("Veuillez renseigner le password",500));
+            // if(name === undefined ) return next(new CustomError("Veuillez renseigner le nom",500));
+            // if(email === undefined ) return next(new CustomError("Veuillez renseigner l'email",500));
+            // if(city === undefined || !isNaN(Number(city))) return next(new CustomError("Veuillez renseigner la ville",500));
+            // if(longitude === undefined || isNaN(Number(longitude))) return next(new CustomError("Veuillez renseigner la longitude",500));
+            // if(latitude === undefined || isNaN(Number(latitude))) return next(new CustomError("Veuillez renseigner la latitude",500));
+
+            await isInDb(email); //check if email is already in db
+            await passwordValidation(password); //password validation
+            const hashPwd = await hash(password);//hash password
+            await isEmailValid(email);//check if email is valid
+            // Save user in database
+            const saveUser = await newUser(hashPwd, name, email, city, longitude, latitude);
+            // Send response
+            res.status(200).json({message: 'Votre compte a bien été créé !'});
         } catch (err) {
             console.error(err);
             next(err);
-            //res.status(400).json({"errorMsg": err});
         }
     });
 
 router.route('/login')
-    .post((req,res) => {
-        const { password, email } = req.body;
-        console.log("reqBody",req.body);
+    .post(async (req, res, next) => {
         try {
-            findUser(password,email)
-            .then((user) => {
-                if(user.length===0) {
-                    res.status(401).json({ "errorMsg": 'Email ou mot de passe incorrect' });
-                    return
-                }
-                const token = generateToken(user[0]);
-                res.status(200).json({token});
-        })
-        } catch(err){
-            res.status(400).json({"errorMsg":err})
+            const { password, email } = req.body;
+            checkArgumentsDefined(password, email);
+
+            const user = await findUser(password, email)
+            const token = generateToken(user[0]);
+            res.status(200).json({token});
+        } catch(err) {
+            next(err);
         }
-    })
-//déconnexion
+    });
+
 
 //save garden position
 router.route('/gardenLocation')
-    .patch(authenticate,(req,res) => {
-        console.log("userId",req.userId);
-        const { longitude, latitude } = req.body;
-        try{
-            const patchGardenLocation = updateGardenLocation(req.userId, longitude, latitude);
-            res.status(200).json({patchGardenLocation});
-        }
-        catch(e){
-            res.status(400).json({"errorMsg":err})
-        }
+    .patch(authenticate, async (req,res, next) => {
+        try {
+            const { longitude, latitude } = req.body;
+            if(longitude === undefined ) return next(new CustomError("Veuillez renseigner la longitude", 400));
+            if(latitude === undefined) return next(new CustomError("Veuillez renseigner la latitude", 400));
 
-    })
+            const patchGardenLocation = await updateGardenLocation(req.userId, longitude, latitude);
+            res.status(200).json({patchGardenLocation});
+        } catch(e) {
+            next(e);
+        }
+    });
 
 //error middleware:
-function errorHandler(err, req, res, next) {
-    console.error(err);
-    res.status(500).json({message: err.message});
-}
+// function errorHandler(err, req, res, next) {
+//     console.error(err);
+//     res.status(500).json({message: err.message});
+// }
 
 
 

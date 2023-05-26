@@ -1,4 +1,5 @@
 const {addElectrovalveInDb,getElectrovalveInDb,updateElectrovalveInDb, deleteElectrovalveInDb} = require ('../models/ElectrovalveModel');
+const {CustomError} = require ('../errors/CustomError')
 
 const giveValvePostion = async (userId, idElectrovalve) => {
     const electrovalves = await getElectrovalve(userId);
@@ -21,30 +22,28 @@ const giveValvePostion = async (userId, idElectrovalve) => {
     }
 }
 
-const isValveNotInDb = async (userId, pinPosition) => {
-    //send true if valve is not in DB
+const isValvePositionAlreadyInDb = async (userId, pinPosition) => {
+    //send true if position valve is in DB
     const getElectrovalves = await getElectrovalve(userId);
     if(getElectrovalves.find(e => e.position == pinPosition)){
-        return false
-    }else return true
+        return true
+    }else false
 }
-const addElectrovalve = async (userId, pinPosition, name) => {
-    if(await isValveNotInDb(userId, pinPosition)){
-        try{
-            const addValveInDb = await addElectrovalveInDb(userId,pinPosition,name);
-            console.log("addValveInDb ",addValveInDb )
-            if (addValveInDb) { // vérifie si l'ajout a réussi
-                let response={
-                    id:addValveInDb.insertId,
-                    name:name,
-                    position:pinPosition,
-                    userId:userId
-                };
-            return response;
-            }else throw new Error ("Unable to add electrovalve.")
-        }catch(err){
-            throw new Error(err);
+const addElectrovalve = async (userId, pinPosition, name, isAutomatic) => {
+    try{
+        const addValveInDb = await addElectrovalveInDb(userId,pinPosition,name,isAutomatic);
+        console.log("addValveInDb ",addValveInDb )
+        if (addValveInDb) { // si enregistrement ok formattage de la reponse
+            let response={
+                id:addValveInDb.insertId,
+                name:name,
+                position:pinPosition,
+                userId:userId
+            };
+        return response;
         }
+    }catch(err){
+        throw new CustomError ("Impossible d'ajouter l'éléctrovalve.",500)
     }
 }
 const deleteElectrovalve = async (idElectrovalve, userId) => {
@@ -76,4 +75,4 @@ const updateElectrovalve = (name,userId,idElectrovalve) => {
     }
 }
 
-module.exports={addElectrovalve,deleteElectrovalve, getElectrovalve,updateElectrovalve, isValveNotInDb, giveValvePostion}
+module.exports={addElectrovalve,deleteElectrovalve, getElectrovalve,updateElectrovalve, isValvePositionAlreadyInDb, giveValvePostion}

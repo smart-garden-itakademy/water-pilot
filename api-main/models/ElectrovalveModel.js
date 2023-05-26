@@ -1,17 +1,18 @@
 const connection = require('../cores/database');
+const {CustomError} = require ('../errors/CustomError')
 
-const addElectrovalveInDb = (userId,pinPosition,name) => {
+const addElectrovalveInDb = (userId,pinPosition,name,isAutomatic) => {
+    //par defaut isAutomatic=
+    //let isAutomatic = true
     return new Promise ((resolve, reject) => {
         connection.query(
-            "INSERT INTO Electrovalve (name, position, userId) VALUES (?, ?, ?)",
-            [name, pinPosition, userId],
+            "INSERT INTO Electrovalve (name, position, userId, isAutomatic) VALUES (?, ?, ?, ?)",
+            [name, pinPosition, userId,isAutomatic],
             (error, results) => {
                 if (error) {
                     reject(error);
-                } else {
-
-                    resolve(results);
-                }
+                    console.log(error)
+                } else resolve(results);
             }
         )
     })
