@@ -26,6 +26,7 @@ const deleteElectrovalveInDb = (idElectrovalve, userId) => {
             (error, results) => {
                 if (error) {
                     reject(error);
+                    console.log(error)
                 } else {
                     results.msg = `L'éléctrovalve  qui a pour ID: ${idElectrovalve}  a été supprimée avec succès`;
                     resolve(results);
@@ -41,7 +42,7 @@ const getElectrovalveInDb = (userId) => {
             [userId],
             (error, results) => {
                 if (error) {
-                    console.error("Erreur lors de la récupération des éléctrovalves dans la base de données :", error);
+                    console.log(error);
                     reject(error);
                 } else {
                     resolve(results);
@@ -50,14 +51,15 @@ const getElectrovalveInDb = (userId) => {
         )
     })
 }
-const updateElectrovalveInDb = (name,userId,idElectrovalve) => {
+
+const updateValveNameInDb = (userId, idElectrovalve, name) => {
     return new Promise ((resolve, reject) => {
         connection.query(
             "UPDATE Electrovalve SET name = ? WHERE userId = ? AND id = ?",
-            [name,userId,idElectrovalve],
+            [name, userId, idElectrovalve],
             (error, results) => {
                 if (error) {
-                    console.error("Erreur lors de la modification de l'éléctrovalve dans la base de données :", error);
+                    console.log(error);
                     reject(error);
                 } else {
                     console.log(`modification name:${name}, idValve: ${idElectrovalve}`)
@@ -66,5 +68,21 @@ const updateElectrovalveInDb = (name,userId,idElectrovalve) => {
             })
     })
 }
+const updateValveIsAutomaticInDb = (userId, idElectrovalve, isAutomatic) => {
+    return new Promise ((resolve, reject) => {
+        connection.query(
+            "UPDATE Electrovalve SET isAutomatic = ? WHERE userId = ? AND id = ?",
+            [isAutomatic, userId, idElectrovalve],
+            (error, results) => {
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                } else {
+                    console.log(`modification isAutomatic:${isAutomatic}, idValve: ${idElectrovalve}`)
+                    resolve(results);
+                }
+            })
+    })
+}
 
-module.exports = {addElectrovalveInDb, deleteElectrovalveInDb, getElectrovalveInDb,updateElectrovalveInDb}
+module.exports = {updateValveNameInDb,updateValveIsAutomaticInDb,addElectrovalveInDb, deleteElectrovalveInDb, getElectrovalveInDb}

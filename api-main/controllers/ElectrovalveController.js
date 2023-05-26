@@ -1,5 +1,8 @@
-const {addElectrovalveInDb,getElectrovalveInDb,updateElectrovalveInDb, deleteElectrovalveInDb} = require ('../models/ElectrovalveModel');
+const {updateValveIsAutomaticInDb,updateValveNameInDb,addElectrovalveInDb,getElectrovalveInDb, deleteElectrovalveInDb} = require ('../models/ElectrovalveModel');
 const {CustomError} = require ('../errors/CustomError')
+
+//TODO : add a function to check if the valve is already in DB return ID if true
+
 
 const giveValvePostion = async (userId, idElectrovalve) => {
     const electrovalves = await getElectrovalve(userId);
@@ -21,7 +24,13 @@ const giveValvePostion = async (userId, idElectrovalve) => {
         });
     }
 }
-
+const isValveNameAlreadyInDb = async (userId, name) => {
+    //send true if name is in DB
+    const getElectrovalves = await getElectrovalve(userId);
+    if(getElectrovalves.find(e => e.name == name)){
+        return true
+    }else false
+}
 const isValvePositionAlreadyInDb = async (userId, pinPosition) => {
     //send true if position valve is in DB
     const getElectrovalves = await getElectrovalve(userId);
@@ -44,6 +53,7 @@ const addElectrovalve = async (userId, pinPosition, name, isAutomatic) => {
         }
     }catch(err){
         throw new CustomError ("Impossible d'ajouter l'éléctrovalve.",500)
+        return
     }
 }
 const deleteElectrovalve = async (idElectrovalve, userId) => {
@@ -51,28 +61,37 @@ const deleteElectrovalve = async (idElectrovalve, userId) => {
         const deleteValveInDb = await deleteElectrovalveInDb(idElectrovalve, userId);
 
         if (deleteValveInDb.affectedRows) {
-            return {msg: `L'éléctrovalve  qui a pour ID: ${idElectrovalve} a été supprimée avec succès`,
-            errMsg:""}
-        } else {
-            return {errMsg: 'electrovalve not found'}
+            return {msg: `L'éléctrovalve  qui a pour ID: ${idElectrovalve} a été supprimée avec succès`}
         }
     }catch(e){
-        throw new Error(e)
+        throw new CustomError ("Impossible de supprimer l'éléctrovalve.",500)
+        return
     }
 }
 const getElectrovalve = (userId) => {
     try{
         return getElectrovalveInDb(userId);
     }catch(e){
-        throw new Error("Unable to get electrovalves.Errormsg:"+e)
-    }
-}
-const updateElectrovalve = (name,userId,idElectrovalve) => {
-    try{
-        return updateElectrovalveInDb(name,userId, idElectrovalve);
-    }catch(e){
-        throw new Error("Unable to rename electrovalve."+e)
+        throw new CustomError ("Impossible de récupérer les éléctrovalves.",500);
+        return
     }
 }
 
-module.exports={addElectrovalve,deleteElectrovalve, getElectrovalve,updateElectrovalve, isValvePositionAlreadyInDb, giveValvePostion}
+const updateValveName = async (userId,idElectrovalve, name) => {
+    try{
+        return updateValveNameInDb(userId,idElectrovalve, name);
+    }catch(e){
+        throw new CustomError ("Impossible de mettre à jour le nom de l'éléctrovalve.",500);
+        return
+    }
+}
+const updateValveIsAutomatic = async (userId,idElectrovalve, isAutomatic) => {
+    try{
+        return updateValveIsAutomaticInDb(userId,idElectrovalve, isAutomatic);
+    }catch(e){
+        throw new CustomError ("Impossible de mettre à jour le mode automatique de l'éléctrovalve.",500);
+        return
+    }
+}
+
+module.exports={updateValveIsAutomatic,updateValveName,isValveNameAlreadyInDb,addElectrovalve,deleteElectrovalve, getElectrovalve, isValvePositionAlreadyInDb, giveValvePostion}
