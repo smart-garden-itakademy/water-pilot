@@ -10,18 +10,6 @@ const isUserExist = async (userId) => {
     console.log("getValves",getAllUsers);
     return !!getAllUsers.find(e => e.id === userId)
 }
-function checkArgumentsDefined(...args) {
-    let arrayError=[];
-    for (let i = 0; i < args.length; i++) {
-        if (args[i] === undefined || args[i] === "" || args[i] === null) {
-            arrayError.push(`tous les champs doivent être remplis`);
-        }
-    }
-    console.log("arrayError",arrayError);
-    if (arrayError.length){
-        throw new CustomError(arrayError.join(","), 500);
-    }
-}
 const generateToken = (user) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '10d' });
     return token;
@@ -44,19 +32,17 @@ const passwordValidation = (pwd) => {
     if ( /\s/.test(pwd)) response.push("le password ne doit pas contenir d'espace.");
 
     if (response.length != 0) {
-        throw new CustomError(response.join(","),500)
+        throw new CustomError(response.join(","),500);
     }
-    return true
 }
 const hash =  (pwd) => {
     const saltRounds = 10;
-console.log('inH')
     return new Promise ((resolve,reject)  => {
         bcrypt.hash(pwd, saltRounds, (err, hash) => {
             if (err){
                 console.log("h",err);
-                throw (err);
-                reject(err)
+                throw new CustomError("Un problème est survenu lors du hachage du mot de passe",500);
+                reject(err);
             }
             console.log("H",hash);
             resolve(hash)
@@ -118,11 +104,12 @@ const findUser = async (Pwd,email) => {
 }
 const updateGardenLocation = async (userId, longitude, latitude) => {
     try{
-        const updateLocation =await updateLocation(userId, longitude, latitude);
-        console.log(updateLocation);
-    }catch(e){
-        throw new Error("Unable to modify the garden's coordinates.Errormsg:"+e)
+        const updateLoc =await updateLocation(userId, longitude, latitude);
+        console.log(updateLoc);
+    }catch(err){
+        console.log(err);
+        throw new CustomError("Impossible de modifier les coordonnées du jardin.",500)
     }
 }
 
-module.exports={isUserExist,passwordValidation,hash, newUser, getUsers, findUser, isInDb, generateToken, updateGardenLocation, isEmailValid,deleteUser,checkArgumentsDefined}
+module.exports={isUserExist,passwordValidation,hash, newUser, getUsers, findUser, isInDb, generateToken, updateGardenLocation, isEmailValid,deleteUser}

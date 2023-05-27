@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const {isUserExist,checkArgumentsDefined,getUsers, isInDb, passwordValidation, hash, isEmailValid, newUser, findUser, generateToken, updateGardenLocation,deleteUser} = require ('../controllers/UserController')
+const {isUserExist,getUsers, isInDb, passwordValidation, hash, isEmailValid, newUser, findUser, generateToken, updateGardenLocation,deleteUser} = require ('../controllers/UserController')
 const {authenticate} = require ('../middlewares/AuthMiddleware')
 const {CustomError} = require ('../errors/CustomError')
+const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/utils/Utils')
+const jwt = require("jsonwebtoken");
 
 //-----------------------Users routes ------------------------------------------
 /**
@@ -120,28 +122,22 @@ router.route('/:id')
  */
 router.route('/sign-up')
     .post(async (req, res, next) => {
-        const { password, name, email, city, longitude, latitude } = req.body;
-        console.log("reqBody",req.body);
+        const { password, name, email, city} = req.body;
+        const longitude = parseFloat(req.body.longitude);
+        const latitude = parseFloat(req.body.latitude);
 
         try {
             checkArgumentsDefined(password, name, email, city, longitude, latitude);
-
-            //vérifier que tous les champs sont renseignés sinon renvoyer une erreur
-            // if(password === undefined) return next( new CustomError("Veuillez renseigner le password",500));
-            // if(name === undefined ) return next(new CustomError("Veuillez renseigner le nom",500));
-            // if(email === undefined ) return next(new CustomError("Veuillez renseigner l'email",500));
-            // if(city === undefined || !isNaN(Number(city))) return next(new CustomError("Veuillez renseigner la ville",500));
-            // if(longitude === undefined || isNaN(Number(longitude))) return next(new CustomError("Veuillez renseigner la longitude",500));
-            // if(latitude === undefined || isNaN(Number(latitude))) return next(new CustomError("Veuillez renseigner la latitude",500));
+            checkArgumentsType(name,"string", email,"string", city,"string", longitude,"number", latitude,"number");
 
             await isInDb(email); //check if email is already in db
             passwordValidation(password); //password validation
             const hashPwd = await hash(password);//hash password
-            jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '10d'}).sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '10d'})(email);//check if email is valid
+            isEmailValid(email);//check if email is valid
             // Save user in database
-            const saveUser = await newUser(hashPwd, name, email, city, longitude, latitude);
+            await newUser(hashPwd, name, email, city, longitude, latitude);
             // Send response
-            res.status(200).json({message: 'Votre compte a bien été créé !'});
+            res.status(200).json({"message": 'Votre compte a bien été créé !'});
         } catch (err) {
             console.error(err);
             next(err);
@@ -153,7 +149,6 @@ router.route('/login')
         try {
             const { password, email } = req.body;
             checkArgumentsDefined(password, email);
-
             const user = await findUser(password, email)
             const token = generateToken(user[0]);
             res.status(200).json({token});
@@ -167,38 +162,24 @@ router.route('/login')
 router.route('/gardenLocation')
     .patch(authenticate, async (req,res, next) => {
         try {
-            const { longitude, latitude } = req.body;
-            if(longitude === undefined ) return next(new CustomError("Veuillez renseigner la longitude", 400));
-            if(latitude === undefined) return next(new CustomError("Veuillez renseigner la latitude", 400));
+            const longitude = parseFloat(req.body.longitude);
+            const latitude = parseFloat(req.body.latitude);
+
+            checkArgumentsDefined(longitude, latitude);
+            checkArgumentsType(longitude,"number", latitude,"number");
 
             const patchGardenLocation = await updateGardenLocation(req.userId, longitude, latitude);
-            res.status(200).json({patchGardenLocation});
-        } catch(e) {
-            next(e);
+            res.status(200).json({"message": 'La localisation de votre jardin a bien été enregistré !'});
+        } catch(err) {
+            next(err);
         }
     });
+//TODO: echapper les caractères spéciaux dans les requêtes sql
 
-//error middleware:
-// function errorHandler(err, req, res, next) {
-//     console.error(err);
-//     res.status(500).json({message: err.message});
-// }
-
-
-
-// vérification de l'adresse mail lors de l'inscription en envoyant un mail
+//TODO: vérification de l'adresse mail lors de l'inscription en envoyant un mail
 //piste: nodemailer
 
-//fonctionnalité forgot password
+//TODO:fonctionnalité forgot password
 
-//------------------------valve settings------------------------------------------
-//creation de valve setting
-//1. creer une valve et récupérer l'ID
-
-//2. creer setting
-//router.route('/valveSetting')
-    
-
-//get valve setting
 
 module.exports=router;
