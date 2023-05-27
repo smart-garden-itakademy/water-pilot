@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {updateValveIsAutomatic,updateValveName,isValveNameAlreadyInDb,getElectrovalve,addElectrovalve,deleteElectrovalve,isValvePositionAlreadyInDb} = require ('../controllers/ElectrovalveController');
+const {isElectrovalveExist,updateValveIsAutomatic,updateValveName,isValveNameAlreadyInDb,getElectrovalves,addElectrovalve,deleteElectrovalve,isValvePositionAlreadyInDb} = require ('../controllers/ElectrovalveController');
 const {authenticate} = require ('../middlewares/AuthMiddleware');
 const {CustomError} = require ('../errors/CustomError')
 const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/utils/Utils')
@@ -9,7 +9,7 @@ router.route('/')
     //renvoi toutes les éléctrovalves
     .get(authenticate,async (req,res,next) => {
         try{
-            const getValve = await getElectrovalve(req.userId);
+            const getValve = await getElectrovalves(req.userId);
             res.status(200).json(getValve)
         }catch(err){
             next(err);
@@ -50,6 +50,11 @@ router.route('/:idValve')
         console.log("name",name,"isAutomatic",isAutomatic)
         //route utilisée pour modifier le nom ou isAutomatique d'une electrovanne
         try{
+            if(isNaN(idElectrovalve)) throw new CustomError ("idValve doit être un nombre",500);
+            //vérifier que l'electrovanne existe bien
+            const isValveExist = await isElectrovalveExist(idElectrovalve, req.userId);
+            if(!isValveExist) throw new CustomError ("Cette électrovanne n'existe pas",500);
+            //TODO:vérifier que le nom n'est pas déjà pris
             if(name){
                 checkArgumentsDefined(name);
                 checkArgumentsType(name,"string");
@@ -68,10 +73,14 @@ router.route('/:idValve')
         }
     })
     .delete(authenticate,async (req,res,next) => {
-        //TODO: faire les vérifications de type et de valeur de idElectrovalve
-        //TODO: vérifier que l'electrovanne existe bien
         const idElectrovalve = parseInt(req.params.idValve) ;
             try{
+                if(isNaN(idElectrovalve)) throw new CustomError ("idValve doit être un nombre",500);
+                console.log("idElectrovalve",idElectrovalve)
+                //vérifier que l'electrovanne existe bien
+                const isValveExist = await isElectrovalveExist(idElectrovalve, req.userId);
+                if(!isValveExist) throw new CustomError ("Cette électrovanne n'existe pas",500);
+
                 const deleteValve = await deleteElectrovalve(idElectrovalve, req.userId);
                 console.log(deleteValve);
                 if(deleteValve.errMsg) throw new Error (deleteValve.errMsg)
