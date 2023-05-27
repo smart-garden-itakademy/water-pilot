@@ -1,10 +1,15 @@
 const bcrypt = require('bcrypt');
-const {findUserInDb,saveNewUser,getUsers,updateLocation,deleteUserInDb} = require ('../models/UserModel');
+const {findUserInDb,saveNewUser,getUsersFromDb,updateLocation,deleteUserInDb} = require ('../models/UserModel');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const {CustomError} = require ('../errors/CustomError')
 
-
+const isUserExist = async (userId) => {
+    //send true if valve is in DB
+    const getAllUsers = await getUsers();
+    console.log("getValves",getAllUsers);
+    return !!getAllUsers.find(e => e.id === userId)
+}
 function checkArgumentsDefined(...args) {
     let arrayError=[];
     for (let i = 0; i < args.length; i++) {
@@ -85,9 +90,9 @@ const isEmailValid = (email) => {
         throw new CustomError("Veuillez fournir une adresse e-mail valide.",500)
     } else return true
 }
-const showUsers = async () => {
+const getUsers = async () => {
     try{
-        return getUsers()
+        return getUsersFromDb()
     }
     catch (error){
         console.log(error)
@@ -120,4 +125,4 @@ const updateGardenLocation = async (userId, longitude, latitude) => {
     }
 }
 
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, updateGardenLocation, isEmailValid,deleteUser,checkArgumentsDefined}
+module.exports={isUserExist,passwordValidation,hash, newUser, getUsers, findUser, isInDb, generateToken, updateGardenLocation, isEmailValid,deleteUser,checkArgumentsDefined}

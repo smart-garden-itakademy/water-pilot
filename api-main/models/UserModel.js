@@ -32,7 +32,7 @@ const saveNewUser = (hashPwd, name, email, city, longitude, latitude) => {
     });
 }
 
-const getUsers = () => {
+const getUsersFromDb = () => {
     return new Promise((resolve, reject) => {
         connection.query(
             "SELECT * FROM User" ,
@@ -80,4 +80,4 @@ const updateLocation = (userId, longitude, latitude) => {
     })
 }
 
-module.exports = {deleteUserInDb,saveNewUser,getUsers,findUserInDb, updateLocation}
+module.exports = {deleteUserInDb,saveNewUser,getUsersFromDb,findUserInDb, updateLocation}

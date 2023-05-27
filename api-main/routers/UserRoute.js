@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {checkArgumentsDefined,showUsers, isInDb, passwordValidation, hash, isEmailValid, newUser, findUser, generateToken, updateGardenLocation,deleteUser} = require ('../controllers/UserController')
+const {isUserExist,checkArgumentsDefined,getUsers, isInDb, passwordValidation, hash, isEmailValid, newUser, findUser, generateToken, updateGardenLocation,deleteUser} = require ('../controllers/UserController')
 const {authenticate} = require ('../middlewares/AuthMiddleware')
 const {CustomError} = require ('../errors/CustomError')
 
@@ -35,28 +35,30 @@ const {CustomError} = require ('../errors/CustomError')
 router.route('/')
     .get(authenticate, async (req, res, next) => {
         try {
-            const users = await showUsers();
+            const users = await getUsers();
             res.status(200).json(users);
         } catch (err) {
             next(err);
         }
     });
 //TODO: tester la route delete user apres avoir refait la db avec ON DELETE CASCADE
-//pour supprimer les enregistrements des tables liées
-//cette route est créée pour un role admin qui doit être implémenté
+//TODO: ajouter un role admin pour pouvoir supprimer un utilisateur
 router.route('/:id')
     .delete(authenticate, async (req, res, next) => {
         try {
-            const id = parseInt(req.params.id);
-            if(isNaN(id)) return next(new CustomError("Invalid user id", 400));
-
-            await deleteUser(id);
+            const userId = parseInt(req.params.id);
+            if(isNaN(userId)) return next(new CustomError("Invalid user id", 500));
+            //TODO: check if user exist
+            const isUserInDb = await isUserExist(userId);
+            if(!isUserInDb) next (new CustomError ("Cet utilisateur n'existe pas",500));
+            await deleteUser(userId);
             res.status(200).json({message: "Utilisateur supprimé"});
         } catch (err) {
             next(err);
         }
     });
 //TODO: patch user
+//TODO: patch password
 
 //sign-up
 /**
@@ -133,9 +135,9 @@ router.route('/sign-up')
             // if(latitude === undefined || isNaN(Number(latitude))) return next(new CustomError("Veuillez renseigner la latitude",500));
 
             await isInDb(email); //check if email is already in db
-            await passwordValidation(password); //password validation
+            passwordValidation(password); //password validation
             const hashPwd = await hash(password);//hash password
-            await isEmailValid(email);//check if email is valid
+            jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '10d'}).sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '10d'})(email);//check if email is valid
             // Save user in database
             const saveUser = await newUser(hashPwd, name, email, city, longitude, latitude);
             // Send response

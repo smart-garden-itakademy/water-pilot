@@ -1,7 +1,6 @@
 const {updateValveIsAutomaticInDb,updateValveNameInDb,addElectrovalveInDb,getElectrovalveInDb, deleteElectrovalveInDb} = require ('../models/ElectrovalveModel');
 const {CustomError} = require ('../errors/CustomError')
 
-//TODO : add a function to check if the valve is already in DB return ID if true
 const isElectrovalveExist = async (idElectrovalve,userId) => {
     //send true if valve is in DB
     const getValves = await getElectrovalves(userId);
