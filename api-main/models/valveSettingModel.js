@@ -7,6 +7,7 @@ const getValveSettingInDb = (idValve) => {
             [idValve],
             (error, results) => {
                 if (error) {
+                    console.error( error);
                     reject(error);
                 } else {
                     resolve(results);
@@ -15,14 +16,14 @@ const getValveSettingInDb = (idValve) => {
         )
     })
 }
-const addValveSettingInDb = (rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve) => {
+const addValveSettingInDb = (rainThreshold, moistureThreshold, duration, idElectrovalve) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve) VALUES (?, ?, ?, ?, ?)",
-            [rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve],
+            "INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, idElectrovalve) VALUES (?, ?, ?, ?)",
+            [rainThreshold, moistureThreshold, duration, idElectrovalve],
             (error, results) => {
                 if (error) {
-                    console.error("Erreur lors de l'enregistrement des settings dans la base de données :", error);
+                    console.error( error);
                     reject(error);
                 } else {
                     resolve(results);

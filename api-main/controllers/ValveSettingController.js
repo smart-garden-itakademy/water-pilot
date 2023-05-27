@@ -1,79 +1,45 @@
 const {getValveSettingInDb, addValveSettingInDb, deleteValveSettingInDb, updateValveSettingInDb} = require ('../models/valveSettingModel');
-const {isValveNotInDb, giveValvePostion} = require ('../controllers/ElectrovalveController');
+const {isValveNotInDb,  giveValvePostion} = require ('../controllers/ElectrovalveController');
+const {CustomError} = require ('../errors/CustomError')
 
-const isSettingInDb = async (userId, idElectrovalve) => {
-    const getSettings = await getValveSetting (idElectrovalve,userId);
-    if(getSettings.find(e => e.idElectrovalve == idElectrovalve)){
-        return true
-    }else false
+const isSettingInDb = async ( idElectrovalve) => {
+    const getSettings = await getValveSetting (idElectrovalve);
+    return !!getSettings.find(e => e.idElectrovalve == idElectrovalve)
+
 }
-const getValveSetting = async (idValve,userId) => {
-    //stop if this idValve not belongs this user Id
-    const valvePosition = await giveValvePostion(userId, idValve);
-    if (!valvePosition.exists){
-        throw new Error ("this electrovalve is unknown.")
-    }
+const getValveSetting = async (idValve) => {
     try{
         return getValveSettingInDb(idValve);
     }catch(e){
         throw new Error(e)
     }
 }
-const addValveSetting = async (rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve, userId) => {
-
-    //stop if this id Electrovalve not belongs this user
-    const valvePosition = await giveValvePostion(userId, idElectrovalve);
-    if (!valvePosition.exists){
-        return {errorMsg: "this electrovalve is unknown."}
-    }
-    //stop if settings already exist on this valve
-    const alreadyInDb = await isSettingInDb(userId, idElectrovalve);
-    if(alreadyInDb) {
-        return {errorMsg: "A setting already exist on this electrovalve."}
-    }
+const addValveSetting = async (rainThreshold, moistureThreshold, duration, idElectrovalve) => {
 
     try {
-        const addSettingsInDb = await addValveSettingInDb(rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve);
-        let response = {
+        const addSettingsInDb = await addValveSettingInDb(rainThreshold, moistureThreshold, duration, idElectrovalve);
+        return {
             idSettings: addSettingsInDb.insertId,
             rainThreshold: rainThreshold,
-            moistureThreshold:moistureThreshold,
+            moistureThreshold: moistureThreshold,
             duration: duration,
-            isAutomatic: isAutomatic,
             idElectrovalve: idElectrovalve,
-            errorMsg: ""
         }
-        return response
-    } catch (e) {
-        throw new Error(e);
+    } catch (err) {
+        console.error(err);
+        throw new CustomError("Impossible d'ajouter les settings de l'éléctrovalve.", 500);
     }
 }
 const deleteValveSetting = async (idElectrovalve,userId) => {
-    //stop if this id Electrovalve not belongs this user
-    const valvePosition = await giveValvePostion(userId, idElectrovalve);
-    console.log("valvePosition",valvePosition)
-    if (!valvePosition.exists){
-        console.log("la");
-        return {"errorMsg":valvePosition.errmsg}
-    }
-
-    //stop if settings doesn't exist on this valve
-    const isInDb = await isSettingInDb(userId, idElectrovalve);
-    if(!isInDb) {
-        return {"errorMsg": "This id settings doesn't exist."}
-    }
-
     try {
         const deleteInDb = await deleteValveSettingInDb(idElectrovalve);
         console.log()
         if (deleteInDb.affectedRows) {
-            return {"msg": `Les settings de l'éléctrovalve qui a pour ID: ${idElectrovalve} ont été supprimés avec succès`,
-                "errorMsg":""}
-        } else {
-            return {"errorMsg": 'settings not found'}
+            return `La configuration de l'éléctrovalve qui a pour ID: ${idElectrovalve} a été supprimée avec succès`
         }
-    }catch (e) {
-        throw new Error (e);
+    }catch (err) {
+        console.error(err);
+        throw new CustomError ("Impossible de supprimer la configuration de l'éléctrovalve.",500);
     }
 }
 const updateValveSetting = async (rainThreshold, moistureThreshold, duration, isAutomatic,userId,idElectrovalve) => {
@@ -97,4 +63,4 @@ const updateValveSetting = async (rainThreshold, moistureThreshold, duration, is
 }
 
 
-module.exports={getValveSetting,addValveSetting,deleteValveSetting, updateValveSetting}
+module.exports={isSettingInDb,getValveSetting,addValveSetting,deleteValveSetting, updateValveSetting}

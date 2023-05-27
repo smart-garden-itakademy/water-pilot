@@ -51,6 +51,7 @@ const addElectrovalve = async (userId, pinPosition, name, isAutomatic) => {
         };
         }
     }catch(err){
+        console.log(err);
         throw new CustomError ("Impossible d'ajouter l'éléctrovalve.",500)
     }
 }
@@ -60,14 +61,16 @@ const deleteElectrovalve = async (idElectrovalve, userId) => {
         if (deleteValveInDb.affectedRows) {
             return {msg: `L'éléctrovalve  qui a pour ID: ${idElectrovalve} a été supprimée avec succès`}
         }
-    }catch(e){
+    }catch(err){
+        console.log(err);
         throw new CustomError ("Impossible de supprimer l'éléctrovalve.",500)
     }
 }
 const getElectrovalves = async (userId) => {
     try{
         return await getElectrovalveInDb(userId);
-    }catch(e){
+    }catch(err){
+        console.log(err);
         throw new CustomError ("Impossible de récupérer les éléctrovalves.",500);
     }
 }
@@ -75,14 +78,16 @@ const getElectrovalves = async (userId) => {
 const updateValveName = async (userId,idElectrovalve, name) => {
     try{
         return updateValveNameInDb(userId,idElectrovalve, name);
-    }catch(e){
+    }catch(err){
+        console.log(err);
         throw new CustomError ("Impossible de mettre à jour le nom de l'éléctrovalve.",500);
     }
 }
 const updateValveIsAutomatic = async (userId,idElectrovalve, isAutomatic) => {
     try{
         return updateValveIsAutomaticInDb(userId,idElectrovalve, isAutomatic);
-    }catch(e){
+    }catch(err){
+        console.log(err);
         throw new CustomError ("Impossible de mettre à jour le mode automatique de l'éléctrovalve.",500);
     }
 }

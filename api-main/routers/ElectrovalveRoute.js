@@ -48,25 +48,27 @@ router.route('/:idValve')
         const idElectrovalve = parseInt(req.params.idValve) ;
         let { name, isAutomatic } = req.body;
         console.log("name",name,"isAutomatic",isAutomatic)
+
         //route utilisée pour modifier le nom ou isAutomatique d'une electrovanne
         try{
             if(isNaN(idElectrovalve)) next (new CustomError ("idValve doit être un nombre",500));
             //vérifier que l'electrovanne existe bien
             const isValveExist = await isElectrovalveExist(idElectrovalve, req.userId);
             if(!isValveExist) next (new CustomError ("Cette électrovanne n'existe pas",500));
-            //vérifier que le nom n'est pas déjà pris
-            const isNameAlreadyExist = await isValveNameAlreadyInDb(req.userId, name);
-            if(isNameAlreadyExist) next (new CustomError ("Un circuit d'arrosage existe déjà avec ce nom.",500));
+
 
             if(name){
-                checkArgumentsDefined(name);
-                checkArgumentsType(name,"string");
+                checkArgumentsDefined(name,idElectrovalve);
+                checkArgumentsType(name,"string",idElectrovalve,"number");
+                //vérifier que le nom n'est pas déjà pris
+                const isNameAlreadyExist = await isValveNameAlreadyInDb(req.userId, name);
+                if(isNameAlreadyExist) next (new CustomError ("Un circuit d'arrosage existe déjà avec ce nom.",500));
                 await updateValveName(req.userId,idElectrovalve,name)
             }
             if(isAutomatic){
                 checkArgumentsDefined(isAutomatic);
                 let boolIsAutomatic = isAutomatic.toLowerCase()==="true";//converti en boolean
-                checkArgumentsType(boolIsAutomatic,"boolean");
+                checkArgumentsType(boolIsAutomatic,"boolean",idElectrovalve,"number");
                 await updateValveIsAutomatic(req.userId,idElectrovalve,boolIsAutomatic)
             }
             res.status(200).json({"msg":"modification effectuée"})
@@ -78,8 +80,7 @@ router.route('/:idValve')
     .delete(authenticate,async (req,res,next) => {
         const idElectrovalve = parseInt(req.params.idValve) ;
             try{
-                if(isNaN(idElectrovalve)) next (new CustomError ("idValve doit être un nombre",500));
-                console.log("idElectrovalve",idElectrovalve)
+                checkArgumentsType(idElectrovalve,"number");
                 //vérifier que l'electrovanne existe bien
                 const isValveExist = await isElectrovalveExist(idElectrovalve, req.userId);
                 if(!isValveExist) next (new CustomError ("Cette électrovanne n'existe pas",500));

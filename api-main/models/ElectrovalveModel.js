@@ -11,7 +11,7 @@ const addElectrovalveInDb = (userId,pinPosition,name,isAutomatic) => {
             (error, results) => {
                 if (error) {
                     reject(error);
-                    console.log(error)
+                    console.error(error)
                 } else resolve(results);
             }
         )
@@ -26,7 +26,7 @@ const deleteElectrovalveInDb = (idElectrovalve, userId) => {
             (error, results) => {
                 if (error) {
                     reject(error);
-                    console.log(error)
+                    console.error(error)
                 } else {
                     results.msg = `L'éléctrovalve  qui a pour ID: ${idElectrovalve}  a été supprimée avec succès`;
                     resolve(results);
@@ -42,7 +42,7 @@ const getElectrovalveInDb = (userId) => {
             [userId],
             (error, results) => {
                 if (error) {
-                    console.log(error);
+                    console.error(error);
                     reject(error);
                 } else {
                     resolve(results);
@@ -59,7 +59,7 @@ const updateValveNameInDb = (userId, idElectrovalve, name) => {
             [name, userId, idElectrovalve],
             (error, results) => {
                 if (error) {
-                    console.log(error);
+                    console.error(error);
                     reject(error);
                 } else {
                     console.log(`modification name:${name}, idValve: ${idElectrovalve}`)
@@ -75,7 +75,7 @@ const updateValveIsAutomaticInDb = (userId, idElectrovalve, isAutomatic) => {
             [isAutomatic, userId, idElectrovalve],
             (error, results) => {
                 if (error) {
-                    console.log(error);
+                    console.error(error);
                     reject(error);
                 } else {
                     console.log(`modification isAutomatic:${isAutomatic}, idValve: ${idElectrovalve}`)
