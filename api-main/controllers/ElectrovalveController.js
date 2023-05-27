@@ -31,17 +31,13 @@ const giveValvePostion = async (userId, idElectrovalve) => {
 }
 const isValveNameAlreadyInDb = async (userId, name) => {
     //send true if name is in DB
-    const getElectrovalves = await getElectrovalves(userId);
-    if(getElectrovalves.find(e => e.name === name)){
-        return true
-    }else false
+    const getValves = await getElectrovalves(userId);
+    return !! getValves.find(e => e.name === name)
 }
 const isValvePositionAlreadyInDb = async (userId, pinPosition) => {
     //send true if position valve is in DB
-    const getElectrovalves = await getElectrovalves(userId);
-    if(getElectrovalves.find(e => e.position === pinPosition)){
-        return true
-    }else false
+    const getValves = await getElectrovalves(userId);
+    return !!getValves.find(e => e.position === pinPosition)
 }
 const addElectrovalve = async (userId, pinPosition, name, isAutomatic) => {
     try{
@@ -62,7 +58,6 @@ const addElectrovalve = async (userId, pinPosition, name, isAutomatic) => {
 const deleteElectrovalve = async (idElectrovalve, userId) => {
     try {
         const deleteValveInDb = await deleteElectrovalveInDb(idElectrovalve, userId);
-
         if (deleteValveInDb.affectedRows) {
             return {msg: `L'éléctrovalve  qui a pour ID: ${idElectrovalve} a été supprimée avec succès`}
         }

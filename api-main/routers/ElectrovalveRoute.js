@@ -9,8 +9,8 @@ router.route('/')
     //renvoi toutes les éléctrovalves
     .get(authenticate,async (req,res,next) => {
         try{
-            const getValve = await getElectrovalves(req.userId);
-            res.status(200).json(getValve)
+            const getValves = await getElectrovalves(req.userId);
+            res.status(200).json(getValves)
         }catch(err){
             next(err);
             return
@@ -30,8 +30,8 @@ router.route('/')
             //vérifier que la position de l'éléctrovanne n'est pas déjà prise
             const PositionAlreadyInDB =await isValvePositionAlreadyInDb(req.userId, pinPosition);
             if(PositionAlreadyInDB) throw new CustomError ("Une électrovanne existe déjà à cette position.",500);
-
-            const isNameAlreadyExist = isValveNameAlreadyInDb(req.userId, name);
+            //vérifier que le nom n'est pas déjà pris
+            const isNameAlreadyExist = await isValveNameAlreadyInDb(req.userId, name);
             if(isNameAlreadyExist) throw new CustomError ("Un circuit d'arrosage existe déjà avec ce nom.",500);
             //enregistrement de l'electrovalve, isAutomatic est true par défaut
             const addValve = await addElectrovalve(req.userId,pinPosition,name,isAutomatic=true);
@@ -54,7 +54,10 @@ router.route('/:idValve')
             //vérifier que l'electrovanne existe bien
             const isValveExist = await isElectrovalveExist(idElectrovalve, req.userId);
             if(!isValveExist) throw new CustomError ("Cette électrovanne n'existe pas",500);
-            //TODO:vérifier que le nom n'est pas déjà pris
+            //vérifier que le nom n'est pas déjà pris
+            const isNameAlreadyExist = await isValveNameAlreadyInDb(req.userId, name);
+            if(isNameAlreadyExist) throw new CustomError ("Un circuit d'arrosage existe déjà avec ce nom.",500);
+
             if(name){
                 checkArgumentsDefined(name);
                 checkArgumentsType(name,"string");
