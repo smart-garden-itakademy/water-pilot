@@ -61,19 +61,32 @@ router.route('/')
             res.status(200).json(deleteSettings)
         }catch (err) {
             next(err);
-            return}
+            return
+        }
     })
-    .put (authenticate,async (req,res) => {
+    .put (authenticate,async (req,res,next) => {
 
-        req.idSettings = parseInt (req.params.idSettings);
+        const rainThreshold = parseInt(req.body.rainThreshold);
+        const moistureThreshold = parseInt(req.body.moistureThreshold);
+        const duration = parseInt(req.body.duration);
 
-        const {rainThreshold, moistureThreshold, duration, isAutomatic} = req.body;
         try{
-            const updateValveSetting = await updateValveSetting(rainThreshold, moistureThreshold, duration, isAutomatic, req.idSettings, req.userId,req.idValve)
-            if(updateValveSetting.errorMsg) throw new Error (updateValveSetting.errorMsg);
-            res.status(200).json(updateValveSetting)
+            //TODO: créer une fonction qui fasse tous les checks (code dupliqué)
+            //vérifier que les arguments sont bien définis et du bon type
+            checkArgumentsDefined(rainThreshold, moistureThreshold, duration);
+            checkArgumentsType(rainThreshold,"number",moistureThreshold,"number",duration,"number",req.idValve,"number");
+            //vérifier que l'éléctrovalve existe bien pour cet utilisateur
+            const isValveExist = await isElectrovalveExist(req.idValve, req.userId);
+            if(!isValveExist) next (new CustomError ("Cette électrovanne n'existe pas",500));
+            //vérifier que le setting existe bien
+            const isSettingAlreadyExist = await isSettingInDb(req.idValve);
+            if(!isSettingAlreadyExist) next (new CustomError ("Aucune configuration n'a été trouvée pour cette électrovanne",500));
+
+            const updateSetting = await updateValveSetting(rainThreshold, moistureThreshold, duration,req.idValve)
+            res.status(200).json(updateSetting)
         }catch(err){
-            res.status(400).json({errorMsg:err})
+            next(err);
+            return
         }
     })
 

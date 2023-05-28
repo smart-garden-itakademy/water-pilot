@@ -42,24 +42,17 @@ const deleteValveSetting = async (idElectrovalve,userId) => {
         throw new CustomError ("Impossible de supprimer la configuration de l'éléctrovalve.",500);
     }
 }
-const updateValveSetting = async (rainThreshold, moistureThreshold, duration, isAutomatic,userId,idElectrovalve) => {
-    //check if idElectrovalve exist and belongs this userId
-    const valvePosition = await giveValvePostion(userId, idElectrovalve);
-    //TODO: check if settings already exist on this valve
+const updateValveSetting = async (rainThreshold, moistureThreshold, duration,idElectrovalve) => {
 
-    if (valvePosition.exists){
         try {
-            await updateValveSettingInDb(rainThreshold, moistureThreshold, duration, isAutomatic,idElectrovalve);
+            await updateValveSettingInDb(rainThreshold, moistureThreshold, duration,idElectrovalve);
             return ({
-                msg:`Les settings de l'éléctrovalve ${idElectrovalve} appartenant à l'utilisateur ${userId} sont mis à jour`,
-                errorMsg:""
+                msg:`Les settings de l'éléctrovalve ${idElectrovalve} sont mis à jour`
             })
-        }catch (e) {
-            throw new Error (e);
+        }catch (err) {
+            console.error(err);
+            throw new CustomError (`Impossible de modifier la configuration de l'éléctrovalve ${idElectrovalve}.`,500);
         }
-    }else{
-        return ({errorMsg:valvePosition.errmsg})
-    }
 }
 
 
