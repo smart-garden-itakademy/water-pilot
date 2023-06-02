@@ -3,7 +3,7 @@ const router = express.Router();
 const {isUserExist,getUsers, isInDb, passwordValidation, hash, isEmailValid, newUser, findUser, generateToken, updateGardenLocation,deleteUser} = require ('../controllers/UserController')
 const {authenticate} = require ('../middlewares/AuthMiddleware')
 const {CustomError} = require ('../errors/CustomError')
-const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/utils/Utils')
+const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
 const jwt = require("jsonwebtoken");
 
 //-----------------------Users routes ------------------------------------------
