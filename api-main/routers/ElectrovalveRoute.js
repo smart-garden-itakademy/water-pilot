@@ -3,7 +3,7 @@ const router = express.Router();
 const {isElectrovalveExist,updateValveIsAutomatic,updateValveName,isValveNameAlreadyInDb,getElectrovalves,addElectrovalve,deleteElectrovalve,isValvePositionAlreadyInDb} = require ('../controllers/ElectrovalveController');
 const {authenticate} = require ('../middlewares/AuthMiddleware');
 const {CustomError} = require ('../errors/CustomError')
-const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/utils/Utils')
+const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
 
 router.route('/')
     //renvoi toutes les éléctrovalves

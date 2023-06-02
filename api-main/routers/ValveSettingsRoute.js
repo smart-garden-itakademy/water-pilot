@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {isSettingInDb,addValveSetting,getValveSetting,deleteValveSetting,updateValveSetting} = require ('../controllers/valveSettingController');
 const {authenticate} = require ('../middlewares/AuthMiddleware');
-const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/utils/Utils')
+const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
 const {CustomError} = require ('../errors/CustomError')
 const {isElectrovalveExist} = require ('../controllers/ElectrovalveController');
 
