@@ -64,6 +64,7 @@ router.route('/')
             return
         }
     })
+
     .put (authenticate,async (req,res,next) => {
 
         const rainThreshold = parseInt(req.body.rainThreshold);

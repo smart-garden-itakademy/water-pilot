@@ -42,15 +42,30 @@ router.route('/')
         } catch (err) {
             next(err);
         }
+    })
+    //supprimer son propre compte
+    .delete(authenticate, async (req, res, next) => {
+        try {
+            const userId = req.userId;
+            if(isNaN(userId)) return next(new CustomError("Invalid user id", 500));
+
+            const isUserInDb = await isUserExist(userId);
+            if(!isUserInDb) next (new CustomError ("Cet utilisateur n'existe pas",500));
+            await deleteUser(userId);
+            res.status(200).json({message: "Utilisateur supprimé"});
+        } catch (err) {
+            next(err);
+        }
     });
 //TODO: tester la route delete user apres avoir refait la db avec ON DELETE CASCADE
+
 //TODO: ajouter un role admin pour pouvoir supprimer un utilisateur
 router.route('/:id')
     .delete(authenticate, async (req, res, next) => {
         try {
             const userId = parseInt(req.params.id);
             if(isNaN(userId)) return next(new CustomError("Invalid user id", 500));
-            //TODO: check if user exist
+
             const isUserInDb = await isUserExist(userId);
             if(!isUserInDb) next (new CustomError ("Cet utilisateur n'existe pas",500));
             await deleteUser(userId);
@@ -137,7 +152,7 @@ router.route('/sign-up')
             // Save user in database
             await newUser(hashPwd, name, email, city, longitude, latitude);
             // Send response
-            res.status(200).json({"message": 'Votre compte a bien été créé !'});
+            res.status(201).json({"message": 'Votre compte a bien été créé !'});
         } catch (err) {
             console.error(err);
             next(err);
