@@ -50,15 +50,12 @@ const hash =  (pwd) => {
     })
 }
 const isInDb = async (mail) => {
-try {
     const isMailAlreadyInDb = await findUserInDb(mail);
+    console.log("isMailAlreadyInDb",isMailAlreadyInDb)
     if(isMailAlreadyInDb.length){
         throw new CustomError("Cet email est déjà utilisé",500);
     }
     return isMailAlreadyInDb
-}catch (e){
-    throw new CustomError("Erreur lors de la recherche de l'utilisateur",500)
-}
 }
 const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
     try{

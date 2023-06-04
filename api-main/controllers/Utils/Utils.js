@@ -12,6 +12,7 @@ function checkArgumentsDefined(...args) {
 //verifier le typage des arguments
 function checkArgumentsType(...args) {
         for (let i = 0; i < args.length; i = i+2) {
+            console.log(typeof args[i], args[i+1])
             if (typeof args[i] !== args[i+1]) {
                 throw new CustomError(`tous les champs doivent être du bon type`, 500);
             }

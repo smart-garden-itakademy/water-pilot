@@ -1,32 +1,31 @@
 const {getSchedulesInDb, addScheduleInDb, deleteScheduleInDb} = require ('../models/ScheduleModel');
 const {giveValvePostion} = require ('../controllers/ElectrovalveController');
 const {isSettingNotInDb} = require ('../controllers/ValveSettingController');
+const {CustomError} = require ('../errors/CustomError')
 
-const checkings = async (userId, idElectrovalve) => {
-    // check if electrovalve belong this user
-    const valve = await giveValvePostion (userId, idElectrovalve);
-    const isSettingExist= await isSettingNotInDb(userId, idElectrovalve)
-    (valve.exists && isSettingExist)?true:false;
-}
 
 const getSchedules = async (idSettings) => {
     //checking if idSetting exist and belong this user
     try{
         return await getSchedulesInDb(idSettings);
     }catch(e){
-        throw new Error("Unable to get schedules.Errormsg:"+e)
+        throw new CustomError("Unable to get schedules.Errormsg:",500)
     }
 }
 
-const addSchedule = async (hourStart, hourEnd, days, idSettings) => {
-    //check if idSetting exist and belong this user
-    
-    //-------
+const addSchedule = async (hourStart, hourEnd, days, idSettings, isActivated) => {
     try {
-        const scheduleAdded =  await addScheduleInDb (hourStart, hourEnd, days, idSettings);
-        return scheduleAdded ;
+        const scheduleAdded =  await addScheduleInDb (hourStart, hourEnd, days, idSettings, isActivated);
+        return {
+            id: scheduleAdded.insertId,
+            hourStart: hourStart,
+            hourEnd: hourEnd,
+            days: days,
+            idSettings: idSettings
+        } ;
+
     } catch (e) {
-        throw new Error("Unable to add schedule.Errormsg:" + e);
+        throw new CustomError("Unable to add schedule.",500);
     }
 }
 const deleteSchedule = async (idSchedule) => {
@@ -34,7 +33,7 @@ const deleteSchedule = async (idSchedule) => {
         const scheduledeleted =  await deleteScheduleInDb (idSchedule) ;
         return scheduledeleted ;
     } catch (e) {
-        throw new Error("Unable to delete schedule.Errormsg:" + e);
+        throw new CustomError("Unable to delete schedule.Errormsg:",500);
     }
 }
 

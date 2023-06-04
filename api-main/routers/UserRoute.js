@@ -154,7 +154,6 @@ router.route('/sign-up')
             // Send response
             res.status(201).json({"message": 'Votre compte a bien été créé !'});
         } catch (err) {
-            console.error(err);
             next(err);
         }
     });

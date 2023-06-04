@@ -14,11 +14,11 @@ const getSchedulesInDb = (idSettings) => {
         )
     })
 }
-const addScheduleInDb = (hourStart, hourEnd, days, idSettings) => {
+const addScheduleInDb = (hourStart, hourEnd, days, idSettings,isActivated) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "INSERT INTO Schedule (hourStart, hourEnd, days, idSettings)VALUES (?, ?, ?, ?)",
-            [hourStart, hourEnd, days, idSettings],
+            "INSERT INTO Schedule (hourStart, hourEnd, days, idSettings, isActivated)VALUES (?, ?, ?, ?, ?)",
+            [hourStart, hourEnd, days, idSettings, isActivated],
             (error, results) => {
                 if (error) {
                     console.error("Erreur lors de l'enregistrement du schedule dans la base de données :", error);

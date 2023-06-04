@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {authenticate} = require ('../controllers/UserController');
+const {authenticate} = require ('../middlewares/AuthMiddleware');
 const {getSchedules,addSchedule, deleteSchedule} = require ('../controllers/ScheduleController');
-
+const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
+const {getIdSetting} = require ('../controllers/ValveSettingController')
 router.route('/')
-    .get(async (req,res) => {
+    .get(authenticate,async (req,res) => {
 
         console.log(req.idSetting);
 
@@ -15,16 +16,24 @@ router.route('/')
             res.status(400).json({"errorMsg":"Un problème est survenu lors de la récupération des plages horaires."+err})
         }
     })
-    .post (async (req,res) => {
-        const {hourStart, hourEnd, days} = req.body;
+    .post (authenticate,async (req,res,next) => {
+
+        const days = req.body.days;
+        const hourStart = parseInt(req.body.hourStart);
+        const hourEnd = parseInt(req.body.hourEnd);
+        const isActivated = req.body.isActivated.toLowerCase() === "true"; //converti en booléen
+        const idSetting = await getIdSetting(req.idValve)
+
         try{
-            const schedule = await addSchedule(hourStart, hourEnd, days, req.idSetting);
+            checkArgumentsDefined(days,hourStart, hourEnd, isActivated);
+            checkArgumentsType(hourStart,"number", hourEnd, "number", isActivated,"boolean")
+            const schedule = await addSchedule(hourStart, hourEnd, days, idSetting,isActivated);
             res.status(200).json(schedule)
         }catch (err){
-            res.status(400).json({"errorMsg":"Un problème est survenu lors de l'enregistrement des plages horaires."+err})
+            next(err);
         }
     })
-router.route('/:idSchedule')
+router.route(authenticate,'/:idSchedule')
     .delete(async (req, res) => {
         req.idSchedule = parseInt(req.params.idSchedule) ;
 
@@ -35,7 +44,7 @@ router.route('/:idSchedule')
             res.status(400).json({"errorMsg":"Un problème est survenu lors de la suppression des plages horaires."+err})
         }
     })
-    .patch(async (req,res) => {
+    .patch(authenticate,async (req,res) => {
         req.idSchedule = parseInt(req.params.idSchedule) ;
 
         const {hourStart, hourEnd, days} = req.body;

@@ -7,6 +7,10 @@ const isSettingInDb = async ( idElectrovalve) => {
     return !!getSettings.find(e => e.idElectrovalve == idElectrovalve)
 
 }
+const getIdSetting = async (idElectrovalve) => {
+    const getSetting = await getValveSetting (idElectrovalve);
+    return getSetting[0].id
+}
 const getValveSetting = async (idValve) => {
     try{
         return getValveSettingInDb(idValve);
@@ -56,4 +60,4 @@ const updateValveSetting = async (rainThreshold, moistureThreshold, duration,idE
 }
 
 
-module.exports={isSettingInDb,getValveSetting,addValveSetting,deleteValveSetting, updateValveSetting}
+module.exports={getIdSetting,isSettingInDb,getValveSetting,addValveSetting,deleteValveSetting, updateValveSetting}

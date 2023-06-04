@@ -6,7 +6,7 @@ const {CustomError} = require ('../errors/CustomError')
 const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
 
 router.route('/')
-    //renvoi toutes les éléctrovalves
+    //renvoi toutes les éléctrovalves de l'utilisateur
     .get(authenticate,async (req,res,next) => {
         try{
             const getValves = await getElectrovalves(req.userId);
@@ -44,7 +44,6 @@ router.route('/')
 router.route('/:idValve')
     .patch(authenticate,async (req,res,next) => {
         console.log(req.params);
-        //TODO: faire les vérifications de type et de valeur de idElectrovalve
         const idElectrovalve = parseInt(req.params.idValve) ;
         let { name, isAutomatic } = req.body;
         console.log("name",name,"isAutomatic",isAutomatic)
