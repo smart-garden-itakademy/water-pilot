@@ -32,7 +32,7 @@ const options = {
             description: 'Cette documentation a été générée avec Swagger',
         },
     },
-    apis: ['./routers/*.js'], //les chemins vers les fichiers où swagger doit chercher pour documenter les routes.
+    apis: ['./doc-api/*.js'], //les chemins vers les fichiers où swagger doit chercher pour documenter les routes.
 };
 
 const specs = swaggerJsdoc(options);

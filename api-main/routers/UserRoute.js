@@ -7,32 +7,7 @@ const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Util
 const jwt = require("jsonwebtoken");
 
 //-----------------------Users routes ------------------------------------------
-/**
- * @swagger
- * /user:
- *   get:
- *     summary: Récupère la liste de tous les utilisateurs
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: La liste des utilisateurs
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   email:
- *                     type: string
- *       401:
- *         description: Non autorisé
- */
+
 //get all users test
 router.route('/')
     .get(authenticate, async (req, res, next) => {
@@ -57,7 +32,6 @@ router.route('/')
             next(err);
         }
     });
-//TODO: tester la route delete user apres avoir refait la db avec ON DELETE CASCADE
 
 //TODO: ajouter un role admin pour pouvoir supprimer un utilisateur
 router.route('/:id')
@@ -78,63 +52,7 @@ router.route('/:id')
 //TODO: patch password
 
 //sign-up
-/**
- * @swagger
- * /user/sign-up:
- *   post:
- *     summary: Inscription d'un nouvel utilisateur
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               password:
- *                 type: string
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               city:
- *                 type: string
- *               longitude:
- *                 type: number
- *               latitude:
- *                 type: number
- *     responses:
- *       200:
- *         description: Le compte de l'utilisateur a été créé
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       400:
- *         description: Une erreur est survenue lors de la création du compte
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 cause:
- *                   type: string
- *                 statusCode:
- *                   type: integer
- *       500:
- *         description: Erreur serveur
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 cause:
- *                   type: string
- *                 statusCode:
- *                   type: integer
- */
+
 router.route('/sign-up')
     .post(async (req, res, next) => {
         const { password, name, email, city} = req.body;
