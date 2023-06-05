@@ -5,15 +5,14 @@ const {getSchedules,addSchedule, deleteSchedule} = require ('../controllers/Sche
 const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
 const {getIdSetting} = require ('../controllers/ValveSettingController')
 router.route('/')
-    .get(authenticate,async (req,res) => {
-
-        console.log(req.idSetting);
+    .get(authenticate,async (req,res,next) => {
+        const idSetting = await getIdSetting(req.idValve)
 
         try{
-            const schedules = await getSchedules(req.idSetting);
+            const schedules = await getSchedules(idSetting);
             res.status(200).json(schedules)
         }catch(err){
-            res.status(400).json({"errorMsg":"Un problème est survenu lors de la récupération des plages horaires."+err})
+            next(err);
         }
     })
     .post (authenticate,async (req,res,next) => {
@@ -33,18 +32,18 @@ router.route('/')
             next(err);
         }
     })
-router.route(authenticate,'/:idSchedule')
-    .delete(async (req, res) => {
+router.route('/:idSchedule')
+    .delete(authenticate,async (req, res,next) => {
         req.idSchedule = parseInt(req.params.idSchedule) ;
-
+        console.log('la')
         try {
             const deleteSc = await deleteSchedule (req.idSchedule);
-            res.status(200).json(deleteSc)
+            res.status(200).json({"msg":`la plannification id:${req.idSchedule} de l'éléctrovalve id: ${req.idValve} a été supprimée`})
         } catch (err){
-            res.status(400).json({"errorMsg":"Un problème est survenu lors de la suppression des plages horaires."+err})
+           next(err);
         }
     })
-    .patch(authenticate,async (req,res) => {
+    .put(authenticate,async (req,res,next) => {
         req.idSchedule = parseInt(req.params.idSchedule) ;
 
         const {hourStart, hourEnd, days} = req.body;
@@ -52,7 +51,9 @@ router.route(authenticate,'/:idSchedule')
             const patchSchedule = await updateSchedule(hourStart, hourEnd, days, req.idSchedule, req.idSetting, req.idValve, req.userId);
             res.status(200).json(patchSchedule)
         }catch(err){
-            res.status(400).json({"errorMsg":"Un problème est survenu lors de la modification de l'éléctrovalve."+err})
+            next(err)
         }
     })
+
+//TODO: route PUT
 module.exports=router;

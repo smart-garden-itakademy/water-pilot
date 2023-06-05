@@ -9,7 +9,7 @@ const getSchedules = async (idSettings) => {
     try{
         return await getSchedulesInDb(idSettings);
     }catch(e){
-        throw new CustomError("Unable to get schedules.Errormsg:",500)
+        throw new CustomError("Unable to get schedules.",500)
     }
 }
 
