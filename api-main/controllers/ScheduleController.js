@@ -1,4 +1,4 @@
-const {getSchedulesInDb, addScheduleInDb, deleteScheduleInDb} = require ('../models/ScheduleModel');
+const {putScheduleInDb,getSchedulesInDb, addScheduleInDb, deleteScheduleInDb} = require ('../models/ScheduleModel');
 const {giveValvePostion} = require ('../controllers/ElectrovalveController');
 const {isSettingNotInDb} = require ('../controllers/ValveSettingController');
 const {CustomError} = require ('../errors/CustomError')
@@ -36,6 +36,13 @@ const deleteSchedule = async (idSchedule) => {
         throw new CustomError("Unable to delete schedule.Errormsg:",500);
     }
 }
+const updateSchedule =  async (hourStart, hourEnd, days, idSettings, isActivated,idSchedule) => {
+    try{
+        const schedulePut = await putScheduleInDb (hourStart, hourEnd, days, idSettings, isActivated, idSchedule);
+    }catch(err){
+        throw new CustomError("Impossible de modifier la plannification",500);
+    }
+}
 
 
-module.exports={getSchedules,addSchedule,deleteSchedule}
+module.exports={updateSchedule,getSchedules,addSchedule,deleteSchedule}

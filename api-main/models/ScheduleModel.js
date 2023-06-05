@@ -46,5 +46,21 @@ const deleteScheduleInDb = (idSchedule) => {
         )
     })
 }
+const putScheduleInDb = (hourStart, hourEnd, days, idSettings,isActivated,idSchedule) => {
+    return new Promise ((resolve, reject) => {
+        connection.query(
+            "UPDATE Schedule SET hourStart = ?, hourEnd = ?, days = ?, isActivated = ?,idSettings = ?  WHERE id = ?",
+            [hourStart, hourEnd, days, isActivated, idSettings, idSchedule],
+            (error, results) => {
+                if(error){
+                    console.error(error)
+                    reject(error)
+                }else{
+                    resolve(results)
+                }
+            }
+            )
+    })
+}
 
-module.exports = {getSchedulesInDb, addScheduleInDb, deleteScheduleInDb}
+module.exports = {putScheduleInDb,getSchedulesInDb, addScheduleInDb, deleteScheduleInDb}

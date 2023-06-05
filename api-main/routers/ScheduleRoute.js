@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {authenticate} = require ('../middlewares/AuthMiddleware');
-const {getSchedules,addSchedule, deleteSchedule} = require ('../controllers/ScheduleController');
+const {updateSchedule,getSchedules,addSchedule, deleteSchedule} = require ('../controllers/ScheduleController');
 const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
 const {getIdSetting} = require ('../controllers/ValveSettingController')
 router.route('/')
@@ -44,12 +44,18 @@ router.route('/:idSchedule')
         }
     })
     .put(authenticate,async (req,res,next) => {
-        req.idSchedule = parseInt(req.params.idSchedule) ;
+        const idSchedule = parseInt(req.params.idSchedule) ;
+        const days = req.body.days;
+        const hourStart = parseInt(req.body.hourStart);
+        const hourEnd = parseInt(req.body.hourEnd);
+        const isActivated = req.body.isActivated.toLowerCase() === "true"; //converti en booléen
+        const idSetting = await getIdSetting(req.idValve)
 
-        const {hourStart, hourEnd, days} = req.body;
         try{
-            const patchSchedule = await updateSchedule(hourStart, hourEnd, days, req.idSchedule, req.idSetting, req.idValve, req.userId);
-            res.status(200).json(patchSchedule)
+            checkArgumentsDefined(days,hourStart, hourEnd, isActivated);
+            checkArgumentsType(hourStart,"number", hourEnd, "number", isActivated,"boolean")
+            const putSchedule = await updateSchedule(hourStart, hourEnd, days, idSetting,isActivated,idSchedule);
+            res.status(200).json(putSchedule)
         }catch(err){
             next(err)
         }
