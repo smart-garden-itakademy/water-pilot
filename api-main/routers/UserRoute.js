@@ -178,11 +178,11 @@ router.route('/gardenLocation')
         try {
             const longitude = parseFloat(req.body.longitude);
             const latitude = parseFloat(req.body.latitude);
-
+            console.log(longitude, latitude)
             checkArgumentsDefined(longitude, latitude);
             checkArgumentsType(longitude,"number", latitude,"number");
 
-            const patchGardenLocation = await updateGardenLocation(req.userId, longitude, latitude);
+            await updateGardenLocation(req.userId, longitude, latitude);
             res.status(200).json({"message": 'La localisation de votre jardin a bien été enregistré !'});
         } catch(err) {
             next(err);

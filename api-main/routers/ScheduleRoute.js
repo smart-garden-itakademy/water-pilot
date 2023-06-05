@@ -32,6 +32,7 @@ router.route('/')
             next(err);
         }
     })
+//TODO: faire les vérifications d'appartenance au user et de l'existence de la plannification
 router.route('/:idSchedule')
     .delete(authenticate,async (req, res,next) => {
         req.idSchedule = parseInt(req.params.idSchedule) ;
@@ -61,5 +62,5 @@ router.route('/:idSchedule')
         }
     })
 
-//TODO: route PUT
+
 module.exports=router;
