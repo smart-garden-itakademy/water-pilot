@@ -4,6 +4,7 @@ services:
     image: mysql:5.7
     volumes:
       - db_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d # monte le script d'initialisation de la db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: R00tp@ssw0rd
