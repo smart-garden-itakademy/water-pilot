@@ -1,57 +1,94 @@
 const express = require('express');
 const router = express.Router();
-const {getElectrovalve,addElectrovalve,updateElectrovalve,deleteElectrovalve} = require ('../controllers/ElectrovalveController');
+const {isElectrovalveExist,updateValveIsAutomatic,updateValveName,isValveNameAlreadyInDb,getElectrovalves,addElectrovalve,deleteElectrovalve,isValvePositionAlreadyInDb} = require ('../controllers/ElectrovalveController');
 const {authenticate} = require ('../middlewares/AuthMiddleware');
+const {CustomError} = require ('../errors/CustomError')
+const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
 
 router.route('/')
-    //renvoi toutes les éléctrovalves
-    .get(authenticate,async (req,res) => {
+    //renvoi toutes les éléctrovalves de l'utilisateur
+    .get(authenticate,async (req,res,next) => {
         try{
-            const getValve = await getElectrovalve(req.userId);
-            res.status(200).json(getValve)
+            const getValves = await getElectrovalves(req.userId);
+            res.status(200).json(getValves)
         }catch(err){
-            res.status(400).json({"errorMsg":err})
+            next(err);
+            return
         }
     })
 
-    .post(authenticate,async (req,res) => {
+    .post(authenticate,async (req,res,next) => {
         console.log("userId",req.userId);
-        const { pinPosition, name } = req.body;
-        if(pinPosition && name){
-            try{
-                const addValve = await addElectrovalve(req.userId,pinPosition,name);
-                addValve ? res.status(200).json(addValve) : res.status(400).json({"errorMsg": "Une électrovanne existe déjà à cette position."});
-            }catch(err){
-                res.status(400).json({"errorMsg":err})
-            }
-        }else res.status(400).json({"errorMsg":"la position de l'éléctrovanne et son nom doivent être renseignés"})
-    })
-router.route('/:idValve')
-    .patch(authenticate,async (req,res) => {
-        console.log(req.params)
-        const { name } = req.body;
-        const idElectrovalve = parseInt(req.params.idValve) ;
-        console.log(idElectrovalve)
-        if(!name) {
-            res.status(400).json({"errorMsg":"le nom du circuit d'arrosage doit être renseigné"});
+        let { pinPosition, name } = req.body;
+        pinPosition = parseInt(pinPosition)
+
+        try {
+            //vérifier que les arguments sont bien définis et du bon type
+            checkArgumentsDefined(pinPosition,name);
+            checkArgumentsType(pinPosition,"number",name,"string");
+
+            //vérifier que la position de l'éléctrovanne n'est pas déjà prise
+            const PositionAlreadyInDB =await isValvePositionAlreadyInDb(req.userId, pinPosition);
+            if(PositionAlreadyInDB) next (new CustomError ("Une électrovanne existe déjà à cette position.",500));
+            //vérifier que le nom n'est pas déjà pris
+            const isNameAlreadyExist = await isValveNameAlreadyInDb(req.userId, name);
+            if(isNameAlreadyExist) next (new CustomError ("Un circuit d'arrosage existe déjà avec ce nom.",500));
+            //enregistrement de l'electrovalve, isAutomatic est true par défaut
+            const addValve = await addElectrovalve(req.userId,pinPosition,name,isAutomatic=true);
+            res.status(200).json(addValve)
+        } catch (err) {
+            next(err);
             return
         }
+    })
+router.route('/:idValve')
+    .patch(authenticate,async (req,res,next) => {
+        console.log(req.params);
+        const idElectrovalve = parseInt(req.params.idValve) ;
+        let { name, isAutomatic } = req.body;
+        console.log("name",name,"isAutomatic",isAutomatic)
+
+        //route utilisée pour modifier le nom ou isAutomatique d'une electrovanne
         try{
-            const putElectrovalve = await updateElectrovalve(name,req.userId,idElectrovalve);
-            res.status(200).json(putElectrovalve)
-        }catch(err){
-            res.status(400).json({"errorMsg":err})
+            if(isNaN(idElectrovalve)) next (new CustomError ("idValve doit être un nombre",500));
+            //vérifier que l'electrovanne existe bien
+            const isValveExist = await isElectrovalveExist(idElectrovalve, req.userId);
+            if(!isValveExist) next (new CustomError ("Cette électrovanne n'existe pas",500));
+
+
+            if(name){
+                checkArgumentsDefined(name,idElectrovalve);
+                checkArgumentsType(name,"string",idElectrovalve,"number");
+                //vérifier que le nom n'est pas déjà pris
+                const isNameAlreadyExist = await isValveNameAlreadyInDb(req.userId, name);
+                if(isNameAlreadyExist) next (new CustomError ("Un circuit d'arrosage existe déjà avec ce nom.",500));
+                await updateValveName(req.userId,idElectrovalve,name)
+            }
+            if(isAutomatic){
+                checkArgumentsDefined(isAutomatic);
+                let boolIsAutomatic = isAutomatic.toLowerCase()==="true";//converti en boolean
+                checkArgumentsType(boolIsAutomatic,"boolean",idElectrovalve,"number");
+                await updateValveIsAutomatic(req.userId,idElectrovalve,boolIsAutomatic)
+            }
+            res.status(200).json({"msg":"modification effectuée"})
+        }catch (err){
+            next(err);
+            return
         }
     })
-    .delete(authenticate,async (req,res) => {
+    .delete(authenticate,async (req,res,next) => {
         const idElectrovalve = parseInt(req.params.idValve) ;
             try{
+                checkArgumentsType(idElectrovalve,"number");
+                //vérifier que l'electrovanne existe bien
+                const isValveExist = await isElectrovalveExist(idElectrovalve, req.userId);
+                if(!isValveExist) next (new CustomError ("Cette électrovanne n'existe pas",500));
                 const deleteValve = await deleteElectrovalve(idElectrovalve, req.userId);
-                console.log(deleteValve);
-                if(deleteValve.errMsg) throw new Error (deleteValve.errMsg)
+
                 res.status(200).json(deleteValve.msg)
             }catch(err){
-                res.status(400).json({"errorMsg":err})
+                next(err);
+                return
             }
     })
 

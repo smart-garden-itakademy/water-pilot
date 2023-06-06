@@ -3,10 +3,11 @@ const connection = require('../cores/database');
 const getValveSettingInDb = (idValve) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "SELECT * FROM ValveSettings WHERE idElectrovalve = ?",
+            "SELECT * FROM ValveSettings WHERE idElectrovalve =?",
             [idValve],
             (error, results) => {
                 if (error) {
+                    console.error( error);
                     reject(error);
                 } else {
                     resolve(results);
@@ -15,14 +16,14 @@ const getValveSettingInDb = (idValve) => {
         )
     })
 }
-const addValveSettingInDb = (rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve) => {
+const addValveSettingInDb = (rainThreshold, moistureThreshold, duration, idElectrovalve) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve)VALUES (?, ?, ?, ?, ?)",
-            [rainThreshold, moistureThreshold, duration, isAutomatic, idElectrovalve],
+            "INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, idElectrovalve) VALUES (?, ?, ?, ?)",
+            [rainThreshold, moistureThreshold, duration, idElectrovalve],
             (error, results) => {
                 if (error) {
-                    console.error("Erreur lors de l'enregistrement des settings dans la base de données :", error);
+                    console.error( error);
                     reject(error);
                 } else {
                     resolve(results);
@@ -31,11 +32,11 @@ const addValveSettingInDb = (rainThreshold, moistureThreshold, duration, isAutom
         )
     })
 }
-const deleteValveSettingInDb = (idElectrovalve,idValveSetting) => {
+const deleteValveSettingInDb = (idElectrovalve) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "DELETE FROM ValveSettings WHERE id = ? AND idElectrovalve = ?",
-            [idValveSetting,idElectrovalve],
+            "DELETE FROM ValveSettings WHERE idElectrovalve = ? ",
+            [idElectrovalve],
             (error, results) => {
                 if (error) {
                     console.error("Erreur lors de la suppression des settings dans la base de données :", error);
@@ -47,14 +48,14 @@ const deleteValveSettingInDb = (idElectrovalve,idValveSetting) => {
         )
     })
 }
-const updateValveSettingInDb = (rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting) => {
+const updateValveSettingInDb = (rainThreshold, moistureThreshold, duration, idElectrovalve) => {
     return new Promise ((resolve, reject) => {
         connection.query(
-            "UPDATE ValveSettings SET rainThreshold = ?, moistureThreshold = ?, duration = ?, isAutomatic = ? WHERE id = ?",
-            [rainThreshold, moistureThreshold, duration, isAutomatic, idValveSetting],
+            "UPDATE ValveSettings SET rainThreshold = ?, moistureThreshold = ?, duration = ? WHERE idElectrovalve = ?",
+            [rainThreshold, moistureThreshold, duration,idElectrovalve],
             (error, results) => {
                 if (error) {
-                    console.error("Erreur lors de la modification des settings dans la base de données :", error);
+                    console.error( error);
                     reject(error);
                 } else {
                     resolve(results);
