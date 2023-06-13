@@ -132,9 +132,9 @@ INSERT INTO Electrovalve (name, position, userId, isAutomatic) VALUES
 INSERT INTO ValveSettings (rainThreshold, moistureThreshold, duration, idElectrovalve) VALUES
     (5, 20, 1, (SELECT id FROM Electrovalve WHERE name = 'Tomates')),
     (6, 25, 2, (SELECT id FROM Electrovalve WHERE name = 'Laitues')),
-    (4, 18, 1, (SELECT id FROM Electrovalve WHERE name = 'Fraises'));
-
-
+    (4, 18, 1, (SELECT id FROM Electrovalve WHERE name = 'Fraises')),
+    (5, 18, 1, (SELECT id FROM Electrovalve WHERE name = 'Blew')),
+    (4, 18, 1, (SELECT id FROM Electrovalve WHERE name = 'Cactus'));
 
 /* Insertion des planifications pour les valves */
 

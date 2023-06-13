@@ -20,6 +20,27 @@ const getSchedules = (idSettings) => {
   });
 };
 
+const getSoilMoistureData = (userId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT value FROM Sensor WHERE name = 'Soil Moisture Sensor' AND userId = ? ORDER BY date DESC LIMIT 1`,
+      [userId],
+      (error, results) => {
+        if (error) {
+          console.error("Erreur lors de la récupération des données du capteur d'humidité du sol :", error);
+          reject(error);
+        }
+        // Assurez-vous qu'il y a bien des résultats à retourner
+        if (results.length) {
+          resolve(results[0].value);
+        } else {
+          resolve(null);
+        }
+      }
+    );
+  });
+};
+
 const getAllValvesWithSettings = async () => {
   return new Promise(async (resolve, reject) => {
     connection.query(
@@ -76,4 +97,5 @@ const insertIrrigationData = (idElectrovalve, dateStart, dateEnd, volume) => {
 module.exports = {
   getAllValvesWithSettings,
   insertIrrigationData,
+  getSoilMoistureData,
 };

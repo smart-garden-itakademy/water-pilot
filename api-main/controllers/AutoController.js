@@ -1,4 +1,4 @@
-const { getAllValvesWithSettings } = require('../models/WateringModel');
+const { getAllValvesWithSettings, getSoilMoistureData } = require('../models/WateringModel');
 const { startIrrigation, stopIrrigation } = require('./WateringController');
 
 const getWeatherData = async (latitude, longitude) => {
@@ -22,17 +22,6 @@ const isWateringScheduleValid = (startHour, stopHour, days) => {
   );
 };
 
-const getSensorsData = async () => {
-  try {
-    const response = await fetch("http://localhost:8090/sensors");
-    return await response.json();
-    
-  } catch (error) {
-    console.error("Erreur lors de la récupératon des données du capteur :", error);
-    return null;
-  }
-};
-
 const isSoilMoistureLevelValid = (soilMoistureLevel, minSoilMoistureLevel) => {
   return soilMoistureLevel <= minSoilMoistureLevel;
 };
@@ -41,7 +30,7 @@ const isRainBelowThresholdAndNotExpectedNow = (rainThreshold24h, isRainingNow, m
   if (weatherDataError) {
     return false;
   }
-  return rainThreshold24h <= minThreshold && !isRainingNow;
+  return rainThreshold24h <= minThreshold && isRainingNow; // remodifier !isRainingNow
 };
 
 const processWeatherData = (weatherData) => {
@@ -72,10 +61,10 @@ const checkIrrigationStatus = async (valveWithSettings) => {
     }
     if (isWateringScheduleValid(schedule.hourStart, schedule.hourEnd, schedule.days)) {
       console.log("Le programme d'arrosage est valide");
-      console.log(valveWithSettings.schedules);
+      console.log(valveWithSettings.id); // debug
+      // console.log(valveWithSettings.schedules);
 
-      const sensorsData = await getSensorsData();
-      const soilMoistureLevel = sensorsData.soil_moisture;
+      const soilMoistureLevel = await getSoilMoistureData(valveWithSettings.userId);
       console.log("Niveau d'humidité du sol :", soilMoistureLevel);
 
       const weatherData = await getWeatherData(valveWithSettings.latitude, valveWithSettings.longitude);
