@@ -1,52 +1,48 @@
 const bcrypt = require('bcrypt');
-const {findUserInDb,saveNewUser,getUsers,updateLocation} = require ('../models/UserModel');
+const {findUserInDb,saveNewUser,getUsersFromDb,updateLocation,deleteUserInDb} = require ('../models/UserModel');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
+const {CustomError} = require ('../errors/CustomError')
 
+const isUserExist = async (userId) => {
+    //send true if valve is in DB
+    const getAllUsers = await getUsers();
+    console.log("getValves",getAllUsers);
+    return !!getAllUsers.find(e => e.id === userId)
+}
 const generateToken = (user) => {
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '10d' });
     return token;
 }
-
+const deleteUser = async (userId) => {
+    try{
+        const deleteU = await deleteUserInDb(userId);
+        return deleteU
+    }catch (e){
+        throw new CustomError("Unable to delete the user",500)
+    }
+}
 const passwordValidation = (pwd) => {
-    /*let result = false
-    if (
-        pwd.length >= 8 &&   //length must be greater than 8 characters.
-        /[A-Z]/.test(pwd) && // One letter should be capital.
-        /\d/.test(pwd) &&    // contain alphanumeric.
-        /\W/.test(pwd) &&    // contain a special character (@, $, !, &, etc).
-        !/\s/.test(pwd)      // no spaces
-    ) {
-        result = true
-        console.log("pwdValidation", result);
-        return result
-    }
-    console.log("pwdValidation", result);
-    return result*/
-    let response = {
-        msg:[],
-        valid : false
-    }
-    if (! pwd.length >= 8)  response.msg.push("length must be greater than 8 characters.");
-    if (! /[A-Z]/.test(pwd)) response.msg.push("One letter should be capital.") ;
-    if (! /\d/.test(pwd)) response.msg.push("contain alphanumeric.") ;
-    if (! /\W/.test(pwd)) response.msg.push("contain a special character (@, $, !, &, etc).") ;
-    if (! /\s/.test(pwd)) response.msg.push("no spaces");
 
-    if (response.msg.length == 0) {
-        response.valid = true
+    let response = [];
+    if (! pwd.length >= 8)  response.push("le password doit contenir au moins 8 caractères.");
+    if (! /[A-Z]/.test(pwd)) response.push("le password doit contenir une majuscule.") ;
+    if (! /\d/.test(pwd)) response.push("le password doit contenir un chiffre.") ;
+    if (! /\W/.test(pwd)) response.push("le password doit contenir un caractère spécial (@, $, !, &, etc).") ;
+    if ( /\s/.test(pwd)) response.push("le password ne doit pas contenir d'espace.");
+
+    if (response.length != 0) {
+        throw new CustomError(response.join(","),500);
     }
-    return response
 }
 const hash =  (pwd) => {
     const saltRounds = 10;
-console.log('inH')
     return new Promise ((resolve,reject)  => {
         bcrypt.hash(pwd, saltRounds, (err, hash) => {
             if (err){
                 console.log("h",err);
-                throw (err);
-                reject(err)
+                throw new CustomError("Un problème est survenu lors du hachage du mot de passe",500);
+                reject(err);
             }
             console.log("H",hash);
             resolve(hash)
@@ -54,16 +50,12 @@ console.log('inH')
     })
 }
 const isInDb = async (mail) => {
-try {
-
     const isMailAlreadyInDb = await findUserInDb(mail);
-
-    console.log("isMailAlreadyInDb",isMailAlreadyInDb);
+    console.log("isMailAlreadyInDb",isMailAlreadyInDb)
+    if(isMailAlreadyInDb.length){
+        throw new CustomError("Cet email est déjà utilisé",500);
+    }
     return isMailAlreadyInDb
-}catch (e){
-    console.error(e)
-    return false
-}
 }
 const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
     try{
@@ -76,18 +68,18 @@ const newUser = async (hashPwd, name, email, city, longitude, latitude) => {
         return null;
     }
 }
-const isEmail = (email) => {
+const isEmailValid = (email) => {
     if (!validator.isEmail(email)) {
-        return false
+        throw new CustomError("Veuillez fournir une adresse e-mail valide.",500)
     } else return true
 }
-const showUsers = async () => {
+const getUsers = async () => {
     try{
-        return getUsers()
+        return getUsersFromDb()
     }
     catch (error){
-        console.error("Erreur lors de la recherche des utilisateurs :", error);
-        return null;
+        console.log(error)
+        throw new CustomError("Erreur lors de la recherche des utilisateurs"+error,500)
     }
 }
 const findUser = async (Pwd,email) => {
@@ -98,25 +90,23 @@ const findUser = async (Pwd,email) => {
             const match = await bcrypt.compare(Pwd, user[0].password);
             if(match) {
                 return user
-            }else {
-                throw new Error ("wrong password");
-            }
-        }else{
-            throw new Error ("wrong mail");
-        }
+            }else throw new CustomError ('Email ou mot de passe incorrect',500);
+        }else throw new CustomError ('Email ou mot de passe incorrect',500);
+
     }
     catch (e){
         console.error(e);
-        return false;
+        throw new CustomError(e,500);
     }
 }
 const updateGardenLocation = async (userId, longitude, latitude) => {
     try{
-        const updateLocation =await updateLocation(userId, longitude, latitude);
-        console.log(updateLocation);
-    }catch(e){
-        throw new Error("Unable to modify the garden's coordinates.Errormsg:"+e)
+        const updateLoc =await updateLocation(userId, longitude, latitude);
+        console.log(updateLoc);
+    }catch(err){
+        console.log(err);
+        throw new CustomError("Impossible de modifier les coordonnées du jardin.",500)
     }
 }
 
-module.exports={passwordValidation,hash, newUser, showUsers, findUser, isInDb, generateToken, updateGardenLocation, isEmail}
+module.exports={isUserExist,passwordValidation,hash, newUser, getUsers, findUser, isInDb, generateToken, updateGardenLocation, isEmailValid,deleteUser}

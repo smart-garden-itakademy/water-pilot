@@ -13,12 +13,12 @@ function verifyToken(token) {
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
     if (!token) {
-        res.status(511).json({ message: 'Token non fourni' });
+        res.status(511).json({ "message": 'Token non fourni' });
         return;
     }
     const decoded = verifyToken(token);
     if (!decoded) {
-        res.status(511).json({ message: 'Token invalide' });
+        res.status(511).json({ "message": 'Token invalide' });
         return;
     }
     req.userId = decoded.id;

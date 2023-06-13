@@ -1,5 +1,20 @@
 const connection = require('../cores/database');
 
+const deleteUserInDb = (userId) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            "DELETE FROM User WHERE id = ?",
+            [userId],
+            (error, results) => {
+                if (error) {
+                    console.error("Erreur lors de la suppression du user :", error);
+                    reject(error);
+                }
+                resolve(results);
+            }
+        )
+    })
+}
 const saveNewUser = (hashPwd, name, email, city, longitude, latitude) => {
     return new Promise((resolve, reject) => {
         connection.query(
@@ -17,7 +32,7 @@ const saveNewUser = (hashPwd, name, email, city, longitude, latitude) => {
     });
 }
 
-const getUsers = () => {
+const getUsersFromDb = () => {
     return new Promise((resolve, reject) => {
         connection.query(
             "SELECT * FROM User" ,
@@ -41,7 +56,7 @@ const findUserInDb = (email) => {
                     console.error("Erreur lors de la récupération des données de l'utilisateur :", error);
                     reject(error);
                 } else {
-                    console.log("results", results);
+                    //console.log("results", results);
                     resolve(results);
                 }
             });
@@ -65,4 +80,4 @@ const updateLocation = (userId, longitude, latitude) => {
     })
 }
 
-module.exports = {saveNewUser,getUsers,findUserInDb, updateLocation}
+module.exports = {deleteUserInDb,saveNewUser,getUsersFromDb,findUserInDb, updateLocation}

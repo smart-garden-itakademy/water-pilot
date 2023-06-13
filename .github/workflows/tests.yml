@@ -1,0 +1,53 @@
+name: API Tests
+
+on: [push]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install dependencies for api-irrigate
+        run: |
+          cd api-irrigate
+          npm ci
+          
+
+      - name: Install dependencies for api-main
+        run: |
+          cd api-main
+          npm ci
+          
+
+      - name: Start api-irrigate server
+        env:
+          SERVER_PORT: ${{ secrets.SERVER_PORT }}
+        run: |
+          cd api-irrigate
+          npm start &
+          sleep 5
+
+      - name: Run tests for api-main
+        env:
+          PORT: ${{ secrets.PORT }}
+          HOST: ${{ secrets.HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          PASS: ${{ secrets.PASS }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          KEY: ${{ secrets.KEY }}
+        run: |
+          cd api-main
+          npm start &
+          npm test

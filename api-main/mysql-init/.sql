@@ -41,35 +41,35 @@ CREATE TABLE Electrovalve (
 
 /* Création de la table UserSettings */
 CREATE TABLE ValveSettings (
-                              id INT PRIMARY KEY AUTO_INCREMENT,
-                              rainThreshold INT NOT NULL,
-                              moistureThreshold INT NOT NULL,
-                              duration INT NOT NULL,
-                              idElectrovalve INT,
-                              FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id) ON DELETE CASCADE
+                               id INT PRIMARY KEY AUTO_INCREMENT,
+                               rainThreshold INT NOT NULL,
+                               moistureThreshold INT NOT NULL,
+                               duration INT NOT NULL,
+                               idElectrovalve INT,
+                               FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id) ON DELETE CASCADE
 );
 
 
 /* Création de la table Irrigation */
 CREATE TABLE Irrigation (
-                          id INT PRIMARY KEY AUTO_INCREMENT,
-                          dateStart DATE NOT NULL,
-                          dateEnd DATE NOT NULL,
-                          volume INT NOT NULL,
-                          idElectrovalve INT NOT NULL,
-                          FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id) ON DELETE CASCADE
+                            id INT PRIMARY KEY AUTO_INCREMENT,
+                            dateStart DATE NOT NULL,
+                            dateEnd DATE NOT NULL,
+                            volume INT NOT NULL,
+                            idElectrovalve INT NOT NULL,
+                            FOREIGN KEY (idElectrovalve) REFERENCES Electrovalve(id) ON DELETE CASCADE
 );
 
 
 /* Création de la table Schedule */
 CREATE TABLE Schedule (
-                      id INT PRIMARY KEY AUTO_INCREMENT,
-                      hourStart INT NOT NULL,
-                      hourEnd INT NOT NULL,
-                      days TEXT NOT NULL,
-                      idSettings INT,
-                      isActivated BOOLEAN NOT NULL,
-                      FOREIGN KEY (idSettings) REFERENCES ValveSettings(id) ON DELETE CASCADE
+                          id INT PRIMARY KEY AUTO_INCREMENT,
+                          hourStart INT NOT NULL,
+                          hourEnd INT NOT NULL,
+                          days TEXT NOT NULL,
+                          idSettings INT,
+                          isActivated BOOLEAN NOT NULL,
+                          FOREIGN KEY (idSettings) REFERENCES ValveSettings(id) ON DELETE CASCADE
 );
 
 

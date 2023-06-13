@@ -4,6 +4,7 @@
   "description": "Ceci est l'api principale de WaterPilot",
   "main": "App.js",
   "scripts": {
+    "test":"newman run ./postman/test_api-main.postman_collection.json -e ./postman/waterpilot.postman_environment.json",
     "start": "nodemon App.js"
   },
   "keywords": [],
@@ -17,7 +18,12 @@
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.2.0",
-    "nodemon": "^2.0.22",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
     "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "newman": "^5.3.2",
+    "nodemon": "^2.0.22"
   }
 }

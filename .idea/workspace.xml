@@ -5,10 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af4a8198-1540-4174-a0f5-6b2ea1408ffc" name="Changes" comment="api-main added middleware in app.js">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/tests.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/controllers/Utils/Utils.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/doc-api/doc_electrovalveRoute.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/doc-api/doc_userRoutes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/errors/CustomError.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/mysql-init/.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/postman/test_api-main.postman_collection.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-main/postman/waterpilot.postman_environment.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/controllers/StatsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/StatsController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/models/StatsModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/StatsModel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-main/routers/StatsRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/StatsRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL/waterPilotDB_createTables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/SQL/waterPilotDB_createTables.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL/waterPilotDB_insert.sql" beforeDir="false" afterPath="$PROJECT_DIR$/SQL/waterPilotDB_insert.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/controllers/ElectrovalveController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/ElectrovalveController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/controllers/ScheduleController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/ScheduleController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/controllers/UserController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/UserController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/controllers/ValveSettingController.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/controllers/ValveSettingController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/errors.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/middlewares/AuthMiddleware.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/middlewares/AuthMiddleware.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/models/ElectrovalveModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/ElectrovalveModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/models/ScheduleModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/ScheduleModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/models/UserModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/UserModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/models/valveSettingModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/models/valveSettingModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/ElectrovalveRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ElectrovalveRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/ScheduleRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ScheduleRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/UserRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/UserRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-main/routers/ValveSettingsRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/api-main/routers/ValveSettingsRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/water-pilot-front" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +87,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Axel/formations web/water-pilot&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dev/Documents/DF26C/Waterpilot&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -142,6 +171,8 @@
       <workItem from="1684098985636" duration="3402000" />
       <workItem from="1684134861551" duration="280000" />
       <workItem from="1684178325769" duration="6291000" />
+      <workItem from="1685030081976" duration="18588000" />
+      <workItem from="1686492916351" duration="9973000" />
     </task>
     <task id="LOCAL-00001" summary="api-main user">
       <created>1680465248875</created>

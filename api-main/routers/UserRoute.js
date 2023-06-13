@@ -1,117 +1,117 @@
 const express = require('express');
 const router = express.Router();
-const {showUsers, isInDb, passwordValidation, hash, isEmail, newUser, findUser, generateToken, updateGardenLocation} = require ('../controllers/UserController')
+const {isUserExist,getUsers, isInDb, passwordValidation, hash, isEmailValid, newUser, findUser, generateToken, updateGardenLocation,deleteUser} = require ('../controllers/UserController')
 const {authenticate} = require ('../middlewares/AuthMiddleware')
-const {PwdConditionError} = require ('../errors')
+const {CustomError} = require ('../errors/CustomError')
+const {checkArgumentsDefined,checkArgumentsType} = require ('../controllers/Utils/Utils')
+const jwt = require("jsonwebtoken");
 
 //-----------------------Users routes ------------------------------------------
 
 //get all users test
 router.route('/')
-    .get(authenticate,(req,res)=>{
-        console.log("userId",req.userId);
-        showUsers()
-            .then((data)=> res.json(data))
+    .get(authenticate, async (req, res, next) => {
+        try {
+            const users = await getUsers();
+            res.status(200).json(users);
+        } catch (err) {
+            next(err);
+        }
     })
+    //supprimer son propre compte
+    .delete(authenticate, async (req, res, next) => {
+        try {
+            const userId = req.userId;
+            if(isNaN(userId)) return next(new CustomError("Invalid user id", 500));
+
+            const isUserInDb = await isUserExist(userId);
+            if(!isUserInDb) next (new CustomError ("Cet utilisateur n'existe pas",500));
+            await deleteUser(userId);
+            res.status(200).json({message: "Utilisateur supprimé"});
+        } catch (err) {
+            next(err);
+        }
+    });
+
+//TODO: ajouter un role admin pour pouvoir supprimer un utilisateur
+router.route('/:id')
+    .delete(authenticate, async (req, res, next) => {
+        try {
+            const userId = parseInt(req.params.id);
+            if(isNaN(userId)) return next(new CustomError("Invalid user id", 500));
+
+            const isUserInDb = await isUserExist(userId);
+            if(!isUserInDb) next (new CustomError ("Cet utilisateur n'existe pas",500));
+            await deleteUser(userId);
+            res.status(200).json({message: "Utilisateur supprimé"});
+        } catch (err) {
+            next(err);
+        }
+    });
+//TODO: patch user
+//TODO: patch password
 
 //sign-up
+
 router.route('/sign-up')
     .post(async (req, res, next) => {
-        const { password, name, email, city, longitude, latitude } = req.body;
-        console.log("reqBody",req.body);
-        console.log("password", password);
-        console.log("name", name);
-        console.log("email", email);
-        console.log("city", city);
-        console.log("longitude", longitude);
-        console.log("latitude", latitude);
-        //TODO vérifier que tous les champs sont remplis
+        const { password, name, email, city} = req.body;
+        const longitude = parseFloat(req.body.longitude);
+        const latitude = parseFloat(req.body.latitude);
 
         try {
-            const mailAlreadyInDB = await isInDb(email)
-            console.log("mailAlreadyInDB",mailAlreadyInDB)
-            const isvalidPassword = await passwordValidation(password)
-            if(mailAlreadyInDB.length) {
-                //mail already exist in DB
-                res.status(400).json({"errorMsg": "Il existe déjà un compte enregistré avec cet Email"})
-            }else if( isvalidPassword.valid) { //password validation
-                // Hash password
-                    const hashPwd = await hash(password);
-                //Email validation
-                    const isValidEmail = await isEmail(email);
-                    if(!isValidEmail ) return res.status(400).send({message: 'Veuillez fournir une adresse e-mail valide.'});
-                // Save user in database
-                    const saveUser = await newUser(hashPwd, name, email, city, longitude, latitude);
+            checkArgumentsDefined(password, name, email, city, longitude, latitude);
+            checkArgumentsType(name,"string", email,"string", city,"string", longitude,"number", latitude,"number");
 
-                // Send response
-                    res.status(200).json(saveUser);
-            }else{
-                console.log("isvalidPassword",isvalidPassword.msg);
-                throw new PwdConditionError(isvalidPassword.msg)
-            }
+            await isInDb(email); //check if email is already in db
+            passwordValidation(password); //password validation
+            const hashPwd = await hash(password);//hash password
+            isEmailValid(email);//check if email is valid
+            // Save user in database
+            await newUser(hashPwd, name, email, city, longitude, latitude);
+            // Send response
+            res.status(201).json({"message": 'Votre compte a bien été créé !'});
         } catch (err) {
-            console.error(err);
             next(err);
-            //res.status(400).json({"errorMsg": err});
         }
     });
 
 router.route('/login')
-    .post((req,res) => {
-        const { password, email } = req.body;
-        console.log("reqBody",req.body);
+    .post(async (req, res, next) => {
         try {
-            findUser(password,email)
-            .then((user) => {
-                if(user.length===0) {
-                    res.status(401).json({ "errorMsg": 'Email ou mot de passe incorrect' });
-                    return
-                }
-                const token = generateToken(user[0]);
-                res.status(200).json({token});
-        })
-        } catch(err){
-            res.status(400).json({"errorMsg":err})
+            const { password, email } = req.body;
+            checkArgumentsDefined(password, email);
+            const user = await findUser(password, email)
+            const token = generateToken(user[0]);
+            res.status(200).json({token});
+        } catch(err) {
+            next(err);
         }
-    })
-//déconnexion
+    });
+
 
 //save garden position
 router.route('/gardenLocation')
-    .patch(authenticate,(req,res) => {
-        console.log("userId",req.userId);
-        const { longitude, latitude } = req.body;
-        try{
-            const patchGardenLocation = updateGardenLocation(req.userId, longitude, latitude);
-            res.status(200).json({patchGardenLocation});
+    .patch(authenticate, async (req,res, next) => {
+        try {
+            const longitude = parseFloat(req.body.longitude);
+            const latitude = parseFloat(req.body.latitude);
+            console.log(longitude, latitude)
+            checkArgumentsDefined(longitude, latitude);
+            checkArgumentsType(longitude,"number", latitude,"number");
+
+            await updateGardenLocation(req.userId, longitude, latitude);
+            res.status(200).json({"message": 'La localisation de votre jardin a bien été enregistré !'});
+        } catch(err) {
+            next(err);
         }
-        catch(e){
-            res.status(400).json({"errorMsg":err})
-        }
+    });
+//TODO: echapper les caractères spéciaux dans les requêtes sql
 
-    })
-
-//error middleware:
-function errorHandler(err, req, res, next) {
-    console.error(err);
-    res.status(500).json({message: err.message});
-}
-
-
-
-// vérification de l'adresse mail lors de l'inscription en envoyant un mail
+//TODO: vérification de l'adresse mail lors de l'inscription en envoyant un mail
 //piste: nodemailer
 
-//fonctionnalité forgot password
+//TODO:fonctionnalité forgot password
 
-//------------------------valve settings------------------------------------------
-//creation de valve setting
-//1. creer une valve et récupérer l'ID
-
-//2. creer setting
-//router.route('/valveSetting')
-    
-
-//get valve setting
 
 module.exports=router;
